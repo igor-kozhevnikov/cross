@@ -6,7 +6,7 @@ namespace Cross\Application;
 
 use Cross\Config\Config;
 use Cross\Plugin\PluginInterface;
-use Symfony\Component\Console\Application as CoreApplication;
+use Symfony\Component\Console\Application as Core;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,16 +17,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Application
 {
     /**
-     * Base application.
+     * Core application.
      */
-    private CoreApplication $application;
+    private Core $core;
 
     /**
      * Constructor.
      */
     public function __construct(string $name, string $version)
     {
-        $this->application = new CoreApplication($name, $version);
+        $this->core = new Core($name, $version);
     }
 
     /**
@@ -36,7 +36,7 @@ class Application
      */
     public function __call(string $name, array $arguments): mixed
     {
-        return $this->application->$name(...$arguments);
+        return $this->core->$name(...$arguments);
     }
 
     /**
@@ -86,6 +86,6 @@ class Application
             $command = new $command();
         }
 
-        $this->application->add($command);
+        $this->core->add($command);
     }
 }

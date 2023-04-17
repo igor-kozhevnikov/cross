@@ -6,7 +6,7 @@ namespace Cross\Commands;
 
 use Cross\Status\Status;
 
-abstract class DeputyCommand extends Command
+abstract class DeputyCommand extends BaseCommand
 {
     /**
      * Deputy.

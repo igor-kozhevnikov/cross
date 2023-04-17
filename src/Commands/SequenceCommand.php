@@ -7,7 +7,7 @@ namespace Cross\Commands;
 use Cross\Sequence\SequenceInterface;
 use Cross\Status\Status;
 
-abstract class SequenceCommand extends Command
+abstract class SequenceCommand extends BaseCommand
 {
     /**
      * Define the sequence.

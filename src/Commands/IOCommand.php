@@ -7,7 +7,7 @@ namespace Cross\Commands;
 use Cross\Status\Status;
 use ReflectionException;
 use ReflectionMethod;
-use Symfony\Component\Console\Command\Command as BaseCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -30,7 +30,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * @method mixed option(string $name)
  * ----------------------------------------------------------------------------
  */
-abstract class IOCommand extends BaseCommand
+abstract class IOCommand extends Command
 {
     /**
      * Input.

@@ -7,7 +7,7 @@ namespace Cross\Commands;
 use Cross\Process\Process;
 use Cross\Status\Status;
 
-abstract class ShellCommand extends Command
+abstract class ShellCommand extends BaseCommand
 {
     /**
      * Command.
