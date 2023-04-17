@@ -23,5 +23,5 @@ $package = new Package();
 // Application
 $application = new Application($composer->getDescription(), $composer->getVersion());
 $application->plugins($package->getPlugins());
-$application->set($package->getCommands());
+$application->commands($package->getCommands());
 $application->run();
