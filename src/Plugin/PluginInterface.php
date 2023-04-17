@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Quizory\Cross\Plugin;
+namespace Cross\Plugin;
+
+use Symfony\Component\Console\Command\Command;
 
 interface PluginInterface
 {
@@ -12,9 +14,16 @@ interface PluginInterface
     public function getKey(): string;
 
     /**
-     * Returns a config.
+     * Returns config.
      *
      * @return array<string, mixed>
      */
     public function getConfig(): array;
+
+    /**
+     * Returns a list of commands.
+     *
+     * @return array<array-key, class-string|Command>
+     */
+    public function getCommands(): array;
 }

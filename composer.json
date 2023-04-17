@@ -2,7 +2,7 @@
     "name": "igor-kozhevnikov/cross",
     "description": "Set of console commands",
     "version": "0.0.1",
-    "keywords": ["cross"],
+    "keywords": ["cross", "console", "command"],
     "homepage": "https://github.com/igor-kozhevnikov/cross",
     "license": "MIT",
     "authors": [
@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "php": "^8.2",
+        "php": "^8.1",
         "symfony/console": "^v6.2",
         "symfony/process": "^v6.2"
     },

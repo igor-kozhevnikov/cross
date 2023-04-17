@@ -2,23 +2,31 @@
 
 declare(strict_types=1);
 
-namespace Quizory\Cross\Plugin;
+namespace Cross\Plugin;
 
 use Exception;
+use Symfony\Component\Console\Command\Command;
 
 abstract class BasePlugin implements PluginInterface
 {
     /**
      * Key.
      */
-    public string $key = '';
+    protected string $key;
 
     /**
      * Config.
      *
      * @var array<string, mixed>
      */
-    public array $config = [];
+    protected array $config = [];
+
+    /**
+     * Commands.
+     *
+     * @var array<array-key, class-string|Command>
+     */
+    protected array $commands = [];
 
     /**
      * @inheritDoc
@@ -31,10 +39,18 @@ abstract class BasePlugin implements PluginInterface
     /**
      * @inheritDoc
      * @return array<string, mixed>
-     * @throws Exception
      */
     public function getConfig(): array
     {
         return $this->config;
+    }
+
+    /**
+     * @inheritDoc
+     * @return array<array-key, class-string|Command>
+     */
+    public function getCommands(): array
+    {
+        return $this->getConfig()['commands'] ?? [];
     }
 }

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Quizory\Cross\Commands;
+namespace Cross\Commands;
 
-use Quizory\Cross\Sequence\SequenceInterface;
-use Quizory\Cross\Status\Status;
+use Cross\Sequence\SequenceInterface;
+use Cross\Status\Status;
 
 abstract class SequenceCommand extends Command
 {

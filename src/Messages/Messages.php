@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Quizory\Cross\Messages;
+namespace Cross\Messages;
 
 class Messages implements MessagesInterface
 {

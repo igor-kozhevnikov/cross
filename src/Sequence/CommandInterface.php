@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Quizory\Cross\Sequence;
+namespace Cross\Sequence;
 
 interface CommandInterface
 {

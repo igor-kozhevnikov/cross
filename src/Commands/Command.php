@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Quizory\Cross\Commands;
+namespace Cross\Commands;
 
-use Quizory\Cross\Attributes\Attributes;
-use Quizory\Cross\Attributes\AttributesInterface;
-use Quizory\Cross\Messages\Messages;
-use Quizory\Cross\Messages\MessagesInterface;
-use Quizory\Cross\Status\Status;
+use Cross\Attributes\Attributes;
+use Cross\Attributes\AttributesInterface;
+use Cross\Messages\Messages;
+use Cross\Messages\MessagesInterface;
+use Cross\Status\Status;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;

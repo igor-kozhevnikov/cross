@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Quizory\Cross\Attributes;
+namespace Cross\Attributes;
 
-use Quizory\Cross\Attributes\Attribute\Argument\ArgumentInterface;
-use Quizory\Cross\Attributes\Attribute\AttributeInterface;
-use Quizory\Cross\Attributes\Attribute\Option\OptionInterface;
+use Cross\Attributes\Attribute\Argument\ArgumentInterface;
+use Cross\Attributes\Attribute\AttributeInterface;
+use Cross\Attributes\Attribute\Option\OptionInterface;
 
 interface AttributesInterface
 {

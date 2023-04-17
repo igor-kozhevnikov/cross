@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Quizory\Cross\Attributes\Attribute\Argument;
+namespace Cross\Attributes\Attribute\Argument;
 
 use Closure;
-use Quizory\Cross\Attributes\Attribute\AttributeInterface;
-use Quizory\Cross\Attributes\AttributesInterface;
+use Cross\Attributes\Attribute\AttributeInterface;
+use Cross\Attributes\AttributesInterface;
 use Symfony\Component\Console\Completion\Suggestion;
 
 interface ArgumentInterface extends AttributeInterface

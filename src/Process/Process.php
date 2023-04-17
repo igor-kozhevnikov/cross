@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Quizory\Cross\Process;
+namespace Cross\Process;
 
-use Quizory\Cross\Status\Status;
+use Cross\Status\Status;
 use Symfony\Component\Process\Process as _Process;
 
 class Process

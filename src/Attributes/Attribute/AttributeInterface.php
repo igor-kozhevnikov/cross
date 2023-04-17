@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Quizory\Cross\Attributes\Attribute;
+namespace Cross\Attributes\Attribute;
 
 use Symfony\Component\Console\Command\Command;
 

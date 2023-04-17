@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Quizory\Cross\Commands;
+namespace Cross\Commands;
 
-use Quizory\Cross\Status\Status;
+use Cross\Status\Status;
 
 abstract class DeputyCommand extends Command
 {

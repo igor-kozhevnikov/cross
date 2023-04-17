@@ -1,24 +1,27 @@
 #!/usr/bin/env php
 <?php
 
-require __DIR__ . '/../prepend.php';
+require __DIR__ . '/../src/Composer/Composer.php';
+require __DIR__ . '/../src/Autoload/Autoload.php';
+require __DIR__ . '/../src/Package/Package.php';
 
-use Quizory\Cross\Application\Application;
-use Quizory\Cross\Config\Config;
-use Quizory\Cross\Composer\Package;
-use Quizory\Cross\Composer\Project;
+use Cross\Application\Application;
+use Cross\Autoload\Autoload;
+use Cross\Composer\Composer;
+use Cross\Package\Package;
 
-$project = new Project();
-$project->autoload();
-$project->plugins();
+// Composer
+$composer = new Composer();
 
+// Autoload
+$autoload = new Autoload($composer->getVendorDirectory());
+$autoload->run();
+
+// Package
 $package = new Package();
-$application = new Application($package->getDescription(), $package->getVersion());
 
-foreach (Config::all() as $space) {
-    $commands = $space['commands'] ?? [];
-    $commands = array_reverse($commands);
-    $application->set($commands);
-}
-
+// Application
+$application = new Application($composer->getDescription(), $composer->getVersion());
+$application->plugins($package->getPlugins());
+$application->set($package->getCommands());
 $application->run();

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Quizory\Cross\Status;
+namespace Cross\Status;
 
 enum Status
 {

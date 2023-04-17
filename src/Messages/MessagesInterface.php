@@ -1,6 +1,6 @@
 <?php
 
-namespace Quizory\Cross\Messages;
+namespace Cross\Messages;
 
 interface MessagesInterface
 {

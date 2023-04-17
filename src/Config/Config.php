@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Quizory\Cross\Config;
+namespace Cross\Config;
 
-class Config
+use Exception;
+
+final class Config
 {
     /**
      * Config instance.
@@ -24,6 +26,34 @@ class Config
     private function __construct()
     {
         //
+    }
+
+    /**
+     * Clone.
+     */
+    private function __clone(): void
+    {
+        //
+    }
+
+    /**
+     * Wakeup.
+     *
+     * @throws Exception
+     */
+    public function __wakeup()
+    {
+        throw new Exception("Cannot unserialize");
+    }
+
+    /**
+     * Unserialize.
+     *
+     * @throws Exception
+     */
+    public function __unserialize(array $data): void
+    {
+        throw new Exception("Cannot unserialize");
     }
 
     /**
@@ -53,7 +83,7 @@ class Config
     }
 
     /**
-     * Returns a value by the key.
+     * Returns a value by a key.
      */
     public static function get(string $key, mixed $default = null): mixed
     {

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Quizory\Cross\Attributes\Attribute\Argument;
+namespace Cross\Attributes\Attribute\Argument;
 
 use Closure;
-use Quizory\Cross\Attributes\Attribute\Attribute;
-use Quizory\Cross\Attributes\AttributesInterface;
-use Quizory\Cross\Config\Config;
+use Cross\Attributes\Attribute\Attribute;
+use Cross\Attributes\AttributesInterface;
+use Cross\Config\Config;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Completion\CompletionInput;
 use Symfony\Component\Console\Completion\CompletionSuggestions;

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Quizory\Cross\Commands;
+namespace Cross\Commands;
 
-use Quizory\Cross\Process\Process;
-use Quizory\Cross\Status\Status;
+use Cross\Process\Process;
+use Cross\Status\Status;
 
 abstract class ShellCommand extends Command
 {
