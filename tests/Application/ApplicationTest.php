@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace Cross\Tests\Application;
 
 use Cross\Application\Application;
-use Cross\Tests\Commands\Cases\Fork;
-use Cross\Tests\Commands\Cases\Spoon;
-use Cross\Tests\Commands\Cases\Cup;
-use Cross\Tests\Commands\Cases\Knife;
-use Cross\Tests\Plugin\Cases\Tiger;
-use Cross\Tests\Plugin\Cases\Elephant;
+use Cross\Config\Config;
+use Cross\Tests\Commands\Stubs\Command;
+use Cross\Tests\Plugin\Stubs\Plugin;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\Console\Application as Core;
@@ -57,7 +54,7 @@ final class ApplicationTest extends TestCase
     }
 
     /**
-     * @covers \Cross\Application\Application::__construct()
+     * @covers Application::__construct()
      */
     public function testConstructor(): void
     {
@@ -70,39 +67,44 @@ final class ApplicationTest extends TestCase
      */
     public function testPlugins(): void
     {
-        $this->application->plugins([Tiger::class, new Elephant()]);
-
-        $this->assertCount($this->counter + 4, $this->core->all());
-    }
-
-    /**
-     * @covers \Cross\Application\Application::plugin()
-     */
-    public function testPlugin(): void
-    {
-        $this->application->plugin(Tiger::class);
-        $this->application->plugin(new Elephant());
-
-        $this->assertCount($this->counter + 4, $this->core->all());
-    }
-
-    /**
-     * @covers \Cross\Application\Application::commands()
-     */
-    public function testCommands(): void
-    {
-        $this->application->commands([Knife::class, new Spoon()]);
+        $this->application->plugins([new Plugin(), Plugin::class]);
 
         $this->assertCount($this->counter + 2, $this->core->all());
     }
 
     /**
-     * @covers \Cross\Application\Application::command()
+     * @covers Application::plugin()
+     * @throws \Exception
+     */
+    public function testPlugin(): void
+    {
+        $key = 'elephant';
+        $config = ['count_legs' => 4];
+
+        $this->application->plugin(new Plugin($key, $config));
+        $this->application->plugin(Plugin::class);
+
+        $this->assertCount($this->counter + 2, $this->core->all());
+        $this->assertSame(Config::get($key), $config);
+    }
+
+    /**
+     * @covers Application::commands()
+     */
+    public function testCommands(): void
+    {
+        $this->application->commands([new Command(), Command::class]);
+
+        $this->assertCount($this->counter + 2, $this->core->all());
+    }
+
+    /**
+     * @covers Application::command()
      */
     public function testCommand(): void
     {
-        $this->application->command(Cup::class);
-        $this->application->command(new Fork());
+        $this->application->command(new Command());
+        $this->application->command(Command::class);
 
         $this->assertCount($this->counter + 2, $this->core->all());
     }
