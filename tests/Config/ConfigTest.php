@@ -82,4 +82,22 @@ final class ConfigTest extends TestCase
         $this->assertSame('zero', Config::get("$prefix.d.0"));
         $this->assertSame('uno', Config::get("$prefix.d.1"));
     }
+
+    #[Test]
+    #[TestDox('Reset config')]
+    public function reset(): void
+    {
+        $key = 'key';
+        $value = 'value';
+
+        $this->assertSame([], Config::all());
+
+        Config::set($key, $value);
+
+        $this->assertSame([$key => $value], Config::all());
+
+        Config::reset();
+
+        $this->assertSame([], Config::all());
+    }
 }
