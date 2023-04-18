@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cross\Config;
+namespace Cross\Commands\Config;
 
 use Exception;
 

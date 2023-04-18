@@ -39,7 +39,7 @@ class Composer
      */
     public function __construct(?string $path = null)
     {
-        $this->path = $path;
+        $this->path = $path ?? __DIR__ . '/../../composer.json';
         $config = $this->extractConfig();
         $this->setConfig($config);
     }
@@ -52,13 +52,11 @@ class Composer
      */
     public function extractConfig(): array
     {
-        $path = $this->getPath();
-
-        if (! is_file($path)) {
+        if (! is_file($this->path)) {
             throw new Exception('The composer.json file does not exist');
         }
 
-        $content = @file_get_contents($path);
+        $content = @file_get_contents($this->path);
         $data = json_decode($content, true);
 
         if (! is_array($data)) {
@@ -66,14 +64,6 @@ class Composer
         }
 
         return $data;
-    }
-
-    /**
-     * Returns a path to the composer.json file.
-     */
-    public function getPath(): string
-    {
-        return $this->path ?? __DIR__ . '/../../composer.json';
     }
 
     /**

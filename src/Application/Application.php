@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cross\Application;
 
-use Cross\Config\Config;
+use Cross\Commands\Config\Config;
 use Cross\Plugin\PluginInterface;
 use Exception;
 use Symfony\Component\Console\Application as Core;

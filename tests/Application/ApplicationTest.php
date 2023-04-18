@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Cross\Tests\Application;
 
 use Cross\Application\Application;
+use Cross\Commands\Config\Config;
 use Cross\Composer\Composer;
-use Cross\Config\Config;
 use Cross\Plugin\BasePlugin;
 use Cross\Tests\Commands\Stubs\CommandStub;
 use Cross\Tests\Plugin\Stubs\PluginStub;

@@ -7,7 +7,7 @@ namespace Cross\Commands\Attributes\Attribute\Option;
 use Closure;
 use Cross\Commands\Attributes\Attribute\Attribute;
 use Cross\Commands\Attributes\AttributesInterface;
-use Cross\Config\Config;
+use Cross\Commands\Config\Config;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Completion\CompletionInput;
 use Symfony\Component\Console\Completion\CompletionSuggestions;

@@ -5,10 +5,16 @@ declare(strict_types=1);
 namespace Cross\Package;
 
 use Cross\Plugin\PluginInterface;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 
 class Package
 {
+    /**
+     * Path to an alternative config.
+     */
+    private ?string $alternative;
+
     /**
      * Config.
      *
@@ -18,32 +24,43 @@ class Package
 
     /**
      * Constructor.
+     * @throws Exception
      */
-    public function __construct()
+    public function __construct(?string $alternative = null)
     {
-        $this->config = $this->getConfig();
+        $this->alternative = $alternative ?? getcwd() . '/cross.php';
+        $this->config = array_merge($this->getBaseConfig(), $this->getAlternativeConfig());
     }
 
     /**
-     * Returns base config.
+     * Returns the base config.
      *
      * @return array<string, mixed>
      */
-    private function getBaseConfig(): array
+    public function getBaseConfig(): array
     {
-        $path = __DIR__ . '/../../config/config.php';
-        return require $path;
+        return require __DIR__ . '/../../config/config.php';
     }
 
     /**
-     * Returns alternative config.
+     * Returns an alternative config.
      *
      * @return array<string, mixed>
+     * @throws Exception
      */
-    private function getAlternativeConfig(): array
+    public function getAlternativeConfig(): array
     {
-        $path = getcwd() . '/cross.php';
-        return is_file($path) ? require $path : [];
+        if (! is_file($this->alternative)) {
+            return [];
+        }
+
+        $config = require $this->alternative;
+
+        if (! is_array($config)) {
+            throw new Exception('Alternative config is invalid');
+        }
+
+        return $config;
     }
 
     /**
@@ -51,9 +68,9 @@ class Package
      *
      * @return array<string, mixed>
      */
-    private function getConfig(): array
+    public function getConfig(): array
     {
-        return array_merge($this->getBaseConfig(), $this->getAlternativeConfig());
+        return $this->config;
     }
 
     /**
