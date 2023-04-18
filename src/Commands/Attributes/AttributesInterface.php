@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Cross\Attributes;
+namespace Cross\Commands\Attributes;
 
-use Cross\Attributes\Attribute\Argument\ArgumentInterface;
-use Cross\Attributes\Attribute\AttributeInterface;
-use Cross\Attributes\Attribute\Option\OptionInterface;
+use Cross\Commands\Attributes\Attribute\Argument\ArgumentInterface;
+use Cross\Commands\Attributes\Attribute\AttributeInterface;
+use Cross\Commands\Attributes\Attribute\Option\OptionInterface;
 
 interface AttributesInterface
 {

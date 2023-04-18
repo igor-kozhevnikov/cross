@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cross\Attributes\Attribute;
+namespace Cross\Commands\Attributes\Attribute;
 
 abstract class Attribute implements AttributeInterface
 {

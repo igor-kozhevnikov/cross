@@ -43,7 +43,7 @@ final class Config
      */
     public function __wakeup()
     {
-        throw new Exception("Cannot unserialize");
+        throw new Exception('Cannot unserialize');
     }
 
     /**
@@ -53,7 +53,7 @@ final class Config
      */
     public function __unserialize(array $data): void
     {
-        throw new Exception("Cannot unserialize");
+        throw new Exception('Cannot unserialize');
     }
 
     /**

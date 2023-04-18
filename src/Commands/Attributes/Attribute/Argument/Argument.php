@@ -2,29 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Cross\Attributes\Attribute\Option;
+namespace Cross\Commands\Attributes\Attribute\Argument;
 
 use Closure;
-use Cross\Attributes\Attribute\Attribute;
-use Cross\Attributes\AttributesInterface;
+use Cross\Commands\Attributes\Attribute\Attribute;
+use Cross\Commands\Attributes\AttributesInterface;
 use Cross\Config\Config;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Completion\CompletionInput;
 use Symfony\Component\Console\Completion\CompletionSuggestions;
 use Symfony\Component\Console\Completion\Suggestion;
-use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputArgument;
 
-class Option extends Attribute implements OptionInterface
+class Argument extends Attribute implements ArgumentInterface
 {
     /**
      * Name.
      */
     private string $name;
-
-    /**
-     * Shortcut.
-     */
-    private ?string $shortcut = null;
 
     /**
      * Mode.
@@ -56,18 +51,17 @@ class Option extends Attribute implements OptionInterface
     /**
      * Constructor.
      */
-    public function __construct(string $name, ?string $shortcut = null)
+    public function __construct(string $name)
     {
         $this->name($name);
-        $this->shortcut($shortcut);
     }
 
     /**
-     * Make an instance.
+     * Create an instance.
      */
-    public static function make(string $name, ?string $shortcut = null): self
+    public static function make(string $name): self
     {
-        return new self($name, $shortcut);
+        return new self($name);
     }
 
     /**
@@ -90,40 +84,6 @@ class Option extends Attribute implements OptionInterface
     /**
      * @inheritDoc
      */
-    public function shortcut(?string $shortcut): self
-    {
-        $this->shortcut = $shortcut;
-        return $this;
-    }
-
-    /**
-     * Returns the shortcut.
-     */
-    public function getShortcut(): ?string
-    {
-        return $this->shortcut;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function description(string $description): self
-    {
-        $this->description = $description;
-        return $this;
-    }
-
-    /**
-     * Returns the description.
-     */
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function mode(?int $mode): self
     {
         $this->mode = $mode;
@@ -141,63 +101,18 @@ class Option extends Attribute implements OptionInterface
     /**
      * @inheritDoc
      */
-    public function none(): self
+    public function description(string $description): self
     {
-        $this->mode(InputOption::VALUE_NONE);
+        $this->description = $description;
         return $this;
     }
 
     /**
-     * @inheritDoc
+     * Returns the description.
      */
-    public function optional(): self
+    public function getDescription(): string
     {
-        $this->mode(InputOption::VALUE_OPTIONAL);
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function required(): self
-    {
-        $this->mode(InputOption::VALUE_REQUIRED);
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function array(): self
-    {
-        $this->mode(InputOption::VALUE_IS_ARRAY);
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function negatable(): self
-    {
-        $this->mode(InputOption::VALUE_NEGATABLE);
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function default(mixed $default, bool $config = true): self
-    {
-        $this->default = $config ? Config::get($default) : $default;
-        return $this;
-    }
-
-    /**
-     * Returns the default value.
-     */
-    public function getDefault(): ?string
-    {
-        return $this->default;
+        return $this->description;
     }
 
     /**
@@ -224,6 +139,50 @@ class Option extends Attribute implements OptionInterface
     /**
      * @inheritDoc
      */
+    public function optional(): self
+    {
+        $this->mode(InputArgument::OPTIONAL);
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function required(): self
+    {
+        $this->mode(InputArgument::REQUIRED);
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function array(): self
+    {
+        $this->mode(InputArgument::IS_ARRAY);
+        return $this;
+    }
+
+    /**
+     * Define the default value.
+     */
+    public function default(mixed $default, bool $config = true): self
+    {
+        $this->default = $config ? Config::get($default) : $default;
+        return $this;
+    }
+
+    /**
+     * Returns the default value.
+     */
+    public function getDefault(): ?string
+    {
+        return $this->default;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function container(AttributesInterface $attributes): self
     {
         $this->attributes = $attributes;
@@ -243,9 +202,8 @@ class Option extends Attribute implements OptionInterface
      */
     public function appendTo(Command $command): void
     {
-        $command->addOption(
+        $command->addArgument(
             $this->getName(),
-            $this->getShortcut(),
             $this->getMode(),
             $this->getDescription(),
             $this->getDefault(),

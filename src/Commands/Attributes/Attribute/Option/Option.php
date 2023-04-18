@@ -2,24 +2,29 @@
 
 declare(strict_types=1);
 
-namespace Cross\Attributes\Attribute\Argument;
+namespace Cross\Commands\Attributes\Attribute\Option;
 
 use Closure;
-use Cross\Attributes\Attribute\Attribute;
-use Cross\Attributes\AttributesInterface;
+use Cross\Commands\Attributes\Attribute\Attribute;
+use Cross\Commands\Attributes\AttributesInterface;
 use Cross\Config\Config;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Completion\CompletionInput;
 use Symfony\Component\Console\Completion\CompletionSuggestions;
 use Symfony\Component\Console\Completion\Suggestion;
-use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
-class Argument extends Attribute implements ArgumentInterface
+class Option extends Attribute implements OptionInterface
 {
     /**
      * Name.
      */
     private string $name;
+
+    /**
+     * Shortcut.
+     */
+    private ?string $shortcut = null;
 
     /**
      * Mode.
@@ -51,17 +56,18 @@ class Argument extends Attribute implements ArgumentInterface
     /**
      * Constructor.
      */
-    public function __construct(string $name)
+    public function __construct(string $name, ?string $shortcut = null)
     {
         $this->name($name);
+        $this->shortcut($shortcut);
     }
 
     /**
-     * Create an instance.
+     * Make an instance.
      */
-    public static function make(string $name): self
+    public static function make(string $name, ?string $shortcut = null): self
     {
-        return new self($name);
+        return new self($name, $shortcut);
     }
 
     /**
@@ -84,18 +90,18 @@ class Argument extends Attribute implements ArgumentInterface
     /**
      * @inheritDoc
      */
-    public function mode(?int $mode): self
+    public function shortcut(?string $shortcut): self
     {
-        $this->mode = $mode;
+        $this->shortcut = $shortcut;
         return $this;
     }
 
     /**
-     * Returns the mode.
+     * Returns the shortcut.
      */
-    public function getMode(): ?int
+    public function getShortcut(): ?string
     {
-        return $this->mode;
+        return $this->shortcut;
     }
 
     /**
@@ -113,6 +119,85 @@ class Argument extends Attribute implements ArgumentInterface
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function mode(?int $mode): self
+    {
+        $this->mode = $mode;
+        return $this;
+    }
+
+    /**
+     * Returns the mode.
+     */
+    public function getMode(): ?int
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function none(): self
+    {
+        $this->mode(InputOption::VALUE_NONE);
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function optional(): self
+    {
+        $this->mode(InputOption::VALUE_OPTIONAL);
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function required(): self
+    {
+        $this->mode(InputOption::VALUE_REQUIRED);
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function array(): self
+    {
+        $this->mode(InputOption::VALUE_IS_ARRAY);
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function negatable(): self
+    {
+        $this->mode(InputOption::VALUE_NEGATABLE);
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function default(mixed $default, bool $config = true): self
+    {
+        $this->default = $config ? Config::get($default) : $default;
+        return $this;
+    }
+
+    /**
+     * Returns the default value.
+     */
+    public function getDefault(): ?string
+    {
+        return $this->default;
     }
 
     /**
@@ -139,50 +224,6 @@ class Argument extends Attribute implements ArgumentInterface
     /**
      * @inheritDoc
      */
-    public function optional(): self
-    {
-        $this->mode(InputArgument::OPTIONAL);
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function required(): self
-    {
-        $this->mode(InputArgument::REQUIRED);
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function array(): self
-    {
-        $this->mode(InputArgument::IS_ARRAY);
-        return $this;
-    }
-
-    /**
-     * Define the default value.
-     */
-    public function default(mixed $default, bool $config = true): self
-    {
-        $this->default = $config ? Config::get($default) : $default;
-        return $this;
-    }
-
-    /**
-     * Returns the default value.
-     */
-    public function getDefault(): ?string
-    {
-        return $this->default;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function container(AttributesInterface $attributes): self
     {
         $this->attributes = $attributes;
@@ -202,8 +243,9 @@ class Argument extends Attribute implements ArgumentInterface
      */
     public function appendTo(Command $command): void
     {
-        $command->addArgument(
+        $command->addOption(
             $this->getName(),
+            $this->getShortcut(),
             $this->getMode(),
             $this->getDescription(),
             $this->getDefault(),

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cross\Sequence;
+namespace Cross\Commands\Sequence;
 
 class Command implements CommandInterface
 {

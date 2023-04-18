@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Cross\Attributes\Attribute\Argument;
+namespace Cross\Commands\Attributes\Attribute\Argument;
 
 use Closure;
-use Cross\Attributes\Attribute\AttributeInterface;
-use Cross\Attributes\AttributesInterface;
+use Cross\Commands\Attributes\Attribute\AttributeInterface;
+use Cross\Commands\Attributes\AttributesInterface;
 use Symfony\Component\Console\Completion\Suggestion;
 
 interface ArgumentInterface extends AttributeInterface

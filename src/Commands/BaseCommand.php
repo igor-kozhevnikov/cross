@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Cross\Commands;
 
-use Cross\Attributes\Attributes;
-use Cross\Attributes\AttributesInterface;
-use Cross\Messages\Messages;
-use Cross\Messages\MessagesInterface;
-use Cross\Status\Status;
+use Cross\Commands\Attributes\Attributes;
+use Cross\Commands\Attributes\AttributesInterface;
+use Cross\Commands\Messages\Messages;
+use Cross\Commands\Messages\MessagesInterface;
+use Cross\Commands\Status\Status;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;

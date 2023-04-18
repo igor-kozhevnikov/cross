@@ -1,6 +1,6 @@
 <?php
 
-namespace Cross\Messages;
+namespace Cross\Commands\Messages;
 
 interface MessagesInterface
 {

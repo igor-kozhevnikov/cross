@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cross\Commands;
 
-use Cross\Status\Status;
+use Cross\Commands\Status\Status;
 use ReflectionException;
 use ReflectionMethod;
 use Symfony\Component\Console\Command\Command;

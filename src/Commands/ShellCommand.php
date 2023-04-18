@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Cross\Commands;
 
-use Cross\Process\Process;
-use Cross\Status\Status;
+use Cross\Commands\Process\Process;
+use Cross\Commands\Status\Status;
 
 abstract class ShellCommand extends BaseCommand
 {

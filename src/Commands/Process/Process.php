@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Cross\Process;
+namespace Cross\Commands\Process;
 
-use Cross\Status\Status;
+use Cross\Commands\Status\Status;
 use Symfony\Component\Process\Process as _Process;
 
 class Process

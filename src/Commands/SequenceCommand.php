@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Cross\Commands;
 
-use Cross\Sequence\SequenceInterface;
-use Cross\Status\Status;
+use Cross\Commands\Sequence\SequenceInterface;
+use Cross\Commands\Status\Status;
 
 abstract class SequenceCommand extends BaseCommand
 {

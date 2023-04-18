@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cross\Messages;
+namespace Cross\Commands\Messages;
 
 class Messages implements MessagesInterface
 {

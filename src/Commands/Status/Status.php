@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cross\Status;
+namespace Cross\Commands\Status;
 
 enum Status
 {
