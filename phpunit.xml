@@ -25,7 +25,7 @@
         </include>
     </source>
 
-    <coverage ignoreDeprecatedCodeUnits="true" disableCodeCoverageIgnore="true">
+    <coverage ignoreDeprecatedCodeUnits="true" disableCodeCoverageIgnore="true" pathCoverage="false">
         <report>
             <html outputDirectory="phpunit/coverage" />
         </report>

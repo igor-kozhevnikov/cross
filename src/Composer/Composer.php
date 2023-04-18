@@ -4,8 +4,15 @@ declare(strict_types=1);
 
 namespace Cross\Composer;
 
+use Exception;
+
 class Composer
 {
+    /**
+     * Path.
+     */
+    private ?string $path;
+
     /**
      * Name.
      */
@@ -28,38 +35,58 @@ class Composer
 
     /**
      * Constructor.
+     * @throws Exception
      */
-    public function __construct()
+    public function __construct(?string $path = null)
     {
-        $config = $this->getComposerConfig();
+        $this->path = $path;
+        $config = $this->extractConfig();
+        $this->setConfig($config);
+    }
 
+    /**
+     * Extract and returns composer config.
+     *
+     * @return array<string, mixed>
+     * @throws Exception
+     */
+    public function extractConfig(): array
+    {
+        $path = $this->getPath();
+
+        if (! is_file($path)) {
+            throw new Exception('The composer.json file does not exist');
+        }
+
+        $content = @file_get_contents($path);
+        $data = json_decode($content, true);
+
+        if (! is_array($data)) {
+            throw new Exception('Data from the composer.json file is invalid');
+        }
+
+        return $data;
+    }
+
+    /**
+     * Returns a path to the composer.json file.
+     */
+    public function getPath(): string
+    {
+        return $this->path ?? __DIR__ . '/../../composer.json';
+    }
+
+    /**
+     * Defines data.
+     *
+     * @param array<string, mixed> $config
+     */
+    public function setConfig(array $config): void
+    {
         $this->name = $config['name'];
         $this->description = $config['description'];
         $this->version = $config['version'];
         $this->vendorDirectory = $config['config']['vendor-dir'] ?? 'vendor';
-    }
-
-    /**
-     * Returns composer config.
-     *
-     * @return array<string, mixed>
-     */
-    private function getComposerConfig(): array
-    {
-        $path = __DIR__ . '/../../composer.json';
-        $content = @file_get_contents($path);
-
-        if (! is_string($content)) {
-            return [];
-        }
-
-        $data = json_decode($content, true);
-
-        if (! is_array($data)) {
-            return [];
-        }
-
-        return $data;
     }
 
     /**
