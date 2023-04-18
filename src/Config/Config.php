@@ -103,4 +103,12 @@ final class Config
 
         return $config;
     }
+
+    /**
+     * Resets all config.
+     */
+    public static function reset(): void
+    {
+        self::getInstance()->config = [];
+    }
 }

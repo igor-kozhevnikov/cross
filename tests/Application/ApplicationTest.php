@@ -5,24 +5,29 @@ declare(strict_types=1);
 namespace Cross\Tests\Application;
 
 use Cross\Application\Application;
+use Cross\Composer\Composer;
 use Cross\Config\Config;
-use Cross\Tests\Commands\Stubs\Command;
-use Cross\Tests\Plugin\Stubs\Plugin;
+use Cross\Plugin\BasePlugin;
+use Cross\Tests\Commands\Stubs\CommandStub;
+use Cross\Tests\Plugin\Stubs\PluginStub;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\Console\Application as Core;
 
+#[CoversClass(Application::class)]
+#[UsesClass(Composer::class)]
+#[UsesClass(Config::class)]
+#[UsesClass(BasePlugin::class)]
 final class ApplicationTest extends TestCase
 {
     /**
-     * Application name.
+     * Composer config.
      */
-    private string $name = 'Cross';
-
-    /**
-     * Application version.
-     */
-    private string $version = '1.2.3';
+    private static ?Composer $composer;
 
     /**
      * Application.
@@ -35,16 +40,32 @@ final class ApplicationTest extends TestCase
     private Core $core;
 
     /**
-     * Counter of default commands.
+     * Counter of default commands in the core application.
      */
     private int $counter;
 
     /**
      * @inheritDoc
      */
+    public static function setUpBeforeClass(): void
+    {
+        self::$composer = new Composer();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function tearDownAfterClass(): void
+    {
+        self::$composer = null;
+    }
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->application = new Application($this->name, $this->version);
+        $this->application = new Application(self::$composer->getName(), self::$composer->getVersion());
 
         $reflectionClass = new ReflectionClass($this->application);
         $reflectionProperty = $reflectionClass->getProperty('core');
@@ -53,58 +74,65 @@ final class ApplicationTest extends TestCase
         $this->counter = count($this->core->all());
     }
 
-    /**
-     * @covers Application::__construct()
-     */
-    public function testConstructor(): void
+    #[Test]
+    #[TestDox('Define the core application')]
+    public function core(): void
     {
-        $this->assertSame($this->name, $this->core->getName());
-        $this->assertSame($this->version, $this->core->getVersion());
+        $this->assertInstanceOf(Core::class, $this->core);
+        $this->assertSame(self::$composer->getName(), $this->core->getName());
+        $this->assertSame(self::$composer->getVersion(), $this->core->getVersion());
     }
 
-    /**
-     * @covers \Cross\Application\Application::plugins()
-     */
-    public function testPlugins(): void
+    #[Test]
+    #[TestDox('Add all commands from a list of plugins')]
+    public function plugins(): void
     {
-        $this->application->plugins([new Plugin(), Plugin::class]);
+        $this->application->plugins([new PluginStub(), PluginStub::class]);
 
         $this->assertCount($this->counter + 2, $this->core->all());
     }
 
-    /**
-     * @covers Application::plugin()
-     * @throws \Exception
-     */
-    public function testPlugin(): void
+    #[Test]
+    #[TestDox('Add all commands from a plugin')]
+    public function pluginCommands(): void
     {
+        $this->application->plugin(new PluginStub());
+        $this->application->plugin(PluginStub::class);
+
+        $this->assertCount($this->counter + 2, $this->core->all());
+    }
+
+    #[Test]
+    #[TestDox('Set config of a plugin')]
+    public function pluginConfig(): void
+    {
+        Config::reset();
+
         $key = 'elephant';
         $config = ['count_legs' => 4];
 
-        $this->application->plugin(new Plugin($key, $config));
-        $this->application->plugin(Plugin::class);
+        $this->application->plugin(new PluginStub($key, $config));
 
-        $this->assertCount($this->counter + 2, $this->core->all());
         $this->assertSame(Config::get($key), $config);
     }
 
-    /**
-     * @covers Application::commands()
-     */
-    public function testCommands(): void
+    #[Test]
+    #[TestDox('Add a list of commands')]
+    public function commands(): void
     {
-        $this->application->commands([new Command(), Command::class]);
+        $commands = [new CommandStub(), CommandStub::class];
 
-        $this->assertCount($this->counter + 2, $this->core->all());
+        $this->application->commands($commands);
+
+        $this->assertCount($this->counter + count($commands), $this->core->all());
     }
 
-    /**
-     * @covers Application::command()
-     */
-    public function testCommand(): void
+    #[Test]
+    #[TestDox('Add a command')]
+    public function command(): void
     {
-        $this->application->command(new Command());
-        $this->application->command(Command::class);
+        $this->application->command(new CommandStub());
+        $this->application->command(CommandStub::class);
 
         $this->assertCount($this->counter + 2, $this->core->all());
     }

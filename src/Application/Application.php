@@ -6,15 +6,11 @@ namespace Cross\Application;
 
 use Cross\Config\Config;
 use Cross\Plugin\PluginInterface;
+use Exception;
 use Symfony\Component\Console\Application as Core;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * @method int run(InputInterface $input = null, OutputInterface $output = null)
- */
-class Application
+final class Application
 {
     /**
      * Core application.
@@ -27,16 +23,6 @@ class Application
     public function __construct(string $name, string $version)
     {
         $this->core = new Core($name, $version);
-    }
-
-    /**
-     * Calls methods from the base application.
-     *
-     * @param array<int, mixed> $arguments
-     */
-    public function __call(string $name, array $arguments): mixed
-    {
-        return $this->core->$name(...$arguments);
     }
 
     /**
@@ -87,5 +73,14 @@ class Application
         }
 
         $this->core->add($command);
+    }
+
+    /**
+     * Runs the current application.
+     * @throws Exception
+     */
+    public function run(): int
+    {
+        return $this->core->run();
     }
 }

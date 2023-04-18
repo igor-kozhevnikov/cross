@@ -7,19 +7,24 @@ namespace Cross\Composer;
 class Composer
 {
     /**
+     * Name.
+     */
+    private string $name;
+
+    /**
      * Description.
      */
-    public string $description;
+    private string $description;
 
     /**
      * Version.
      */
-    public string $version;
+    private string $version;
 
     /**
      * Vendor directory.
      */
-    public string $vendorDirectory;
+    private string $vendorDirectory;
 
     /**
      * Constructor.
@@ -28,8 +33,9 @@ class Composer
     {
         $config = $this->getComposerConfig();
 
-        $this->description = $config['description'] ?? 'UNDEFINED';
-        $this->version = $config['version'] ?? 'UNDEFINED';
+        $this->name = $config['name'];
+        $this->description = $config['description'];
+        $this->version = $config['version'];
         $this->vendorDirectory = $config['config']['vendor-dir'] ?? 'vendor';
     }
 
@@ -54,6 +60,14 @@ class Composer
         }
 
         return $data;
+    }
+
+    /**
+     * Returns a name.
+     */
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     /**

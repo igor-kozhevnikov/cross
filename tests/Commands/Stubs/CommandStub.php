@@ -7,7 +7,7 @@ namespace Cross\Tests\Commands\Stubs;
 use Exception;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 
-class Command extends BaseCommand
+class CommandStub extends BaseCommand
 {
     /**
      * Constructor.
