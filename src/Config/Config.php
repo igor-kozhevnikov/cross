@@ -37,29 +37,19 @@ final class Config
     }
 
     /**
-     * Wakeup.
-     *
-     * @throws Exception
-     */
-    public function __wakeup()
-    {
-        throw new Exception('Cannot unserialize');
-    }
-
-    /**
      * Unserialize.
      *
      * @throws Exception
      */
     public function __unserialize(array $data): void
     {
-        throw new Exception('Cannot unserialize');
+        throw new Exception('Cannot unserialize (unserialize)');
     }
 
     /**
      * Returns an instance.
      */
-    private static function getInstance(): self
+    public static function getInstance(): self
     {
         return self::$instance ?? self::$instance = new self();
     }

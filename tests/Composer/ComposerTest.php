@@ -44,7 +44,7 @@ final class ComposerTest extends TestCase
         $directory = __DIR__ . '/../../phpunit/temp';
         $path = "$directory/$name";
 
-        mkdir($directory, 0755, true);
+        mkdir($directory, 0744, true);
 
         $file = fopen($path, 'w');
         fclose($file);
