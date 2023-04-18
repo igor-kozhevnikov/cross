@@ -2,11 +2,9 @@
 <?php
 
 require __DIR__ . '/../src/Composer/Composer.php';
-require __DIR__ . '/../src/Autoload/Autoload.php';
 require __DIR__ . '/../src/Package/Package.php';
 
 use Cross\Application\Application;
-use Cross\Autoload\Autoload;
 use Cross\Composer\Composer;
 use Cross\Package\Package;
 
@@ -14,8 +12,7 @@ use Cross\Package\Package;
 $composer = new Composer();
 
 // Autoload
-$autoload = new Autoload($composer->getVendorDirectory());
-$autoload->run();
+require getcwd() . '/' . $composer->getVendorDirectory() . '/autoload.php';
 
 // Package
 $package = new Package();
