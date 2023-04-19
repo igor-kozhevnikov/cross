@@ -55,7 +55,7 @@ abstract class ShellCommand extends BaseCommand
     /**
      * Configures the current process.
      */
-    protected function configProcess(Process $process): void
+    protected function configureProcess(Process $process): void
     {
         //
     }
@@ -113,7 +113,7 @@ abstract class ShellCommand extends BaseCommand
         $process->setTty($this->tty());
         $process->setEnv($this->env());
 
-        $this->configProcess($process);
+        $this->configureProcess($process);
 
         $code = $process->run();
 
