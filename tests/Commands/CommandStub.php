@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Cross\Tests\Commands\Stubs;
+namespace Cross\Tests\Commands;
 
-use Exception;
-use Symfony\Component\Console\Command\Command as BaseCommand;
+use Symfony\Component\Console\Command\Command;
 
-class CommandStub extends BaseCommand
+class CommandStub extends Command
 {
     /**
      * Constructor.
-     * @throws Exception
      */
     public function __construct()
     {

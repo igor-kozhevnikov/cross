@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Cross\Tests\Plugin\Stubs;
+namespace Cross\Tests\Plugin;
 
 use Cross\Plugin\BasePlugin;
-use Cross\Tests\Commands\Stubs\CommandStub;
+use Cross\Tests\Commands\CommandStub;
 
 class PluginStub extends BasePlugin
 {

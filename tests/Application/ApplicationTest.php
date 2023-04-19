@@ -8,8 +8,8 @@ use Cross\Application\Application;
 use Cross\Commands\Config\Config;
 use Cross\Composer\Composer;
 use Cross\Plugin\BasePlugin;
-use Cross\Tests\Commands\Stubs\CommandStub;
-use Cross\Tests\Plugin\Stubs\PluginStub;
+use Cross\Tests\Commands\CommandStub;
+use Cross\Tests\Plugin\PluginStub;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -109,7 +109,7 @@ final class ApplicationTest extends TestCase
         Config::reset();
 
         $key = 'elephant';
-        $config = ['count_legs' => 4];
+        $config = ['legs' => 4];
 
         $this->application->plugin(new PluginStub($key, $config));
 
