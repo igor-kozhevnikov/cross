@@ -5,63 +5,23 @@ declare(strict_types=1);
 namespace Cross\Commands;
 
 use Cross\Commands\Statuses\Exist;
-use ReflectionException;
-use ReflectionMethod;
+use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * ----------------------------------------------------------------------------
- * Output:
- * ----------------------------------------------------------------------------
- * @method mixed ask(string $question, string $default = null, callable $validator = null)
- * @method mixed choice(string $question, array $choices, mixed $default = null)
- * @method bool confirm(string $question, bool $default = true)
- * @method void info(string|array $message)
- * @method void comment(string|array $message)
- * ----------------------------------------------------------------------------
- * Input:
- * ----------------------------------------------------------------------------
- * @method array arguments()
- * @method mixed argument(string $name)
- * @method array options()
- * @method mixed option(string $name)
- * ----------------------------------------------------------------------------
- */
 abstract class Command extends BaseCommand
 {
     /**
      * Input.
      */
-    private InputInterface $input;
+    protected InputInterface $input;
 
     /**
      * Output.
      */
-    private SymfonyStyle $output;
-
-    /**
-     * Methods.
-     *
-     * @var array<string, array<string, ?string>>
-     */
-    private array $methods = [
-        'output' => [
-            'info' => null,
-            'ask' => null,
-            'choice' => null,
-            'confirm' => null,
-            'comment' => null,
-        ],
-        'input' => [
-            'arguments' => 'getArguments',
-            'argument' => 'getArgument',
-            'options' => 'getOptions',
-            'option' => 'getOption',
-        ],
-    ];
+    protected SymfonyStyle $output;
 
     /**
      * @inheritDoc
@@ -75,7 +35,7 @@ abstract class Command extends BaseCommand
     /**
      * Returns the input.
      */
-    protected function input(): InputInterface
+    public function input(): InputInterface
     {
         return $this->input;
     }
@@ -83,7 +43,7 @@ abstract class Command extends BaseCommand
     /**
      * Returns the output.
      */
-    protected function output(): SymfonyStyle
+    public function output(): SymfonyStyle
     {
         return $this->output;
     }
@@ -139,22 +99,51 @@ abstract class Command extends BaseCommand
     }
 
     /**
-     * Auto prepend block.
+     * Returns all the given arguments merged with the default values.
+     *
+     * @return array<array-key, mixed>
      */
-    public function autoPrependBlock(): void
+    public function arguments(): array
     {
-        $output = $this->output();
+        return $this->input()->getArguments();
+    }
 
+    /**
+     * Returns the argument value for a given argument name.
+     */
+    public function argument(string $name): mixed
+    {
         try {
-            $reflection = new ReflectionMethod($output, 'autoPrependBlock');
-            $reflection->invoke($output);
-        } catch (ReflectionException) {
-            //
+            return $this->input()->getArgument($name);
+        } catch (InvalidArgumentException) {
+            return null;
         }
     }
 
     /**
-     * Returns values depend on an option value.
+     * Returns all the given options merged with the default values.
+     *
+     * @return array<array-key, mixed>
+     */
+    public function options(): array
+    {
+        return $this->input()->getOptions();
+    }
+
+    /**
+     * Returns the option value for a given option name.
+     */
+    public function option(string $name): mixed
+    {
+        try {
+            return $this->input()->getOption($name);
+        } catch (InvalidArgumentException) {
+            return null;
+        }
+    }
+
+    /**
+     * Returns a positive value if an option value is positive.
      */
     public function whenOption(string $name, string $positive, ?string $negative = null): ?string
     {
@@ -162,31 +151,50 @@ abstract class Command extends BaseCommand
     }
 
     /**
-     * Returns values depend on an option value.
+     * Returns a positive value if an option value is negative.
      */
     public function whenNotOption(string $name, string $positive, ?string $negative = null): ?string
     {
-        return !$this->option($name) ? $positive : $negative;
+        return ! $this->option($name) ? $positive : $negative;
     }
 
     /**
-     * Call methods from the input or output.
-     *
-     * @param array<int, mixed> $arguments
+     * Formats an info message.
      */
-    public function __call(string $name, array $arguments): mixed
+    public function info(string|array $message): void
     {
-        $sources = ['output', 'input'];
-        $method = $this->$name(...);
+        $this->output()->info($message);
+    }
 
-        foreach ($sources as $source) {
-            if (array_key_exists($name, $this->methods[$source])) {
-                $method = $this->methods[$source][$name] ?? $name;
-                $method = $this->$source()->$method(...);
-                break;
-            }
-        }
+    /**
+     * Formats a command comment.
+     */
+    public function comment(string|array $message): void
+    {
+        $this->output()->comment($message);
+    }
 
-        return $method(...$arguments);
+    /**
+     * Asks a question.
+     */
+    public function ask(string $question, string $default = null, callable $validator = null): void
+    {
+        $this->output()->ask($question, $default, $validator);
+    }
+
+    /**
+     * Gives a choice.
+     */
+    public function choice(string $question, array $choices, mixed $default = null, bool $multiSelect = false): mixed
+    {
+        return $this->output()->choice($question, $choices, $default, $multiSelect);
+    }
+
+    /**
+     * Requires a confirm.
+     */
+    public function confirm(string $question, bool $default = true): bool
+    {
+        return $this->output()->confirm($question, $default);
     }
 }

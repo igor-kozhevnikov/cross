@@ -2,16 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Cross\Tests\Config;
+namespace Cross\Tests\Commands\Config;
 
 use Cross\Commands\Config\Config;
 use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\IgnoreMethodForCodeCoverage;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Config::class)]
+#[IgnoreMethodForCodeCoverage(Config::class, '__construct')]
+#[IgnoreMethodForCodeCoverage(Config::class, '__clone')]
 final class ConfigTest extends TestCase
 {
     /**

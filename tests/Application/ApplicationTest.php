@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cross\Tests\Application;
 
 use Cross\Application\Application;
+use Cross\Commands\Command;
 use Cross\Commands\Config\Config;
 use Cross\Composer\Composer;
 use Cross\Plugin\BasePlugin;
@@ -19,6 +20,7 @@ use ReflectionClass;
 use Symfony\Component\Console\Application as Core;
 
 #[CoversClass(Application::class)]
+#[UsesClass(Command::class)]
 #[UsesClass(Composer::class)]
 #[UsesClass(Config::class)]
 #[UsesClass(BasePlugin::class)]

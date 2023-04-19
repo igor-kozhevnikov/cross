@@ -40,11 +40,6 @@ abstract class BaseCommand extends Command
     protected bool $hidden = false;
 
     /**
-     * If true add a space before the output.
-     */
-    protected bool $withSpace = true;
-
-    /**
      * Handles the console command.
      */
     abstract protected function handle(): Exist;
@@ -81,14 +76,6 @@ abstract class BaseCommand extends Command
     protected function hidden(): bool
     {
         return $this->hidden;
-    }
-
-    /**
-     * Returns an addition space before the output flag.
-     */
-    protected function withSpace(): bool
-    {
-        return $this->withSpace;
     }
 
     /**
@@ -165,10 +152,6 @@ abstract class BaseCommand extends Command
 
         if ($prepare->isNotContinue()) {
             return $prepare->exist();
-        }
-
-        if ($this->withSpace()) {
-            $this->autoPrependBlock();
         }
 
         $this->before();
