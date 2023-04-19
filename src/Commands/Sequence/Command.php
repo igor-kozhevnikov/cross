@@ -24,7 +24,7 @@ class Command implements CommandInterface
     private array $input = [];
 
     /**
-     * Define whether to append to a sequence or not.
+     * Defines whether to append to a sequence or not.
      */
     private bool $isAppend = true;
 

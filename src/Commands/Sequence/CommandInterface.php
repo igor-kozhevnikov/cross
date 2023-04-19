@@ -7,7 +7,7 @@ namespace Cross\Commands\Sequence;
 interface CommandInterface
 {
     /**
-     * Define the name.
+     * Defines the name.
      */
     public function name(string $name): self;
 
@@ -17,7 +17,7 @@ interface CommandInterface
     public function getName(): string;
 
     /**
-     * Define the input.
+     * Defines the input.
      *
      * @param array<string, bool|string> $input
      */

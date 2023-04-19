@@ -16,7 +16,7 @@ interface AttributesInterface
     public function merge(AttributesInterface $attributes): self;
 
     /**
-     * Define the attributes.
+     * Defines the attributes.
      *
      * @param array<int, AttributeInterface> $attributes
      */

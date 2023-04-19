@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cross\Commands;
 
-use Cross\Commands\Status\Status;
+use Cross\Commands\Statuses\Exist;
 
 abstract class DeputyCommand extends BaseCommand
 {
@@ -21,7 +21,7 @@ abstract class DeputyCommand extends BaseCommand
     protected array $parameters = [];
 
     /**
-     * Define the deputy.
+     * Defines the deputy.
      */
     protected function deputy(): string
     {
@@ -29,7 +29,7 @@ abstract class DeputyCommand extends BaseCommand
     }
 
     /**
-     * Define the parameters.
+     * Defines the parameters.
      *
      * @return array<string, mixed>
      */
@@ -41,7 +41,7 @@ abstract class DeputyCommand extends BaseCommand
     /**
      * @inheritDoc
      */
-    protected function handle(): Status
+    protected function handle(): Exist
     {
         return $this->call($this->deputy(), $this->parameters());
     }

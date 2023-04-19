@@ -5,7 +5,7 @@ namespace Cross\Commands\Messages;
 interface MessagesInterface
 {
     /**
-     * Define the success message;
+     * Defines the success message;
      */
     public function success(string $message): self;
 
@@ -15,7 +15,7 @@ interface MessagesInterface
     public function getSuccess(): ?string;
 
     /**
-     * Define the error message;
+     * Defines the error message;
      */
     public function error(string $message): self;
 

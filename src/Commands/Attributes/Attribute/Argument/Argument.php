@@ -65,7 +65,7 @@ class Argument extends Attribute implements ArgumentInterface
     }
 
     /**
-     * Define the name.
+     * Defines the name.
      */
     public function name(string $name): self
     {
@@ -116,7 +116,7 @@ class Argument extends Attribute implements ArgumentInterface
     }
 
     /**
-     * Define the suggestions.
+     * Defines the suggestions.
      *
      * @param array<string|Suggestion>|Closure $suggestions
      */
@@ -164,7 +164,7 @@ class Argument extends Attribute implements ArgumentInterface
     }
 
     /**
-     * Define the default value.
+     * Defines the default value.
      */
     public function default(mixed $default, bool $config = true): self
     {

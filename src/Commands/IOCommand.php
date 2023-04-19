@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cross\Commands;
 
-use Cross\Commands\Status\Status;
+use Cross\Commands\Statuses\Exist;
 use ReflectionException;
 use ReflectionMethod;
 use Symfony\Component\Console\Command\Command;
@@ -93,7 +93,7 @@ abstract class IOCommand extends Command
      *
      * @param null|string|array<int, string> $message
      */
-    public function error(null|string|array $message = null, ?string $info = null): Status
+    public function error(null|string|array $message = null, ?string $info = null): Exist
     {
         if ($message) {
             $this->output()->error($message);
@@ -103,7 +103,7 @@ abstract class IOCommand extends Command
             $this->output()->info($info);
         }
 
-        return Status::Failure;
+        return Exist::Failure;
     }
 
     /**
@@ -111,17 +111,17 @@ abstract class IOCommand extends Command
      *
      * @param array<int, string> $errors
      */
-    public function errors(array $errors): Status
+    public function errors(array $errors): Exist
     {
         if (empty($errors)) {
-            return Status::Failure;
+            return Exist::Failure;
         }
 
         $errors = array_map(fn (string $error) => "- $error", $errors);
         array_unshift($errors, 'Errors:');
         $this->output()->block($errors, null, 'fg=white;bg=red', ' ', true);
 
-        return Status::Failure;
+        return Exist::Failure;
     }
 
     /**
@@ -129,13 +129,13 @@ abstract class IOCommand extends Command
      *
      * @param null|string|array<int, string> $message
      */
-    public function success(null|string|array $message = null): Status
+    public function success(null|string|array $message = null): Exist
     {
         if ($message) {
             $this->output()->success($message);
         }
 
-        return Status::Success;
+        return Exist::Success;
     }
 
     /**

@@ -5,32 +5,28 @@ declare(strict_types=1);
 namespace Cross\Commands;
 
 use Cross\Commands\Sequence\SequenceInterface;
-use Cross\Commands\Status\Status;
+use Cross\Commands\Statuses\Exist;
 
 abstract class SequenceCommand extends BaseCommand
 {
     /**
-     * Define the sequence.
+     * Defines the sequence.
      */
     abstract protected function sequence(): SequenceInterface;
 
     /**
      * @inheritDoc
      */
-    protected function handle(): Status
+    protected function handle(): Exist
     {
         foreach ($this->sequence()->all() as $command) {
             $status = $this->call($command->getName(), $command->getInput());
 
-            if (Status::isSkip($status)) {
-                continue;
-            }
-
-            if (Status::isNotSuccess($status)) {
+            if (Exist::isNotSuccess($status)) {
                 return $status;
             }
         }
 
-        return Status::Success;
+        return Exist::Success;
     }
 }

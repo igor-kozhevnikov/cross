@@ -12,64 +12,64 @@ use Symfony\Component\Console\Completion\Suggestion;
 interface OptionInterface extends AttributeInterface
 {
     /**
-     * Define the name.
+     * Defines the name.
      */
     public function name(string $name): self;
 
     /**
-     * Define the shortcut.
+     * Defines the shortcut.
      */
     public function shortcut(?string $shortcut): self;
 
     /**
-     * Define the mode.
+     * Defines the mode.
      */
     public function mode(?int $mode): self;
 
     /**
-     * Define the none mode.
+     * Defines the none mode.
      */
     public function none(): self;
 
     /**
-     * Define the optional mode.
+     * Defines the optional mode.
      */
     public function optional(): self;
 
     /**
-     * Define the required mode.
+     * Defines the required mode.
      */
     public function required(): self;
 
     /**
-     * Define the array mode.
+     * Defines the array mode.
      */
     public function array(): self;
 
     /**
-     * Define the negatable mode.
+     * Defines the negatable mode.
      */
     public function negatable(): self;
 
     /**
-     * Define the description.
+     * Defines the description.
      */
     public function description(string $description): self;
 
     /**
-     * Define the default value.
+     * Defines the default value.
      */
     public function default(mixed $default, bool $config = true): self;
 
     /**
-     * Define the suggestions.
+     * Defines the suggestions.
      *
      * @param array<string|Suggestion>|Closure $suggestions
      */
     public function suggestions(array|Closure $suggestions): self;
 
     /**
-     * Define the attributes' container.
+     * Defines the attributes' container.
      */
     public function container(AttributesInterface $attributes): self;
 

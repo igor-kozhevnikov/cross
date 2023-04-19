@@ -4,15 +4,22 @@ declare(strict_types=1);
 
 namespace Cross\Commands;
 
-use Cross\Commands\Process\Process;
-use Cross\Commands\Status\Status;
+use Cross\Commands\Statuses\Exist;
+use Symfony\Component\Process\Process;
 
 abstract class ShellCommand extends BaseCommand
 {
     /**
      * Command.
+     *
+     * @var string|array<array-key, mixed>
      */
-    protected string $command = '';
+    protected string|array $command;
+
+    /**
+     * Current working directory.
+     */
+    protected ?string $cwd = null;
 
     /**
      * TTY mode.
@@ -22,7 +29,7 @@ abstract class ShellCommand extends BaseCommand
     /**
      * Timeout.
      */
-    protected ?float $timeout = 36000;
+    protected ?float $timeout = null;
 
     /**
      * Environment.
@@ -32,15 +39,45 @@ abstract class ShellCommand extends BaseCommand
     protected array $env = [];
 
     /**
-     * Define the command.
+     * Makes and returns a new instance of a process.
      */
-    protected function command(): string
+    protected function makeProcess(): Process
+    {
+        $command = $this->command();
+
+        if (is_string($command)) {
+            return Process::fromShellCommandline($command, $this->cwd());
+        }
+
+        return new Process($command, $this->cwd());
+    }
+
+    /**
+     * Configures the current process.
+     */
+    protected function configProcess(Process $process): void
+    {
+        //
+    }
+
+    /**
+     * Returns a command.
+     */
+    protected function command(): string|array
     {
         return $this->command;
     }
 
     /**
-     * Define the TTY mode.
+     * Returns the current working directory.
+     */
+    protected function cwd(): ?string
+    {
+        return $this->cwd;
+    }
+
+    /**
+     * Returns a TTY mode.
      */
     protected function tty(): bool
     {
@@ -48,7 +85,7 @@ abstract class ShellCommand extends BaseCommand
     }
 
     /**
-     * Define the timeout.
+     * Returns a timeout.
      */
     protected function timeout(): ?float
     {
@@ -56,7 +93,7 @@ abstract class ShellCommand extends BaseCommand
     }
 
     /**
-     * Define the environment.
+     * Returns environment.
      *
      * @return array<string, mixed>
      */
@@ -68,12 +105,18 @@ abstract class ShellCommand extends BaseCommand
     /**
      * @inheritDoc
      */
-    protected function handle(): Status
+    protected function handle(): Exist
     {
-        return Process::make($this->command())
-            ->timeout($this->timeout())
-            ->tty($this->tty())
-            ->env($this->env())
-            ->run();
+        $process = $this->makeProcess();
+
+        $process->setTimeout($this->timeout());
+        $process->setTty($this->tty());
+        $process->setEnv($this->env());
+
+        $this->configProcess($process);
+
+        $code = $process->run();
+
+        return Exist::from($code);
     }
 }

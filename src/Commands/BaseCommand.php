@@ -8,7 +8,8 @@ use Cross\Commands\Attributes\Attributes;
 use Cross\Commands\Attributes\AttributesInterface;
 use Cross\Commands\Messages\Messages;
 use Cross\Commands\Messages\MessagesInterface;
-use Cross\Commands\Status\Status;
+use Cross\Commands\Statuses\Exist;
+use Cross\Commands\Statuses\Prepare;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,22 +35,22 @@ abstract class BaseCommand extends IOCommand
     protected array $aliases = [];
 
     /**
-     * Hidden command.
+     * If true the command will be hidden.
      */
     protected bool $hidden = false;
 
     /**
-     * With space before the output.
+     * If true add a space before the output.
      */
     protected bool $withSpace = true;
 
     /**
-     * Handle the console command.
+     * Handles the console command.
      */
-    abstract protected function handle(): Status;
+    abstract protected function handle(): Exist;
 
     /**
-     * Define the name.
+     * Returns a name.
      */
     protected function name(): string
     {
@@ -57,7 +58,7 @@ abstract class BaseCommand extends IOCommand
     }
 
     /**
-     * Define the description.
+     * Returns a description.
      */
     protected function description(): string
     {
@@ -65,9 +66,9 @@ abstract class BaseCommand extends IOCommand
     }
 
     /**
-     * Define aliases.
+     * Returns aliases.
      *
-     * @return array<int, string>
+     * @return array<array-key, string>
      */
     protected function aliases(): array
     {
@@ -75,7 +76,7 @@ abstract class BaseCommand extends IOCommand
     }
 
     /**
-     * Define the hidden status.
+     * Returns a hidden flag.
      */
     protected function hidden(): bool
     {
@@ -83,7 +84,7 @@ abstract class BaseCommand extends IOCommand
     }
 
     /**
-     * Define whether you use a space before the output.
+     * Returns an addition space before the output flag.
      */
     protected function withSpace(): bool
     {
@@ -108,7 +109,7 @@ abstract class BaseCommand extends IOCommand
     }
 
     /**
-     * Define messages.
+     * Defines messages.
      */
     protected function messages(): MessagesInterface
     {
@@ -116,7 +117,7 @@ abstract class BaseCommand extends IOCommand
     }
 
     /**
-     * Define attributes.
+     * Defines attributes.
      */
     protected function attributes(): AttributesInterface
     {
@@ -134,9 +135,9 @@ abstract class BaseCommand extends IOCommand
     /**
      * Is called before the handler call with a status.
      */
-    protected function prepare(): Status
+    protected function prepare(): Prepare
     {
-        return Status::Continue;
+        return Prepare::Continue;
     }
 
     /**
@@ -150,7 +151,7 @@ abstract class BaseCommand extends IOCommand
     /**
      * Is called after the handler call.
      */
-    protected function finally(Status $status): void
+    protected function finally(Exist $exist): void
     {
         //
     }
@@ -160,10 +161,10 @@ abstract class BaseCommand extends IOCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $status = $this->prepare();
+        $prepare = $this->prepare();
 
-        if ($status->isNotContinue()) {
-            return $status->getCode();
+        if ($prepare->isNotContinue()) {
+            return $prepare->exist();
         }
 
         if ($this->withSpace()) {
@@ -172,21 +173,19 @@ abstract class BaseCommand extends IOCommand
 
         $this->before();
 
-        $status = $this->handle();
+        $exist = $this->handle();
 
-        $this->finally($status);
+        $this->finally($exist);
 
-        $messages = $this->messages();
-
-        if (Status::isSuccess($status)) {
-            $message = $messages->getSuccess();
-            $status = $this->success($message);
+        if (Exist::isSuccess($exist)) {
+            $message = $this->messages()->getSuccess();
+            $exist = $this->success($message);
         } else {
-            $message = $messages->getError();
-            $status = $this->error($message);
+            $message = $this->messages()->getError();
+            $exist = $this->error($message);
         }
 
-        return $status->getCode();
+        return $exist->value;
     }
 
     /**
@@ -194,7 +193,7 @@ abstract class BaseCommand extends IOCommand
      *
      * @param array<string, mixed> $input
      */
-    protected function call(string $name, array $input = []): Status
+    protected function call(string $name, array $input = []): Exist
     {
         $command = $this->getApplication()->find($name);
         $input = new ArrayInput($input);
@@ -205,6 +204,6 @@ abstract class BaseCommand extends IOCommand
             return $this->error($e->getMessage());
         }
 
-        return Status::make($code);
+        return Exist::from($code);
     }
 }

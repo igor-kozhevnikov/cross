@@ -71,7 +71,7 @@ class Option extends Attribute implements OptionInterface
     }
 
     /**
-     * Define the name.
+     * Defines the name.
      */
     public function name(string $name): self
     {
@@ -201,7 +201,7 @@ class Option extends Attribute implements OptionInterface
     }
 
     /**
-     * Define the suggestions.
+     * Defines the suggestions.
      *
      * @param array<string|Suggestion>|Closure $suggestions
      */

@@ -7,7 +7,7 @@ namespace Cross\Commands\Sequence;
 interface SequenceInterface
 {
     /**
-     * Define the sequence.
+     * Defines the sequence.
      *
      * @param array<int, CommandInterface> $sequence
      */
