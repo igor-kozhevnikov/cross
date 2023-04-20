@@ -44,7 +44,7 @@ interface ArgumentInterface extends AttributeInterface
     /**
      * Defines the default value.
      */
-    public function default(mixed $default, bool $config = true): self;
+    public function default(mixed $default): self;
 
     /**
      * Defines the suggestions.

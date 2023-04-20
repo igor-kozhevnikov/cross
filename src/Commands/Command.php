@@ -35,7 +35,7 @@ abstract class Command extends BaseCommand
     /**
      * Returns the input.
      */
-    public function input(): InputInterface
+    protected function input(): InputInterface
     {
         return $this->input;
     }
@@ -43,7 +43,7 @@ abstract class Command extends BaseCommand
     /**
      * Returns the output.
      */
-    public function output(): SymfonyStyle
+    protected function output(): SymfonyStyle
     {
         return $this->output;
     }
@@ -53,7 +53,7 @@ abstract class Command extends BaseCommand
      *
      * @param null|string|array<int, string> $message
      */
-    public function error(null|string|array $message = null, ?string $info = null): Exist
+    protected function error(null|string|array $message = null, ?string $info = null): Exist
     {
         if ($message) {
             $this->output()->error($message);
@@ -71,7 +71,7 @@ abstract class Command extends BaseCommand
      *
      * @param array<int, string> $errors
      */
-    public function errors(array $errors): Exist
+    protected function errors(array $errors): Exist
     {
         if (empty($errors)) {
             return Exist::Failure;
@@ -89,7 +89,7 @@ abstract class Command extends BaseCommand
      *
      * @param null|string|array<int, string> $message
      */
-    public function success(null|string|array $message = null): Exist
+    protected function success(null|string|array $message = null): Exist
     {
         if ($message) {
             $this->output()->success($message);
@@ -103,7 +103,7 @@ abstract class Command extends BaseCommand
      *
      * @return array<array-key, mixed>
      */
-    public function arguments(): array
+    protected function arguments(): array
     {
         return $this->input()->getArguments();
     }
@@ -111,7 +111,7 @@ abstract class Command extends BaseCommand
     /**
      * Returns the argument value for a given argument name.
      */
-    public function argument(string $name): mixed
+    protected function argument(string $name): mixed
     {
         try {
             return $this->input()->getArgument($name);
@@ -125,7 +125,7 @@ abstract class Command extends BaseCommand
      *
      * @return array<array-key, mixed>
      */
-    public function options(): array
+    protected function options(): array
     {
         return $this->input()->getOptions();
     }
@@ -133,7 +133,7 @@ abstract class Command extends BaseCommand
     /**
      * Returns the option value for a given option name.
      */
-    public function option(string $name): mixed
+    protected function option(string $name): mixed
     {
         try {
             return $this->input()->getOption($name);
@@ -145,7 +145,7 @@ abstract class Command extends BaseCommand
     /**
      * Returns a positive value if an option value is positive.
      */
-    public function whenOption(string $name, string $positive, ?string $negative = null): ?string
+    protected function whenOption(string $name, mixed $positive, mixed $negative = null): mixed
     {
         return $this->option($name) ? $positive : $negative;
     }
@@ -153,7 +153,7 @@ abstract class Command extends BaseCommand
     /**
      * Returns a positive value if an option value is negative.
      */
-    public function whenNotOption(string $name, string $positive, ?string $negative = null): ?string
+    protected function whenNotOption(string $name, mixed $positive, mixed $negative = null): mixed
     {
         return ! $this->option($name) ? $positive : $negative;
     }
@@ -161,7 +161,7 @@ abstract class Command extends BaseCommand
     /**
      * Formats an info message.
      */
-    public function info(string|array $message): void
+    protected function info(string|array $message): void
     {
         $this->output()->info($message);
     }
@@ -169,7 +169,7 @@ abstract class Command extends BaseCommand
     /**
      * Formats a command comment.
      */
-    public function comment(string|array $message): void
+    protected function comment(string|array $message): void
     {
         $this->output()->comment($message);
     }
@@ -177,7 +177,7 @@ abstract class Command extends BaseCommand
     /**
      * Asks a question.
      */
-    public function ask(string $question, string $default = null, callable $validator = null): void
+    protected function ask(string $question, string $default = null, callable $validator = null): void
     {
         $this->output()->ask($question, $default, $validator);
     }
@@ -185,7 +185,7 @@ abstract class Command extends BaseCommand
     /**
      * Gives a choice.
      */
-    public function choice(string $question, array $choices, mixed $default = null, bool $multiSelect = false): mixed
+    protected function choice(string $question, array $choices, mixed $default = null, bool $multiSelect = false): mixed
     {
         return $this->output()->choice($question, $choices, $default, $multiSelect);
     }
@@ -193,7 +193,7 @@ abstract class Command extends BaseCommand
     /**
      * Requires a confirm.
      */
-    public function confirm(string $question, bool $default = true): bool
+    protected function confirm(string $question, bool $default = true): bool
     {
         return $this->output()->confirm($question, $default);
     }

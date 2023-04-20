@@ -21,7 +21,7 @@ abstract class DeputyCommand extends BaseCommand
     protected array $parameters = [];
 
     /**
-     * Defines the deputy.
+     * Returns the deputy.
      */
     protected function deputy(): string
     {
@@ -29,7 +29,7 @@ abstract class DeputyCommand extends BaseCommand
     }
 
     /**
-     * Defines the parameters.
+     * Returns the parameters.
      *
      * @return array<string, mixed>
      */

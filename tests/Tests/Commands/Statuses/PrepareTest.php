@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Cross\Tests\Commands\Statuses;
 
 use Cross\Commands\Statuses\Prepare;
-use Cross\Tests\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Prepare::class)]
 final class PrepareTest extends TestCase

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Cross\Tests;
+namespace Cross\Tests\Utils;
 
-class TestCase extends \PHPUnit\Framework\TestCase
+class File
 {
     /**
      * Makes a file.
      */
-    public static function makeFile(string $name, ?string $content = null): string
+    public static function temp(string $name, ?string $content = null): string
     {
-        $directory = __DIR__ . '/../phpunit/temp';
+        $directory = __DIR__ . '/../../phpunit/temp';
         $path = "$directory/$name";
 
         if (! is_dir($directory)) {

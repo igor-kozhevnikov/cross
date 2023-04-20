@@ -6,21 +6,16 @@ namespace Cross\Tests\Commands;
 
 use Cross\Commands\Command;
 use Cross\Commands\Statuses\Exist;
-use Cross\Tests\TestCase;
+use Cross\Tests\Stubs\Commands\CommandStub;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\IgnoreMethodForCodeCoverage;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[CoversClass(Command::class)]
-#[IgnoreMethodForCodeCoverage(Command::class, 'info')]
-#[IgnoreMethodForCodeCoverage(Command::class, 'comment')]
-#[IgnoreMethodForCodeCoverage(Command::class, 'ask')]
-#[IgnoreMethodForCodeCoverage(Command::class, 'choice')]
-#[IgnoreMethodForCodeCoverage(Command::class, 'confirm')]
 final class CommandTest extends TestCase
 {
     #[Test]
@@ -123,8 +118,8 @@ final class CommandTest extends TestCase
         $command->addOption('counter', mode: InputOption::VALUE_REQUIRED, default: 10);
         $command->call();
 
-        $this->assertSame('P', $command->whenOption('counter', 'P', 'N'));
-        $this->assertSame('N', $command->whenOption('undefined', 'P', 'N'));
+        $this->assertSame(true, $command->whenOption('counter', true, false));
+        $this->assertSame(false, $command->whenOption('undefined', true, false));
     }
 
     #[Test]
@@ -135,7 +130,92 @@ final class CommandTest extends TestCase
         $command->addOption('counter', mode: InputOption::VALUE_REQUIRED, default: 10);
         $command->call();
 
-        $this->assertSame('N', $command->whenNotOption('counter', 'P', 'N'));
-        $this->assertSame('P', $command->whenNotOption('undefined', 'P', 'N'));
+        $this->assertSame(false, $command->whenNotOption('counter', true, false));
+        $this->assertSame(true, $command->whenNotOption('undefined', true, false));
+    }
+
+    #[Test]
+    #[TestDox('Call the info method')]
+    public function info(): void
+    {
+        $output = $this->getMockBuilder(SymfonyStyle::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['info'])
+            ->getMock();
+
+        $arguments = ['good news'];
+
+        $output->expects($this->once())->method('info')->with(...$arguments);
+
+        $command = new CommandStub($output);
+        $command->info(...$arguments);
+    }
+
+    #[Test]
+    #[TestDox('Call the comment method')]
+    public function comment(): void
+    {
+        $output = $this->getMockBuilder(SymfonyStyle::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['comment'])
+            ->getMock();
+
+        $arguments = ['good news'];
+
+        $output->expects($this->once())->method('comment')->with(...$arguments);
+
+        $command = new CommandStub($output);
+        $command->comment(...$arguments);
+    }
+
+    #[Test]
+    #[TestDox('Call the ask method')]
+    public function ask(): void
+    {
+        $output = $this->getMockBuilder(SymfonyStyle::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['ask'])
+            ->getMock();
+
+        $arguments = ['how are you?', 'ok', null];
+
+        $output->expects($this->once())->method('ask')->with(...$arguments);
+
+        $command = new CommandStub($output);
+        $command->ask(...$arguments);
+    }
+
+    #[Test]
+    #[TestDox('Call the choice method')]
+    public function choice(): void
+    {
+        $output = $this->getMockBuilder(SymfonyStyle::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['choice'])
+            ->getMock();
+
+        $arguments = ['what do you wish?', ['cake', 'beer'], 'beer', true];
+
+        $output->expects($this->once())->method('choice')->with(...$arguments);
+
+        $command = new CommandStub($output);
+        $command->choice(...$arguments);
+    }
+
+    #[Test]
+    #[TestDox('Call the confirm method')]
+    public function confirm(): void
+    {
+        $output = $this->getMockBuilder(SymfonyStyle::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['confirm'])
+            ->getMock();
+
+        $arguments = ['really?', true];
+
+        $output->expects($this->once())->method('confirm')->with(...$arguments);
+
+        $command = new CommandStub($output);
+        $command->confirm(...$arguments);
     }
 }

@@ -166,9 +166,9 @@ class Argument extends Attribute implements ArgumentInterface
     /**
      * Defines the default value.
      */
-    public function default(mixed $default, bool $config = true): self
+    public function default(mixed $default): self
     {
-        $this->default = $config ? Config::get($default) : $default;
+        $this->default = $default;
         return $this;
     }
 

@@ -186,9 +186,9 @@ class Option extends Attribute implements OptionInterface
     /**
      * @inheritDoc
      */
-    public function default(mixed $default, bool $config = true): self
+    public function default(mixed $default): self
     {
-        $this->default = $config ? Config::get($default) : $default;
+        $this->default = $default;
         return $this;
     }
 

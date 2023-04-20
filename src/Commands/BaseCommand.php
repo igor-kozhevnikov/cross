@@ -40,6 +40,11 @@ abstract class BaseCommand extends Command
     protected bool $hidden = false;
 
     /**
+     * Attributes.
+     */
+    protected ?Attributes $attributes = null;
+
+    /**
      * Handles the console command.
      */
     abstract protected function handle(): Exist;
@@ -108,7 +113,7 @@ abstract class BaseCommand extends Command
      */
     protected function attributes(): AttributesInterface
     {
-        return Attributes::make();
+        return $this->attributes ?? Attributes::make();
     }
 
     /**
@@ -138,7 +143,7 @@ abstract class BaseCommand extends Command
     /**
      * Is called after the handler call.
      */
-    protected function finally(Exist $exist): void
+    protected function after(Exist $exist): void
     {
         //
     }
@@ -158,7 +163,7 @@ abstract class BaseCommand extends Command
 
         $exist = $this->handle();
 
-        $this->finally($exist);
+        $this->after($exist);
 
         if (Exist::isSuccess($exist)) {
             $message = $this->messages()->getSuccess();
@@ -176,9 +181,9 @@ abstract class BaseCommand extends Command
      *
      * @param array<string, mixed> $input
      */
-    protected function call(string $name, array $input = []): Exist
+    public function call(?string $name = null, array $input = []): Exist
     {
-        $command = $this->getApplication()->find($name);
+        $command = is_null($name) ? $this : $this->getApplication()->find($name);
         $input = new ArrayInput($input);
 
         try {

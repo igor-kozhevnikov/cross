@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Cross\Tests\Package;
 
 use Cross\Package\Package;
-use Cross\Tests\TestCase;
 use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
+use Cross\Tests\Utils\File;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Package::class)]
 final class PackageTest extends TestCase
@@ -48,7 +49,7 @@ final class PackageTest extends TestCase
     #[TestDox('Return a valid alternative config')]
     public function alternativeConfigValid(): void
     {
-        $path = $this->makeFile('valid-alternative-config.php', '<?php return [];');
+        $path = File::temp('valid-alternative-config.php', '<?php return [];');
 
         $package = new Package($path);
 
@@ -61,7 +62,7 @@ final class PackageTest extends TestCase
     {
         $this->expectException(Exception::class);
 
-        $path = $this->makeFile('invalid-alternative-config.php', '<?php return null;');
+        $path = File::temp('invalid-alternative-config.php', '<?php return null;');
 
         new Package($path);
     }

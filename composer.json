@@ -28,7 +28,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Cross\\Tests\\": "tests/"
+            "Cross\\Tests\\": "tests/Tests",
+            "Cross\\Tests\\Utils\\": "tests/Utils",
+            "Cross\\Tests\\Stubs\\": "tests/Stubs"
         }
     },
     "scripts": {

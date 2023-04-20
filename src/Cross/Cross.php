@@ -2,27 +2,27 @@
 
 declare(strict_types=1);
 
-namespace Cross\Application;
+namespace Cross\Cross;
 
 use Cross\Commands\Config\Config;
 use Cross\Plugin\PluginInterface;
 use Exception;
-use Symfony\Component\Console\Application as Core;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 
-final class Application
+class Cross
 {
     /**
-     * Core application.
+     * Application.
      */
-    private Core $core;
+    private Application $application;
 
     /**
      * Constructor.
      */
-    public function __construct(string $name, string $version)
+    public function __construct(Application $application)
     {
-        $this->core = new Core($name, $version);
+        $this->application = $application;
     }
 
     /**
@@ -72,7 +72,7 @@ final class Application
             $command = new $command();
         }
 
-        $this->core->add($command);
+        $this->application->add($command);
     }
 
     /**
@@ -81,6 +81,6 @@ final class Application
      */
     public function run(): int
     {
-        return $this->core->run();
+        return $this->application->run();
     }
 }

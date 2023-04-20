@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Cross\Tests\Composer;
 
 use Cross\Composer\Composer;
-use Cross\Tests\TestCase;
 use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
+use Cross\Tests\Utils\File;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Composer::class)]
 final class ComposerTest extends TestCase
@@ -40,7 +41,7 @@ final class ComposerTest extends TestCase
     {
         $this->expectException(Exception::class);
 
-        $path = $this->makeFile('invalid-composer.json');
+        $path = File::temp('invalid-composer.json');
 
         $composer = new Composer($path);
         $composer->extractConfig();
