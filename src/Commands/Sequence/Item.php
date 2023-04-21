@@ -38,7 +38,7 @@ class Item implements ItemInterface
     }
 
     /**
-     * @inheritDoc
+     * Defines a name.
      */
     public function setName(string $name): void
     {
@@ -46,7 +46,7 @@ class Item implements ItemInterface
     }
 
     /**
-     * @inheritDoc
+     * Returns a name.
      */
     public function getName(): string
     {
@@ -54,7 +54,7 @@ class Item implements ItemInterface
     }
 
     /**
-     * @inheritDoc
+     * Defines an append flag.
      */
     public function setAppend(bool $append): void
     {
@@ -62,7 +62,7 @@ class Item implements ItemInterface
     }
 
     /**
-     * @inheritDoc
+     * Returns an append flag.
      */
     public function isAppend(): bool
     {

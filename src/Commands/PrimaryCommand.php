@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cross\Commands;
 
-use Cross\Commands\Statuses\Exist;
 use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

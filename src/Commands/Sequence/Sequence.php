@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Cross\Commands\Sequence;
 
-class Sequence implements SequenceInterface
+use ArrayIterator;
+use IteratorAggregate;
+use Traversable;
+
+class Sequence implements SequenceInterface, IteratorAggregate
 {
     /**
      * Sequence.
@@ -24,7 +28,9 @@ class Sequence implements SequenceInterface
     }
 
     /**
-     * @inheritDoc
+     * Defines the sequence.
+     *
+     * @param array<int, ItemInterface> $items
      */
     public function set(array $items): void
     {
@@ -36,7 +42,7 @@ class Sequence implements SequenceInterface
     }
 
     /**
-     * @inheritDoc
+     * Adds an item.
      */
     public function add(ItemInterface $item): void
     {
@@ -44,7 +50,7 @@ class Sequence implements SequenceInterface
     }
 
     /**
-     * @inheritDoc
+     * Returns an item by a name.
      */
     public function get(string $name): ?ItemInterface
     {
@@ -52,10 +58,18 @@ class Sequence implements SequenceInterface
     }
 
     /**
-     * @inheritDoc
+     * Returns all items.
      */
     public function all(): array
     {
         return $this->items;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getIterator(): Traversable
+    {
+        return new ArrayIterator($this->items);
     }
 }

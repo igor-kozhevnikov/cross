@@ -19,7 +19,7 @@ abstract class SequenceCommand extends BaseCommand
      */
     protected function handle(): Exist
     {
-        foreach ($this->sequence()->all() as $command) {
+        foreach ($this->sequence() as $command) {
             $command = $this->getApplication()->find($command->getName());
             $code = $command->run($this->input(), $this->output());
             $exist = Exist::from($code);

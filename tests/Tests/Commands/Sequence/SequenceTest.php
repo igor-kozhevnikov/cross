@@ -58,4 +58,14 @@ final class SequenceTest extends TestCase
 
         $this->assertSame($item, $sequence->get($item->getName()));
     }
+
+    #[Test]
+    #[TestDox('Iteration items')]
+    public function iterator(): void
+    {
+        $sequence = new Sequence();
+
+        $this->assertIsIterable($sequence);
+        $this->assertIsIterable($sequence->getIterator());
+    }
 }
