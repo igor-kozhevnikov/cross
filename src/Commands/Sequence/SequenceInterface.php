@@ -11,17 +11,17 @@ interface SequenceInterface
      *
      * @param array<int, ItemInterface> $items
      */
-    public function set(array $items): self;
+    public function set(array $items): void;
 
     /**
      * Adds an item.
      */
-    public function add(ItemInterface $item): self;
+    public function add(ItemInterface $item): void;
 
     /**
-     * Make an item.
+     * Returns an item by a name.
      */
-    public function item(string $name): ItemInterface;
+    public function get(string $name): ?ItemInterface;
 
     /**
      * Returns all items.

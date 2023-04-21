@@ -9,48 +9,40 @@ class Item implements ItemInterface
     /**
      * Sequence.
      */
-    private SequenceInterface $sequence;
+    protected SequenceInterface $sequence;
 
     /**
      * Name.
      */
-    private string $name;
+    protected string $name;
 
     /**
-     * Input.
-     *
-     * @var array<string, string>
+     * If true this item will be added to the sequence.
      */
-    private array $input = [];
+    protected bool $append = true;
 
     /**
-     * Defines whether to append to a sequence or not.
+     * Defines the sequence.
      */
-    private bool $isAppend = true;
-
-    /**
-     * Construct.
-     */
-    public function __construct(string $name)
+    public function setSequence(SequenceInterface $sequence): void
     {
-        $this->name($name);
+        $this->sequence = $sequence;
     }
 
     /**
-     * Static constructor.
+     * Returns the sequence.
      */
-    public static function make(string $name): self
+    public function getSequence(): SequenceInterface
     {
-        return new self($name);
+        return $this->sequence;
     }
 
     /**
      * @inheritDoc
      */
-    public function name(string $name): self
+    public function setName(string $name): void
     {
         $this->name = $name;
-        return $this;
     }
 
     /**
@@ -64,35 +56,17 @@ class Item implements ItemInterface
     /**
      * @inheritDoc
      */
-    public function input(array $input): self
+    public function setAppend(bool $append): void
     {
-        $this->input = $input;
-        return $this;
+        $this->append = $append;
     }
 
     /**
      * @inheritDoc
      */
-    public function getInput(): array
+    public function isAppend(): bool
     {
-        return $this->input;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function when(bool $condition): self
-    {
-        $this->isAppend = $condition;
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function whenNot(bool $condition): self
-    {
-        return $this->when(!$condition);
+        return $this->append;
     }
 
     /**
@@ -100,19 +74,10 @@ class Item implements ItemInterface
      */
     public function end(): SequenceInterface
     {
-        if ($this->isAppend) {
-            $this->sequence->add($this);
+        if ($this->isAppend()) {
+            $this->getSequence()->add($this);
         }
 
-        return $this->sequence;
-    }
-
-    /**
-     * Defines the sequence.
-     */
-    public function sequence(SequenceInterface $sequence): self
-    {
-        $this->sequence = $sequence;
-        return $this;
+        return $this->getSequence();
     }
 }

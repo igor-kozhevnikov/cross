@@ -24,44 +24,31 @@ class Sequence implements SequenceInterface
     }
 
     /**
-     * Static constructor.
-     *
-     * @param array<int, ItemInterface> $item
-     */
-    public static function make(array $item = []): self
-    {
-        return new self($item);
-    }
-
-    /**
      * @inheritDoc
      */
-    public function set(array $items): self
+    public function set(array $items): void
     {
         $this->items = [];
 
         foreach ($items as $item) {
             $this->add($item);
         }
-
-        return $this;
     }
 
     /**
      * @inheritDoc
      */
-    public function add(ItemInterface $item): self
+    public function add(ItemInterface $item): void
     {
-        $this->items[] = $item;
-        return $this;
+        $this->items[$item->getName()] = $item;
     }
 
     /**
      * @inheritDoc
      */
-    public function item(string $name): ItemInterface
+    public function get(string $name): ?ItemInterface
     {
-        return Item::make($name)->sequence($this);
+        return $this->items[$name] ?? null;
     }
 
     /**

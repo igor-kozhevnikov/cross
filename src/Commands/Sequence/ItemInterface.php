@@ -7,38 +7,24 @@ namespace Cross\Commands\Sequence;
 interface ItemInterface
 {
     /**
-     * Defines the name.
+     * Defines a name.
      */
-    public function name(string $name): self;
+    public function setName(string $name): void;
 
     /**
-     * Returns the name.
+     * Returns a name.
      */
     public function getName(): string;
 
     /**
-     * Defines the input.
-     *
-     * @param array<string, bool|string> $input
+     * Defines an append flag.
      */
-    public function input(array $input): self;
+    public function setAppend(bool $append): void;
 
     /**
-     * Returns the input.
-     *
-     * @return array<string, string>
+     * Returns an append flag.
      */
-    public function getInput(): array;
-
-    /**
-     * Use the item if the condition is true.
-     */
-    public function when(bool $condition): self;
-
-    /**
-     * Use the item if the condition is false.
-     */
-    public function whenNot(bool $condition): self;
+    public function isAppend(): bool;
 
     /**
      * Returns the parent sequence.

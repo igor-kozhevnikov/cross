@@ -8,7 +8,7 @@ use Cross\Commands\Sequence\Sequence;
 use Cross\Commands\SequenceCommand;
 use Cross\Commands\Statuses\Exist;
 use Cross\Tests\Stubs\Commands\BaseCommandStub;
-use Cross\Tests\Stubs\Commands\SequenceableCommandStub;
+use Cross\Tests\Stubs\Commands\Sequence\ItemStub;
 use Cross\Tests\Stubs\Commands\SequenceCommandStub;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -26,10 +26,10 @@ final class SequenceCommandTest extends TestCase
     #[TestDox('Successful handling a sequence')]
     public function handleSuccessful(): void
     {
-        $sequenceable = new SequenceableCommandStub();
+        $item = new ItemStub();
 
         $command = new BaseCommandStub();
-        $command->name = $sequenceable->getName();
+        $command->name = $item->getName();
         $command->configure();
 
         $application = new Application();
@@ -39,7 +39,7 @@ final class SequenceCommandTest extends TestCase
         $sequence->input = new ArrayInput([]);
         $sequence->output = new SymfonyStyle($sequence->input, new BufferedOutput());
         $sequence->setApplication($application);
-        $sequence->sequence = Sequence::make()->add($sequenceable);
+        $sequence->sequence = new Sequence([$item]);
 
         $this->assertSame(Exist::Success, $sequence->handle());
     }
@@ -48,10 +48,10 @@ final class SequenceCommandTest extends TestCase
     #[TestDox('Unsuccessful handling a sequence')]
     public function handleUnsuccessful(): void
     {
-        $sequenceable = new SequenceableCommandStub();
+        $item = new ItemStub();
 
         $command = new BaseCommandStub();
-        $command->name = $sequenceable->getName();
+        $command->name = $item->getName();
         $command->exist = Exist::Failure;
         $command->configure();
 
@@ -62,7 +62,7 @@ final class SequenceCommandTest extends TestCase
         $sequence->input = new ArrayInput([]);
         $sequence->output = new SymfonyStyle($sequence->input, new BufferedOutput());
         $sequence->setApplication($application);
-        $sequence->sequence = Sequence::make()->add($sequenceable);
+        $sequence->sequence = new Sequence([$item]);
 
         $this->assertSame(Exist::Failure, $sequence->handle());
     }
