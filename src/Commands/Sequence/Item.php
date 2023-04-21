@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cross\Commands\Sequence;
 
-class Command implements CommandInterface
+class Item implements ItemInterface
 {
     /**
      * Sequence.
@@ -108,7 +108,7 @@ class Command implements CommandInterface
     }
 
     /**
-     * Add command to the sequence.
+     * Defines the sequence.
      */
     public function sequence(SequenceInterface $sequence): self
     {

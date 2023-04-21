@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Cross\Tests\Stubs\Commands;
 
-use Cross\Commands\Command;
-use Cross\Commands\Statuses\Exist;
-use Cross\Tests\Stubs\Accessible;
+use Cross\Commands\PrimaryCommand;
+use Cross\Tests\Utils\Accessible;
 use Cross\Tests\Utils\Str;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,15 +14,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
+ * @property InputInterface $input
+ * @property SymfonyStyle $output
+ *
+ * @method void initialize(InputInterface $input, OutputInterface $output)
  * @method InputInterface input()
  * @method SymfonyStyle output()
- * @method Exist errors()
- * @method Exist error()
- * @method Exist success(null|string|array $message = null)
+ * @method void errors(array $errors)
+ * @method void error(null|string|array $message = null, ?string $info = null)
+ * @method void success(null|string|array $message = null)
  * @method array arguments()
  * @method mixed argument(string $name)
  * @method array options()
- * @method mixed option(string $name)
+ * @method array option(string $name)
  * @method mixed whenOption(string $name, mixed $positive, mixed $negative = null)
  * @method mixed whenNotOption(string $name, mixed $positive, mixed $negative = null)
  * @method void info(string|array $message)
@@ -32,20 +35,15 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * @method void choice(string $question, array $choices, mixed $default = null, bool $multiSelect = false)
  * @method void confirm(string $question, bool $default = true)
  */
-class CommandStub extends Command
+class PrimaryCommandStub extends PrimaryCommand
 {
     use Accessible;
 
     /**
-     * @inheritDoc
+     * Constructor.
      */
-    public function __construct(
-        ?SymfonyStyle $output = null,
-    ) {
-        if (! is_null($output)) {
-            $this->output = $output;
-        }
-
+    public function __construct()
+    {
         parent::__construct(Str::random());
     }
 
@@ -58,10 +56,13 @@ class CommandStub extends Command
     }
 
     /**
-     * Run a command.
+     * @inheritDoc
      */
-    public function call(): int
+    public function run(?InputInterface $input = null, ?OutputInterface $output = null): int
     {
-        return $this->run(new ArrayInput([]), new BufferedOutput());
+        $input ??= new ArrayInput([]);
+        $output ??= new SymfonyStyle($input, new BufferedOutput());
+
+        return parent::run($input, $output);
     }
 }

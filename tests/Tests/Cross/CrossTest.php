@@ -7,7 +7,7 @@ namespace Cross\Tests\Cross;
 use Cross\Commands\Config\Config;
 use Cross\Composer\Composer;
 use Cross\Cross\Cross;
-use Cross\Tests\Stubs\Commands\CommandStub;
+use Cross\Tests\Stubs\Commands\PrimaryCommandStub;
 use Cross\Tests\Stubs\Plugin\PluginStub;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -70,7 +70,7 @@ final class CrossTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Define an application')]
+    #[TestDox('Defining an application')]
     public function application(): void
     {
         $this->assertInstanceOf(Application::class, $this->application);
@@ -79,7 +79,7 @@ final class CrossTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Add all commands from a list of plugins')]
+    #[TestDox('Adding all commands from a list of plugins')]
     public function plugins(): void
     {
         $this->cross->plugins([new PluginStub(), PluginStub::class]);
@@ -88,7 +88,7 @@ final class CrossTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Add all commands from a plugin')]
+    #[TestDox('Adding all commands from a plugin')]
     public function pluginCommands(): void
     {
         $this->cross->plugin(new PluginStub());
@@ -98,24 +98,25 @@ final class CrossTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Set config of a plugin')]
+    #[TestDox('Defining a plugin config')]
     public function pluginConfig(): void
     {
         Config::reset();
 
-        $key = 'elephant';
-        $config = ['legs' => 4];
+        $plugin = new PluginStub();
+        $plugin->key = 'elephant';
+        $plugin->config = ['legs' => 4];
 
-        $this->cross->plugin(new PluginStub($key, $config));
+        $this->cross->plugin($plugin);
 
-        $this->assertSame(Config::get($key), $config);
+        $this->assertSame(Config::get($plugin->key), $plugin->config);
     }
 
     #[Test]
-    #[TestDox('Add a list of commands')]
+    #[TestDox('Adding a list of commands')]
     public function commands(): void
     {
-        $commands = [new CommandStub(), CommandStub::class];
+        $commands = [new PrimaryCommandStub(), PrimaryCommandStub::class];
 
         $this->cross->commands($commands);
 
@@ -123,17 +124,17 @@ final class CrossTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Add a command')]
+    #[TestDox('Adding a command')]
     public function command(): void
     {
-        $this->cross->command(new CommandStub());
-        $this->cross->command(CommandStub::class);
+        $this->cross->command(new PrimaryCommandStub());
+        $this->cross->command(PrimaryCommandStub::class);
 
         $this->assertCount($this->counter + 2, $this->application->all());
     }
 
     #[Test]
-    #[TestDox('Run')]
+    #[TestDox('Running an application')]
     public function testRun(): void
     {
         $this->application->method('run')->willReturn(15);

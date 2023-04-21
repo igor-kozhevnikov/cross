@@ -4,21 +4,32 @@ declare(strict_types=1);
 
 namespace Cross\Tests\Stubs\Commands;
 
-use Cross\Commands\Attributes\Attributes;
+use Cross\Commands\Attributes\AttributesInterface;
 use Cross\Commands\BaseCommand;
+use Cross\Commands\Messages\MessagesInterface;
 use Cross\Commands\Statuses\Exist;
 use Cross\Commands\Statuses\Prepare;
-use Cross\Tests\Stubs\Accessible;
+use Cross\Tests\Utils\Accessible;
 use Cross\Tests\Utils\Str;
-use Symfony\Component\Console\Exception\ExceptionInterface;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
+ * @property string $name
+ * @property string $description
+ * @property array $aliases
+ * @property bool $hidden
+ * @property ?AttributesInterface $attributes
+ * @property ?MessagesInterface $messages
+ *
+ * @method string name()
+ * @method string description()
+ * @method array aliases()
+ * @method bool hidden()
+ * @method void configure()
+ * @method array arguments()
  * @method mixed argument(string $name)
+ * @method array options()
  * @method mixed option(string $name)
  * @method int execute(InputInterface $input, OutputInterface $output)
  */
@@ -27,21 +38,21 @@ class BaseCommandStub extends BaseCommand
     use Accessible;
 
     /**
-     * @inheritDoc
+     * Prepare.
      */
-    public function __construct(
-        public string $name = '',
-        public string $description = '',
-        public array $aliases = [],
-        public bool $hidden = false,
-        public ?Attributes $attributes = null,
-        public ?Prepare $prepare = null,
-        public ?ExceptionInterface $run = null,
-    ) {
-        $this->name = $name ?: Str::random();
-        $this->input = new ArrayInput([]);
-        $this->output = new SymfonyStyle($this->input, new BufferedOutput());
-        parent::__construct($this->name);
+    public ?Prepare $prepare = null;
+
+    /**
+     * Exist.
+     */
+    public ?Exist $exist = Exist::Success;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct($this->name = Str::random());
     }
 
     /**
@@ -49,7 +60,7 @@ class BaseCommandStub extends BaseCommand
      */
     public function prepare(): Prepare
     {
-        return is_null($this->prepare) ? parent::prepare() : $this->prepare;
+        return $this->prepare ?? parent::prepare();
     }
 
     /**
@@ -57,6 +68,6 @@ class BaseCommandStub extends BaseCommand
      */
     protected function handle(): Exist
     {
-        return Exist::Success;
+        return $this->exist;
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cross\Commands\Sequence;
 
-interface CommandInterface
+interface ItemInterface
 {
     /**
      * Defines the name.
@@ -31,12 +31,12 @@ interface CommandInterface
     public function getInput(): array;
 
     /**
-     * Use the command if the condition is true.
+     * Use the item if the condition is true.
      */
     public function when(bool $condition): self;
 
     /**
-     * Use the command if the condition is false.
+     * Use the item if the condition is false.
      */
     public function whenNot(bool $condition): self;
 

@@ -4,45 +4,16 @@ declare(strict_types=1);
 
 namespace Cross\Tests\Stubs\Plugin;
 
-use Cross\Plugin\PluginInterface;
-use Cross\Tests\Stubs\Commands\CommandStub;
-use Cross\Tests\Utils\Str;
+use Cross\Tests\Stubs\Commands\PrimaryCommandStub;
 
-class PluginStub implements PluginInterface
+class PluginStub extends BasePluginStub
 {
     /**
      * Constructor.
      */
-    public function __construct(
-        public string $key = '',
-        public array $config = [],
-        public array $commands = [],
-    ) {
-        $this->key = $key ?: Str::random();
-        $this->commands = $this->commands ?: [CommandStub::class];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getKey(): string
+    public function __construct()
     {
-        return $this->key;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getConfig(): array
-    {
-        return $this->config;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getCommands(): array
-    {
-        return $this->commands;
+        parent::__construct();
+        $this->commands = [PrimaryCommandStub::class];
     }
 }

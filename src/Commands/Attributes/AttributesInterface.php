@@ -11,7 +11,7 @@ use Cross\Commands\Attributes\Attribute\Option\OptionInterface;
 interface AttributesInterface
 {
     /**
-     * Merge the attributes.
+     * Merges the attributes.
      */
     public function merge(AttributesInterface $attributes): self;
 
@@ -23,17 +23,17 @@ interface AttributesInterface
     public function set(array $attributes): self;
 
     /**
-     * Add a attribute.
+     * Adds an attribute.
      */
     public function add(AttributeInterface $attribute): self;
 
     /**
-     * Add an argument by the builder.
+     * Adds an argument.
      */
     public function argument(string $name): ArgumentInterface;
 
     /**
-     * Add an option by the builder.
+     * Adds an option.
      */
     public function option(string $name): OptionInterface;
 

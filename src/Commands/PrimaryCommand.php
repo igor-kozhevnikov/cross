@@ -6,12 +6,12 @@ namespace Cross\Commands;
 
 use Cross\Commands\Statuses\Exist;
 use InvalidArgumentException;
-use Symfony\Component\Console\Command\Command as BaseCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-abstract class Command extends BaseCommand
+abstract class PrimaryCommand extends Command
 {
     /**
      * Input.
@@ -21,7 +21,7 @@ abstract class Command extends BaseCommand
     /**
      * Output.
      */
-    protected SymfonyStyle $output;
+    protected OutputInterface|SymfonyStyle $output;
 
     /**
      * @inheritDoc
@@ -29,7 +29,7 @@ abstract class Command extends BaseCommand
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->input = $input;
-        $this->output = new SymfonyStyle($input, $output);
+        $this->output = $output;
     }
 
     /**
@@ -49,11 +49,11 @@ abstract class Command extends BaseCommand
     }
 
     /**
-     * Show the failed message and return failed code.
+     * Shows a error message.
      *
      * @param null|string|array<int, string> $message
      */
-    protected function error(null|string|array $message = null, ?string $info = null): Exist
+    protected function error(null|string|array $message = null, ?string $info = null): void
     {
         if ($message) {
             $this->output()->error($message);
@@ -62,40 +62,28 @@ abstract class Command extends BaseCommand
         if ($info) {
             $this->output()->info($info);
         }
-
-        return Exist::Failure;
     }
 
     /**
-     * Show the error messages and return failed code.
+     * Shows error messages.
      *
      * @param array<int, string> $errors
      */
-    protected function errors(array $errors): Exist
+    protected function errors(array $errors): void
     {
-        if (empty($errors)) {
-            return Exist::Failure;
-        }
-
         $errors = array_map(fn (string $error) => "- $error", $errors);
         array_unshift($errors, 'Errors:');
         $this->output()->block($errors, null, 'fg=white;bg=red', ' ', true);
-
-        return Exist::Failure;
     }
 
     /**
-     * Show the success message and return the success code.
+     * Shows a success message.
      *
      * @param null|string|array<int, string> $message
      */
-    protected function success(null|string|array $message = null): Exist
+    protected function success(null|string|array $message = null): void
     {
-        if ($message) {
-            $this->output()->success($message);
-        }
-
-        return Exist::Success;
+        $this->output()->success($message);
     }
 
     /**

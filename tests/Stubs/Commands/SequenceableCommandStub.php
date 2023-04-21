@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Cross\Tests\Stubs\Commands;
 
-use Cross\Commands\Sequence\Command;
+use Cross\Commands\Sequence\Item;
 use Cross\Tests\Utils\Str;
 
-class SequenceCommandCommandStub extends Command
+class SequenceableCommandStub extends Item
 {
     /**
-     * @inheritDoc
+     * Constructor.
      */
     public function __construct()
     {

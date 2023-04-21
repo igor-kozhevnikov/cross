@@ -4,106 +4,126 @@ declare(strict_types=1);
 
 namespace Cross\Tests\Commands;
 
-use Cross\Commands\Command;
-use Cross\Commands\Statuses\Exist;
-use Cross\Tests\Stubs\Commands\CommandStub;
+use Cross\Commands\PrimaryCommand;
+use Cross\Tests\Stubs\Commands\PrimaryCommandStub;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-#[CoversClass(Command::class)]
-final class CommandTest extends TestCase
+#[CoversClass(PrimaryCommand::class)]
+final class PrimaryCommandTest extends TestCase
 {
     #[Test]
-    #[TestDox('Initialize an input and output')]
+    #[TestDox('Initializing an input and output')]
     public function initialize(): void
     {
-        $command = new CommandStub();
-        $command->call();
+        $input = new ArrayInput([]);
+        $output = new SymfonyStyle($input, new BufferedOutput());
 
-        $this->assertInstanceOf(InputInterface::class, $command->input());
-        $this->assertInstanceOf(SymfonyStyle::class, $command->output());
+        $command = new PrimaryCommandStub();
+        $command->initialize($input, $output);
+
+        $this->assertSame($input, $command->input);
+        $this->assertSame($input, $command->input());
+
+        $this->assertSame($output, $command->output);
+        $this->assertSame($output, $command->output());
     }
 
     #[Test]
-    #[TestDox('Output error messages')]
+    #[TestDox('Outputting error messages')]
     public function errors(): void
     {
-        $command = new CommandStub();
-        $command->call();
+        $output = $this->getMockBuilder(SymfonyStyle::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['block'])
+            ->getMock();
 
-        $this->assertSame(Exist::Failure, $command->errors([]));
-        $this->assertSame(Exist::Failure, $command->errors(['message']));
+        $output->expects($this->once())->method('block');
+
+        $command = new PrimaryCommandStub();
+        $command->output = $output;
+        $command->errors(['To long!', 'To far!']);
     }
 
     #[Test]
-    #[TestDox('Output an error message')]
+    #[TestDox('Outputting an error message')]
     public function error(): void
     {
-        $command = new CommandStub();
-        $command->call();
+        $output = $this->getMockBuilder(SymfonyStyle::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['block'])
+            ->getMock();
 
-        $this->assertSame(Exist::Failure, $command->error('message'));
-        $this->assertSame(Exist::Failure, $command->error('message', 'info'));
+        $output->expects($this->exactly(2))->method('block');
+
+        $command = new PrimaryCommandStub();
+        $command->output = $output;
+        $command->error('To long!', 'Actually 500ms.');
     }
 
     #[Test]
-    #[TestDox('Output a success message')]
+    #[TestDox('Outputting a success messages')]
     public function success(): void
     {
-        $command = new CommandStub();
-        $command->call();
+        $output = $this->getMockBuilder(SymfonyStyle::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['success'])
+            ->getMock();
 
-        $this->assertSame(Exist::Success, $command->success());
-        $this->assertSame(Exist::Success, $command->success('message'));
-        $this->assertSame(Exist::Success, $command->success(['message', 'message']));
+        $output->expects($this->once())->method('success');
+
+        $command = new PrimaryCommandStub();
+        $command->output = $output;
+        $command->success('Way to go!');
     }
 
     #[Test]
-    #[TestDox('Return arguments')]
+    #[TestDox('Getting arguments')]
     public function arguments(): void
     {
-        $command = new CommandStub();
+        $command = new PrimaryCommandStub();
         $command->addArgument('counter', default: 10);
-        $command->call();
+        $command->run();
 
         $this->assertSame(['counter' => 10], $command->arguments());
     }
 
     #[Test]
-    #[TestDox('Return an argument')]
+    #[TestDox('Getting an argument')]
     public function argument(): void
     {
-        $command = new CommandStub();
+        $command = new PrimaryCommandStub();
         $command->addArgument('counter', default: 10);
-        $command->call();
+        $command->run();
 
         $this->assertSame(10, $command->argument('counter'));
         $this->assertSame(null, $command->argument('undefined'));
     }
 
     #[Test]
-    #[TestDox('Return options')]
+    #[TestDox('Getting options')]
     public function options(): void
     {
-        $command = new CommandStub();
+        $command = new PrimaryCommandStub();
         $command->addOption('counter', mode: InputOption::VALUE_REQUIRED, default: 10);
-        $command->call();
+        $command->run();
 
         $this->assertSame(['counter' => 10], $command->options());
     }
 
     #[Test]
-    #[TestDox('Return an option')]
+    #[TestDox('Getting an option')]
     public function option(): void
     {
-        $command = new CommandStub();
+        $command = new PrimaryCommandStub();
         $command->addOption('counter', mode: InputOption::VALUE_REQUIRED, default: 10);
-        $command->call();
+        $command->run();
 
         $this->assertSame(10, $command->option('counter'));
         $this->assertSame(null, $command->option('undefined'));
@@ -111,111 +131,116 @@ final class CommandTest extends TestCase
 
 
     #[Test]
-    #[TestDox('Return a value depend on a positive option')]
+    #[TestDox('Getting a value depend on a positive option')]
     public function whenOption(): void
     {
-        $command = new CommandStub();
+        $command = new PrimaryCommandStub();
         $command->addOption('counter', mode: InputOption::VALUE_REQUIRED, default: 10);
-        $command->call();
+        $command->run();
 
         $this->assertSame(true, $command->whenOption('counter', true, false));
         $this->assertSame(false, $command->whenOption('undefined', true, false));
     }
 
     #[Test]
-    #[TestDox('Return a value depend on a negative option')]
+    #[TestDox('Getting a value depend on a negative option')]
     public function whenNotOption(): void
     {
-        $command = new CommandStub();
+        $command = new PrimaryCommandStub();
         $command->addOption('counter', mode: InputOption::VALUE_REQUIRED, default: 10);
-        $command->call();
+        $command->run();
 
         $this->assertSame(false, $command->whenNotOption('counter', true, false));
         $this->assertSame(true, $command->whenNotOption('undefined', true, false));
     }
 
     #[Test]
-    #[TestDox('Call the info method')]
+    #[TestDox('Executing the info method')]
     public function info(): void
     {
+        $arguments = ['No smoking!'];
+
         $output = $this->getMockBuilder(SymfonyStyle::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['info'])
             ->getMock();
 
-        $arguments = ['good news'];
-
         $output->expects($this->once())->method('info')->with(...$arguments);
 
-        $command = new CommandStub($output);
+        $command = new PrimaryCommandStub();
+        $command->output = $output;
         $command->info(...$arguments);
     }
 
     #[Test]
-    #[TestDox('Call the comment method')]
+    #[TestDox('Executing the comment method')]
     public function comment(): void
     {
+        $arguments = ['Remember that moment!'];
+
         $output = $this->getMockBuilder(SymfonyStyle::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['comment'])
             ->getMock();
 
-        $arguments = ['good news'];
-
         $output->expects($this->once())->method('comment')->with(...$arguments);
 
-        $command = new CommandStub($output);
+        $command = new PrimaryCommandStub();
+        $command->output = $output;
         $command->comment(...$arguments);
     }
 
     #[Test]
-    #[TestDox('Call the ask method')]
+    #[TestDox('Executing the ask method')]
     public function ask(): void
     {
+        $arguments = ['Whats up?', 'No bad', null];
+
         $output = $this->getMockBuilder(SymfonyStyle::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['ask'])
             ->getMock();
 
-        $arguments = ['how are you?', 'ok', null];
-
         $output->expects($this->once())->method('ask')->with(...$arguments);
 
-        $command = new CommandStub($output);
+        $command = new PrimaryCommandStub();
+        $command->output = $output;
         $command->ask(...$arguments);
     }
 
     #[Test]
-    #[TestDox('Call the choice method')]
+    #[TestDox('Executing the choice method')]
     public function choice(): void
     {
+        $arguments = ['What would you like?', ['cake', 'beer'], 'beer', true];
+
         $output = $this->getMockBuilder(SymfonyStyle::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['choice'])
             ->getMock();
 
-        $arguments = ['what do you wish?', ['cake', 'beer'], 'beer', true];
-
         $output->expects($this->once())->method('choice')->with(...$arguments);
 
-        $command = new CommandStub($output);
+        $command = new PrimaryCommandStub();
+        $command->output = $output;
         $command->choice(...$arguments);
     }
 
     #[Test]
-    #[TestDox('Call the confirm method')]
+    #[TestDox('Executing the confirm method')]
     public function confirm(): void
     {
+        $arguments = ['Really?', true];
+
         $output = $this->getMockBuilder(SymfonyStyle::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['confirm'])
             ->getMock();
 
-        $arguments = ['really?', true];
-
         $output->expects($this->once())->method('confirm')->with(...$arguments);
 
-        $command = new CommandStub($output);
+        $command = new PrimaryCommandStub();
+        $command->output = $output;
         $command->confirm(...$arguments);
     }
 }

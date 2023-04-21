@@ -5,50 +5,69 @@ declare(strict_types=1);
 namespace Cross\Tests\Composer;
 
 use Cross\Composer\Composer;
-use Exception;
+use Cross\Composer\Exceptions\InvalidComposerConfigException;
+use Cross\Composer\Exceptions\MissingComposerConfigException;
+use Cross\Tests\Stubs\Composer\ComposerStub;
+use Cross\Tests\Utils\File;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\IgnoreClassForCodeCoverage;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
-use Cross\Tests\Utils\File;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Composer::class)]
+#[IgnoreClassForCodeCoverage(InvalidComposerConfigException::class)]
+#[IgnoreClassForCodeCoverage(MissingComposerConfigException::class)]
 final class ComposerTest extends TestCase
 {
     #[Test]
-    #[TestDox('Successful extraction of composer config')]
-    public function extractSuccess(): void
+    #[TestDox('Getting a composer config path')]
+    public function configPath(): void
     {
-        $composer = new Composer();
-        $config = $composer->extractConfig();
+        $composer = new ComposerStub();
+
+        $this->assertSame(getcwd() . '/composer.json', $composer->getConfigPath());
+    }
+
+    #[Test]
+    #[TestDox('Successful fetching of composer config')]
+    public function configSuccess(): void
+    {
+        $config = (new ComposerStub())->fetchConfig();
 
         $this->assertIsArray($config);
+        $this->assertIsString($config['name']);
+        $this->assertIsString($config['description']);
+        $this->assertIsString($config['version']);
+        $this->assertNull($config['vendor-dir']);
     }
 
     #[Test]
-    #[TestDox('Unsuccessful extraction of composer config due to the composer.json file does not exist')]
-    public function extractFailedFile(): void
+    #[TestDox('Unsuccessful fetching of composer config due to the composer.json file does not exist')]
+    public function configMissing(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(MissingComposerConfigException::class);
 
-        $composer = new Composer('invalid path');
-        $composer->extractConfig();
+        $composer = new ComposerStub();
+        $composer->path = '~/andromeda-galaxy/composer.json';
+        $composer->fetchConfig();
     }
 
     #[Test]
-    #[TestDox('Unsuccessful extraction of composer config due to composer.json file content is invalid')]
-    public function extractFailedContent(): void
+    #[TestDox('Unsuccessful fetching of composer config due to composer.json file content is invalid')]
+    public function configInvalid(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(InvalidComposerConfigException::class);
 
         $path = File::temp('invalid-composer.json');
 
-        $composer = new Composer($path);
-        $composer->extractConfig();
+        $composer = new ComposerStub();
+        $composer->path = $path;
+        $composer->fetchConfig();
     }
 
     #[Test]
-    #[TestDox('Set all properties')]
+    #[TestDox('Defining the all properties')]
     public function properties(): void
     {
         $name = 'Name';
@@ -59,7 +78,7 @@ final class ComposerTest extends TestCase
 
         $all = compact('name', 'description', 'version', 'config');
 
-        $composer = new Composer();
+        $composer = new ComposerStub();
         $composer->setConfig($all);
 
         $this->assertSame($name, $composer->getName());

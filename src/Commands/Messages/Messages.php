@@ -19,7 +19,7 @@ class Messages implements MessagesInterface
     /**
      * Constructor.
      */
-    private function __construct(?string $success = null, ?string $error = null)
+    public function __construct(?string $success = null, ?string $error = null)
     {
         $this->success = $success;
         $this->error = $error;
@@ -30,12 +30,9 @@ class Messages implements MessagesInterface
      *
      * @param array<string, string> $messages
      */
-    public static function make(array $messages = []): self
+    public static function make(?string $success = null, ?string $error = null): self
     {
-        return new self(
-            success: $messages['success'] ?? null,
-            error: $messages['error'] ?? null,
-        );
+        return new self($success, $error);
     }
 
     /**
@@ -45,6 +42,14 @@ class Messages implements MessagesInterface
     {
         $this->success = $message;
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function hasSuccess(): bool
+    {
+        return (bool) $this->success;
     }
 
     /**
@@ -62,6 +67,14 @@ class Messages implements MessagesInterface
     {
         $this->error = $message;
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function hasError(): bool
+    {
+        return (bool) $this->error;
     }
 
     /**

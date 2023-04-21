@@ -17,16 +17,15 @@ use Symfony\Component\Process\Process;
 final class ShellCommandTest extends TestCase
 {
     #[Test]
-    #[TestDox('Returns properties')]
+    #[TestDox('Getting simple properties')]
     public function properties(): void
     {
-        $command = new ShellCommandStub(
-            command: 'monkey',
-            cwd: 'dir',
-            tty: false,
-            timeout: 7.5,
-            env: ['location' => 'Africa'],
-        );
+        $command = new ShellCommandStub();
+        $command->command = 'discover';
+        $command->cwd = '~/milky-way-galaxy/';
+        $command->tty = false;
+        $command->timeout = 10.5;
+        $command->env = ['black-holes' => true];
 
         $this->assertSame($command->command, $command->command());
         $this->assertSame($command->cwd, $command->cwd());
@@ -36,28 +35,62 @@ final class ShellCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Make a process from a string')]
-    public function makeProcessFromString(): void
+    #[TestDox('Making a process from a string')]
+    public function processFromString(): void
     {
-        $command = new ShellCommandStub(command: 'monkey');
+        $command = new ShellCommandStub();
+        $command->cwd = '~/house-of-the-great-gatsby';
+        $command->command = 'dance';
 
-        $this->assertInstanceOf(Process::class, $command->makeProcess());
+        $process = $command->makeProcess();
+
+        $this->assertInstanceOf(Process::class, $process);
+        $this->assertSame($command->cwd, $process->getWorkingDirectory());
+        $this->assertSame($command->command, $process->getCommandLine());
     }
 
     #[Test]
-    #[TestDox('Make a process from an array')]
-    public function makeProcessFormArray(): void
+    #[TestDox('Making a process from an array')]
+    public function processFormArray(): void
     {
-        $command = new ShellCommandStub(command: ['monkey']);
+        $command = new ShellCommandStub();
+        $command->cwd = '~/mortal-kombat-arena';
+        $command->command = ['fight', 'kill'];
 
-        $this->assertInstanceOf(Process::class, $command->makeProcess());
+        $process = $command->makeProcess();
+
+        $this->assertInstanceOf(Process::class, $process);
+        $this->assertSame($command->cwd, $process->getWorkingDirectory());
+
+        $this->assertSame(
+            join(' ', array_map(fn (string $command): string => "'$command'", $command->command)),
+            $process->getCommandLine(),
+        );
     }
 
     #[Test]
-    #[TestDox('Handle the command')]
+    #[TestDox('Configuring a process')]
+    public function configure(): void
+    {
+        $process = new Process([]);
+
+        $command = new ShellCommandStub();
+        $command->tty = true;
+        $command->timeout = 777;
+        $command->env = ['luck' => true];
+        $command->configureProcess($process);
+
+        $this->assertSame($command->tty, $process->isTty());
+        $this->assertSame($command->timeout, $process->getTimeout());
+        $this->assertSame($command->env, $process->getEnv());
+    }
+
+    #[Test]
+    #[TestDox('Executing the handle() method')]
     public function handle(): void
     {
         $command = new ShellCommandStub();
+        $command->command = [];
 
         $this->assertSame(Exist::Success, $command->handle());
     }

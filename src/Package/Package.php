@@ -4,73 +4,82 @@ declare(strict_types=1);
 
 namespace Cross\Package;
 
+use Cross\Package\Exceptions\InvalidAlternativeConfigException;
 use Cross\Plugin\PluginInterface;
-use Exception;
 use Symfony\Component\Console\Command\Command;
 
 class Package
 {
     /**
-     * Path to an alternative config.
-     */
-    private ?string $alternative;
-
-    /**
      * Config.
      *
      * @var array<string, mixed>
      */
-    private array $config;
+    protected array $config;
 
     /**
      * Constructor.
-     * @throws Exception
+     *
+     * @throws InvalidAlternativeConfigException
      */
     public function __construct(?string $alternative = null)
     {
-        $this->alternative = $alternative ?? getcwd() . '/cross.php';
-        $this->config = array_merge($this->getBaseConfig(), $this->getAlternativeConfig());
+        $this->config = $this->mergeConfig($alternative);
     }
 
     /**
-     * Returns the base config.
+     * Fetches the base config.
      *
      * @return array<string, mixed>
      */
-    public function getBaseConfig(): array
+    private function fetchBaseConfig(): array
     {
         return require __DIR__ . '/../../config/config.php';
     }
 
     /**
-     * Returns an alternative config.
+     * Fetches an alternative config.
      *
      * @return array<string, mixed>
-     * @throws Exception
+     *
+     * @throws InvalidAlternativeConfigException
      */
-    public function getAlternativeConfig(): array
+    protected function fetchAlternativeConfig(?string $alternative = null): array
     {
-        if (! is_file($this->alternative)) {
+        if (is_null($alternative)) {
+            $alternative = getcwd() . '/cross.php';
+        }
+
+        if (! is_file($alternative)) {
             return [];
         }
 
-        $config = require $this->alternative;
+        $config = require $alternative;
 
         if (! is_array($config)) {
-            throw new Exception('Alternative config is invalid');
+            throw new InvalidAlternativeConfigException();
         }
 
         return $config;
     }
 
     /**
-     * Returns config.
+     * Merges configs.
      *
      * @return array<string, mixed>
+     *
+     * @throws InvalidAlternativeConfigException
      */
-    public function getConfig(): array
+    protected function mergeConfig(?string $alternative = null): array
     {
-        return $this->config;
+        $base = $this->fetchBaseConfig();
+        $alternative = $this->fetchAlternativeConfig($alternative);
+
+        if (empty($alternative)) {
+            return $base;
+        }
+
+        return array_merge($base, $alternative);
     }
 
     /**

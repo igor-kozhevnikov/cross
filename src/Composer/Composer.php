@@ -4,74 +4,83 @@ declare(strict_types=1);
 
 namespace Cross\Composer;
 
-use Exception;
+use Cross\Composer\Exceptions\InvalidComposerConfigException;
+use Cross\Composer\Exceptions\MissingComposerConfigException;
 
 class Composer
 {
     /**
-     * Path.
-     */
-    private ?string $path;
-
-    /**
      * Name.
      */
-    private string $name;
+    protected string $name;
 
     /**
      * Description.
      */
-    private string $description;
+    protected string $description;
 
     /**
      * Version.
      */
-    private string $version;
+    protected string $version;
 
     /**
      * Vendor directory.
      */
-    private string $vendorDirectory;
+    protected string $vendorDirectory;
 
     /**
      * Constructor.
-     * @throws Exception
+     *
+     * @throws MissingComposerConfigException
+     * @throws InvalidComposerConfigException
      */
-    public function __construct(?string $path = null)
+    public function __construct()
     {
-        $this->path = $path ?? __DIR__ . '/../../composer.json';
-        $config = $this->extractConfig();
+        $config = $this->fetchConfig();
         $this->setConfig($config);
     }
 
     /**
-     * Extract and returns composer config.
+     * Fetch config.
      *
      * @return array<string, mixed>
-     * @throws Exception
+     *
+     * @throws MissingComposerConfigException
+     * @throws InvalidComposerConfigException
      */
-    public function extractConfig(): array
+    protected function fetchConfig(): array
     {
-        if (! is_file($this->path)) {
-            throw new Exception('The composer.json file does not exist');
+        $path = $this->getConfigPath();
+
+        if (! is_file($path)) {
+            throw new MissingComposerConfigException();
         }
 
-        $content = @file_get_contents($this->path);
+        $content = @file_get_contents($path);
         $data = json_decode($content, true);
 
         if (! is_array($data)) {
-            throw new Exception('Data from the composer.json file is invalid');
+            throw new InvalidComposerConfigException();
         }
 
         return $data;
     }
 
     /**
-     * Defines data.
+     * Returns a config path.
+     */
+    protected function getConfigPath(): string
+    {
+        return getcwd() . '/composer.json';
+    }
+
+    /**
+     * Defines config.
      *
      * @param array<string, mixed> $config
      */
-    public function setConfig(array $config): void
+    protected function setConfig(array $config): void
     {
         $this->name = $config['name'];
         $this->description = $config['description'];

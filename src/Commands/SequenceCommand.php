@@ -10,7 +10,7 @@ use Cross\Commands\Statuses\Exist;
 abstract class SequenceCommand extends BaseCommand
 {
     /**
-     * Defines the sequence.
+     * Returns a sequence.
      */
     abstract protected function sequence(): SequenceInterface;
 
@@ -20,10 +20,12 @@ abstract class SequenceCommand extends BaseCommand
     protected function handle(): Exist
     {
         foreach ($this->sequence()->all() as $command) {
-            $status = $this->call($command->getName(), $command->getInput());
+            $command = $this->getApplication()->find($command->getName());
+            $code = $command->run($this->input(), $this->output());
+            $exist = Exist::from($code);
 
-            if (Exist::isNotSuccess($status)) {
-                return $status;
+            if (Exist::isNotSuccess($exist)) {
+                return $exist;
             }
         }
 

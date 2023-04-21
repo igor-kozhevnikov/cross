@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Cross\Tests\Plugin;
 
 use Cross\Plugin\BasePlugin;
-use Cross\Tests\Stubs\Commands\CommandStub;
+use Cross\Tests\Stubs\Commands\PrimaryCommandStub;
 use Cross\Tests\Stubs\Plugin\BasePluginStub;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -16,25 +16,27 @@ use PHPUnit\Framework\TestCase;
 final class BasePluginTest extends TestCase
 {
     #[Test]
-    #[TestDox('Return a key')]
+    #[TestDox('Getting a key')]
     public function key(): void
     {
-        $plugin = new BasePluginStub('key');
+        $plugin = new BasePluginStub();
+        $plugin->key = 'key';
 
         $this->assertSame($plugin->key, $plugin->getKey());
     }
 
     #[Test]
-    #[TestDox('Return config')]
+    #[TestDox('Getting config')]
     public function config(): void
     {
-        $plugin = new BasePluginStub(config: ['legs' => 4]);
+        $plugin = new BasePluginStub();
+        $plugin->config = ['legs' => 4];
 
         $this->assertSame($plugin->config, $plugin->getConfig());
     }
 
     #[Test]
-    #[TestDox('Return missing commands')]
+    #[TestDox('Getting initial commands')]
     public function commandsMissing(): void
     {
         $plugin = new BasePluginStub();
@@ -43,20 +45,21 @@ final class BasePluginTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Return commands from the special property')]
+    #[TestDox('Getting commands from the special property')]
     public function commandsFromProperty(): void
     {
-        $plugin = new BasePluginStub(commands: [new CommandStub(), CommandStub::class]);
+        $plugin = new BasePluginStub();
+        $plugin->commands = [new PrimaryCommandStub(), PrimaryCommandStub::class];
 
         $this->assertCount(2, $plugin->getCommands());
     }
 
     #[Test]
-    #[TestDox('Return commands from config')]
+    #[TestDox('Getting commands from config')]
     public function commandsFromConfig(): void
     {
-        $config['commands'] = [CommandStub::class, CommandStub::class];
-        $plugin = new BasePluginStub(config: $config);
+        $plugin = new BasePluginStub();
+        $plugin->config = ['commands' => [PrimaryCommandStub::class, PrimaryCommandStub::class]];
 
         $this->assertCount(2, $plugin->getCommands());
     }

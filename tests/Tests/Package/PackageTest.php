@@ -4,32 +4,26 @@ declare(strict_types=1);
 
 namespace Cross\Tests\Package;
 
+use Cross\Package\Exceptions\InvalidAlternativeConfigException;
 use Cross\Package\Package;
-use Exception;
+use Cross\Tests\Stubs\Package\PackageStub;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\IgnoreClassForCodeCoverage;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use Cross\Tests\Utils\File;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Package::class)]
+#[IgnoreClassForCodeCoverage(InvalidAlternativeConfigException::class)]
 final class PackageTest extends TestCase
 {
     #[Test]
-    #[TestDox('Initialize a config array')]
-    public function constructor(): void
-    {
-        $package = new Package();
-
-        $this->assertIsArray($package->getConfig());
-    }
-
-    #[Test]
-    #[TestDox('Return the correct base config')]
+    #[TestDox('Getting the correct base configuration')]
     public function baseConfig(): void
     {
-        $package = new Package();
-        $config = $package->getBaseConfig();
+        $package = new PackageStub();
+        $config = $package->fetchBaseConfig();
 
         $this->assertIsArray($config);
         $this->assertSame([], $config['plugins']);
@@ -37,30 +31,30 @@ final class PackageTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Return a missing alternative config')]
+    #[TestDox('Getting the initial alternative config')]
     public function alternativeConfigMissing(): void
     {
-        $package = new Package();
+        $package = new PackageStub();
 
-        $this->assertIsArray($package->getAlternativeConfig());
+        $this->assertSame([], $package->fetchAlternativeConfig());
     }
 
     #[Test]
-    #[TestDox('Return a valid alternative config')]
+    #[TestDox('Getting a valid alternative config')]
     public function alternativeConfigValid(): void
     {
-        $path = File::temp('valid-alternative-config.php', '<?php return [];');
+        $path = File::temp('valid-alternative-config.php', "<?php return ['enable' => true];");
 
-        $package = new Package($path);
+        $package = new PackageStub($path);
 
-        $this->assertIsArray($package->getAlternativeConfig());
+        $this->assertSame(['enable' => true], $package->fetchAlternativeConfig($path));
     }
 
     #[Test]
-    #[TestDox('Return an invalid alternative config')]
+    #[TestDox('Getting an invalid alternative config')]
     public function alternativeConfigInvalid(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(InvalidAlternativeConfigException::class);
 
         $path = File::temp('invalid-alternative-config.php', '<?php return null;');
 
@@ -68,20 +62,30 @@ final class PackageTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Return a list of plugins')]
+    #[TestDox('Getting the initial configuration')]
+    public function config(): void
+    {
+        $package = new PackageStub();
+        $config = ['plugins' => [], 'commands' => []];
+
+        $this->assertSame($config, $package->config);
+    }
+
+    #[Test]
+    #[TestDox('Getting the initial list of plugins')]
     public function plugins(): void
     {
         $package = new Package();
 
-        $this->assertIsArray($package->getPlugins());
+        $this->assertSame([], $package->getPlugins());
     }
 
     #[Test]
-    #[TestDox('Return a list of commands')]
+    #[TestDox('Getting the initial list of commands')]
     public function commands(): void
     {
         $package = new Package();
 
-        $this->assertIsArray($package->getCommands());
+        $this->assertSame([], $package->getCommands());
     }
 }

@@ -5,48 +5,65 @@ declare(strict_types=1);
 namespace Cross\Tests\Commands;
 
 use Cross\Commands\Sequence\Sequence;
-use Cross\Commands\Sequence\SequenceInterface;
 use Cross\Commands\SequenceCommand;
 use Cross\Commands\Statuses\Exist;
-use Cross\Tests\Stubs\Commands\SequenceCommandCommandStub;
+use Cross\Tests\Stubs\Commands\BaseCommandStub;
+use Cross\Tests\Stubs\Commands\SequenceableCommandStub;
 use Cross\Tests\Stubs\Commands\SequenceCommandStub;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[CoversClass(SequenceCommand::class)]
 final class SequenceCommandTest extends TestCase
 {
     #[Test]
-    #[TestDox('Return a sequence')]
-    public function sequence(): void
-    {
-        $sequence = Sequence::make();
-        $command = new SequenceCommandStub($sequence);
-
-        $this->assertInstanceOf(SequenceInterface::class, $command->sequence);
-    }
-
-    #[Test]
-    #[TestDox('Successful handle a sequence')]
+    #[TestDox('Successful handling a sequence')]
     public function handleSuccessful(): void
     {
-        $sequenceable = new SequenceCommandCommandStub();
-        $sequence = Sequence::make()->add($sequenceable);
-        $command = new SequenceCommandStub($sequence, Exist::Success);
+        $sequenceable = new SequenceableCommandStub();
 
-        $this->assertSame(Exist::Success, $command->handle());
+        $command = new BaseCommandStub();
+        $command->name = $sequenceable->getName();
+        $command->configure();
+
+        $application = new Application();
+        $application->add($command);
+
+        $sequence = new SequenceCommandStub();
+        $sequence->input = new ArrayInput([]);
+        $sequence->output = new SymfonyStyle($sequence->input, new BufferedOutput());
+        $sequence->setApplication($application);
+        $sequence->sequence = Sequence::make()->add($sequenceable);
+
+        $this->assertSame(Exist::Success, $sequence->handle());
     }
 
     #[Test]
-    #[TestDox('Unsuccessful handle a sequence')]
+    #[TestDox('Unsuccessful handling a sequence')]
     public function handleUnsuccessful(): void
     {
-        $sequenceable = new SequenceCommandCommandStub();
-        $sequence = Sequence::make()->add($sequenceable);
-        $command = new SequenceCommandStub($sequence, Exist::Failure);
+        $sequenceable = new SequenceableCommandStub();
 
-        $this->assertSame(Exist::Failure, $command->handle());
+        $command = new BaseCommandStub();
+        $command->name = $sequenceable->getName();
+        $command->exist = Exist::Failure;
+        $command->configure();
+
+        $application = new Application();
+        $application->add($command);
+
+        $sequence = new SequenceCommandStub();
+        $sequence->input = new ArrayInput([]);
+        $sequence->output = new SymfonyStyle($sequence->input, new BufferedOutput());
+        $sequence->setApplication($application);
+        $sequence->sequence = Sequence::make()->add($sequenceable);
+
+        $this->assertSame(Exist::Failure, $sequence->handle());
     }
 }

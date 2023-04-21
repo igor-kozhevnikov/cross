@@ -9,24 +9,24 @@ interface SequenceInterface
     /**
      * Defines the sequence.
      *
-     * @param array<int, CommandInterface> $sequence
+     * @param array<int, ItemInterface> $items
      */
-    public function set(array $sequence): self;
+    public function set(array $items): self;
 
     /**
-     * Add a command.
+     * Adds an item.
      */
-    public function add(CommandInterface $command): self;
+    public function add(ItemInterface $item): self;
 
     /**
-     * Add a command by command builder.
+     * Make an item.
      */
-    public function command(string $name): CommandInterface;
+    public function item(string $name): ItemInterface;
 
     /**
-     * Returns all commands
+     * Returns all items.
      *
-     * @return array<int, CommandInterface>
+     * @return array<int, ItemInterface>
      */
     public function all(): array;
 }

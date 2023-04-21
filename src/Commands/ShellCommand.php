@@ -55,9 +55,13 @@ abstract class ShellCommand extends BaseCommand
     /**
      * Configures the current process.
      */
-    protected function configureProcess(Process $process): void
+    protected function configureProcess(Process $process): Process
     {
-        //
+        $process->setTimeout($this->timeout());
+        $process->setTty($this->tty());
+        $process->setEnv($this->env());
+
+        return $process;
     }
 
     /**
@@ -108,12 +112,7 @@ abstract class ShellCommand extends BaseCommand
     protected function handle(): Exist
     {
         $process = $this->makeProcess();
-
-        $process->setTimeout($this->timeout());
-        $process->setTty($this->tty());
-        $process->setEnv($this->env());
-
-        $this->configureProcess($process);
+        $process = $this->configureProcess($process);
 
         $code = $process->run();
 

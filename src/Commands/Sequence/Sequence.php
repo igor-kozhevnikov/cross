@@ -9,39 +9,39 @@ class Sequence implements SequenceInterface
     /**
      * Sequence.
      *
-     * @var array<int, CommandInterface>
+     * @var array<int, ItemInterface>
      */
-    private array $sequence;
+    private array $items;
 
     /**
      * Constructor.
      *
-     * @param array<int, CommandInterface> $sequence
+     * @param array<int, ItemInterface> $items
      */
-    public function __construct(array $sequence = [])
+    public function __construct(array $items = [])
     {
-        $this->set($sequence);
+        $this->set($items);
     }
 
     /**
      * Static constructor.
      *
-     * @param array<int, CommandInterface> $sequence
+     * @param array<int, ItemInterface> $item
      */
-    public static function make(array $sequence = []): self
+    public static function make(array $item = []): self
     {
-        return new self($sequence);
+        return new self($item);
     }
 
     /**
      * @inheritDoc
      */
-    public function set(array $sequence): self
+    public function set(array $items): self
     {
-        $this->sequence = [];
+        $this->items = [];
 
-        foreach ($sequence as $command) {
-            $this->add($command);
+        foreach ($items as $item) {
+            $this->add($item);
         }
 
         return $this;
@@ -50,18 +50,18 @@ class Sequence implements SequenceInterface
     /**
      * @inheritDoc
      */
-    public function add(CommandInterface $command): self
+    public function add(ItemInterface $item): self
     {
-        $this->sequence[] = $command;
+        $this->items[] = $item;
         return $this;
     }
 
     /**
      * @inheritDoc
      */
-    public function command(string $name): CommandInterface
+    public function item(string $name): ItemInterface
     {
-        return Command::make($name)->sequence($this);
+        return Item::make($name)->sequence($this);
     }
 
     /**
@@ -69,6 +69,6 @@ class Sequence implements SequenceInterface
      */
     public function all(): array
     {
-        return $this->sequence;
+        return $this->items;
     }
 }

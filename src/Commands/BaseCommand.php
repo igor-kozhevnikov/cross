@@ -10,12 +10,10 @@ use Cross\Commands\Messages\Messages;
 use Cross\Commands\Messages\MessagesInterface;
 use Cross\Commands\Statuses\Exist;
 use Cross\Commands\Statuses\Prepare;
-use Symfony\Component\Console\Exception\ExceptionInterface;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-abstract class BaseCommand extends Command
+abstract class BaseCommand extends PrimaryCommand
 {
     /**
      * Name.
@@ -42,7 +40,12 @@ abstract class BaseCommand extends Command
     /**
      * Attributes.
      */
-    protected ?Attributes $attributes = null;
+    protected ?AttributesInterface $attributes = null;
+
+    /**
+     * Messages.
+     */
+    protected ?MessagesInterface $messages = null;
 
     /**
      * Handles the console command.
@@ -105,7 +108,7 @@ abstract class BaseCommand extends Command
      */
     protected function messages(): MessagesInterface
     {
-        return Messages::make();
+        return $this->messages ?? Messages::make();
     }
 
     /**
@@ -149,6 +152,22 @@ abstract class BaseCommand extends Command
     }
 
     /**
+     * Shows messages.
+     */
+    protected function showMessages(): void
+    {
+        $messages = $this->messages();
+
+        if ($messages->hasSuccess()) {
+            $this->success($messages->getSuccess());
+        }
+
+        if ($messages->hasError()) {
+            $this->error($messages->getError());
+        }
+    }
+
+    /**
      * @inheritDoc
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -165,33 +184,8 @@ abstract class BaseCommand extends Command
 
         $this->after($exist);
 
-        if (Exist::isSuccess($exist)) {
-            $message = $this->messages()->getSuccess();
-            $exist = $this->success($message);
-        } else {
-            $message = $this->messages()->getError();
-            $exist = $this->error($message);
-        }
+        $this->showMessages();
 
         return $exist->value;
-    }
-
-    /**
-     * Run a command.
-     *
-     * @param array<string, mixed> $input
-     */
-    public function call(?string $name = null, array $input = []): Exist
-    {
-        $command = is_null($name) ? $this : $this->getApplication()->find($name);
-        $input = new ArrayInput($input);
-
-        try {
-            $code = $command->run($input, $this->output());
-        } catch (ExceptionInterface $e) {
-            return $this->error($e->getMessage());
-        }
-
-        return Exist::from($code);
     }
 }
