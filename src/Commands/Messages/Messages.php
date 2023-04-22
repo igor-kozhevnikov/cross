@@ -9,31 +9,19 @@ class Messages implements MessagesInterface
     /**
      * Success message.
      */
-    private ?string $success = null;
+    protected ?string $success = null;
 
     /**
      * Error message.
      */
-    private ?string $error = null;
-
-    /**
-     * Makes an instance.
-     */
-    public static function make(?string $success = null, ?string $error = null): self
-    {
-        $messages = new self();
-        $messages->success($success);
-        $messages->error($error);
-        return $messages;
-    }
+    protected ?string $error = null;
 
     /**
      * Define a success message.
      */
-    public function success(?string $message): MessagesInterface
+    public function setSuccess(?string $message): void
     {
         $this->success = $message;
-        return $this;
     }
 
     /**
@@ -55,10 +43,9 @@ class Messages implements MessagesInterface
     /**
      * Defines an error message.
      */
-    public function error(?string $message): MessagesInterface
+    public function setError(?string $message): void
     {
         $this->error = $message;
-        return $this;
     }
 
     /**

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Cross\Tests\Commands;
 
-use Cross\Commands\PrimaryCommand;
-use Cross\Tests\Stubs\Commands\PrimaryCommandStub;
+use Cross\Commands\InitialCommand;
+use Cross\Tests\Stubs\Commands\InitialCommandStub;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -15,8 +15,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-#[CoversClass(PrimaryCommand::class)]
-final class PrimaryCommandTest extends TestCase
+#[CoversClass(InitialCommand::class)]
+final class InitialCommandTest extends TestCase
 {
     #[Test]
     #[TestDox('Initializing an input and output')]
@@ -25,7 +25,7 @@ final class PrimaryCommandTest extends TestCase
         $input = new ArrayInput([]);
         $output = new SymfonyStyle($input, new BufferedOutput());
 
-        $command = new PrimaryCommandStub();
+        $command = new InitialCommandStub();
         $command->initialize($input, $output);
 
         $this->assertSame($input, $command->input);
@@ -46,7 +46,7 @@ final class PrimaryCommandTest extends TestCase
 
         $output->expects($this->once())->method('block');
 
-        $command = new PrimaryCommandStub();
+        $command = new InitialCommandStub();
         $command->output = $output;
         $command->errors(['To long!', 'To far!']);
     }
@@ -62,7 +62,7 @@ final class PrimaryCommandTest extends TestCase
 
         $output->expects($this->exactly(2))->method('block');
 
-        $command = new PrimaryCommandStub();
+        $command = new InitialCommandStub();
         $command->output = $output;
         $command->error('To long!', 'Actually 500ms.');
     }
@@ -78,7 +78,7 @@ final class PrimaryCommandTest extends TestCase
 
         $output->expects($this->once())->method('success');
 
-        $command = new PrimaryCommandStub();
+        $command = new InitialCommandStub();
         $command->output = $output;
         $command->success('Way to go!');
     }
@@ -87,7 +87,7 @@ final class PrimaryCommandTest extends TestCase
     #[TestDox('Getting arguments')]
     public function arguments(): void
     {
-        $command = new PrimaryCommandStub();
+        $command = new InitialCommandStub();
         $command->addArgument('counter', default: 10);
         $command->run();
 
@@ -98,7 +98,7 @@ final class PrimaryCommandTest extends TestCase
     #[TestDox('Getting an argument')]
     public function argument(): void
     {
-        $command = new PrimaryCommandStub();
+        $command = new InitialCommandStub();
         $command->addArgument('counter', default: 10);
         $command->run();
 
@@ -110,7 +110,7 @@ final class PrimaryCommandTest extends TestCase
     #[TestDox('Getting options')]
     public function options(): void
     {
-        $command = new PrimaryCommandStub();
+        $command = new InitialCommandStub();
         $command->addOption('counter', mode: InputOption::VALUE_REQUIRED, default: 10);
         $command->run();
 
@@ -121,7 +121,7 @@ final class PrimaryCommandTest extends TestCase
     #[TestDox('Getting an option')]
     public function option(): void
     {
-        $command = new PrimaryCommandStub();
+        $command = new InitialCommandStub();
         $command->addOption('counter', mode: InputOption::VALUE_REQUIRED, default: 10);
         $command->run();
 
@@ -134,7 +134,7 @@ final class PrimaryCommandTest extends TestCase
     #[TestDox('Getting a value depend on a positive option')]
     public function whenOption(): void
     {
-        $command = new PrimaryCommandStub();
+        $command = new InitialCommandStub();
         $command->addOption('counter', mode: InputOption::VALUE_REQUIRED, default: 10);
         $command->run();
 
@@ -146,7 +146,7 @@ final class PrimaryCommandTest extends TestCase
     #[TestDox('Getting a value depend on a negative option')]
     public function whenNotOption(): void
     {
-        $command = new PrimaryCommandStub();
+        $command = new InitialCommandStub();
         $command->addOption('counter', mode: InputOption::VALUE_REQUIRED, default: 10);
         $command->run();
 
@@ -167,7 +167,7 @@ final class PrimaryCommandTest extends TestCase
 
         $output->expects($this->once())->method('info')->with(...$arguments);
 
-        $command = new PrimaryCommandStub();
+        $command = new InitialCommandStub();
         $command->output = $output;
         $command->info(...$arguments);
     }
@@ -185,7 +185,7 @@ final class PrimaryCommandTest extends TestCase
 
         $output->expects($this->once())->method('comment')->with(...$arguments);
 
-        $command = new PrimaryCommandStub();
+        $command = new InitialCommandStub();
         $command->output = $output;
         $command->comment(...$arguments);
     }
@@ -203,7 +203,7 @@ final class PrimaryCommandTest extends TestCase
 
         $output->expects($this->once())->method('ask')->with(...$arguments);
 
-        $command = new PrimaryCommandStub();
+        $command = new InitialCommandStub();
         $command->output = $output;
         $command->ask(...$arguments);
     }
@@ -221,7 +221,7 @@ final class PrimaryCommandTest extends TestCase
 
         $output->expects($this->once())->method('choice')->with(...$arguments);
 
-        $command = new PrimaryCommandStub();
+        $command = new InitialCommandStub();
         $command->output = $output;
         $command->choice(...$arguments);
     }
@@ -239,7 +239,7 @@ final class PrimaryCommandTest extends TestCase
 
         $output->expects($this->once())->method('confirm')->with(...$arguments);
 
-        $command = new PrimaryCommandStub();
+        $command = new InitialCommandStub();
         $command->output = $output;
         $command->confirm(...$arguments);
     }

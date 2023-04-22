@@ -7,7 +7,7 @@ namespace Cross\Tests\Cross;
 use Cross\Commands\Config\Config;
 use Cross\Composer\Composer;
 use Cross\Cross\Cross;
-use Cross\Tests\Stubs\Commands\PrimaryCommandStub;
+use Cross\Tests\Stubs\Commands\InitialCommandStub;
 use Cross\Tests\Stubs\Plugin\PluginStub;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -116,7 +116,7 @@ final class CrossTest extends TestCase
     #[TestDox('Adding a list of commands')]
     public function commands(): void
     {
-        $commands = [new PrimaryCommandStub(), PrimaryCommandStub::class];
+        $commands = [new InitialCommandStub(), InitialCommandStub::class];
 
         $this->cross->commands($commands);
 
@@ -127,8 +127,8 @@ final class CrossTest extends TestCase
     #[TestDox('Adding a command')]
     public function command(): void
     {
-        $this->cross->command(new PrimaryCommandStub());
-        $this->cross->command(PrimaryCommandStub::class);
+        $this->cross->command(new InitialCommandStub());
+        $this->cross->command(InitialCommandStub::class);
 
         $this->assertCount($this->counter + 2, $this->application->all());
     }

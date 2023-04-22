@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cross\Commands;
 
+use Cross\Commands\Attributes\Attribute\AttributeInterface;
 use Cross\Commands\Attributes\Attributes;
 use Cross\Commands\Attributes\AttributesInterface;
 use Cross\Commands\Messages\Messages;
@@ -13,7 +14,7 @@ use Cross\Commands\Statuses\Prepare;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-abstract class BaseCommand extends PrimaryCommand
+abstract class BaseCommand extends InitialCommand
 {
     /**
      * Name.
@@ -96,7 +97,8 @@ abstract class BaseCommand extends PrimaryCommand
         $this->setAliases($this->aliases());
         $this->setHidden($this->hidden());
 
-        foreach ($this->attributes()->all() as $attribute) {
+        /** @var AttributeInterface $attribute */
+        foreach ($this->attributes() as $attribute) {
             $attribute->appendTo($this);
         }
 
@@ -108,7 +110,7 @@ abstract class BaseCommand extends PrimaryCommand
      */
     protected function messages(): MessagesInterface
     {
-        return $this->messages ?? Messages::make();
+        return $this->messages ?? new Messages();
     }
 
     /**
@@ -116,7 +118,7 @@ abstract class BaseCommand extends PrimaryCommand
      */
     protected function attributes(): AttributesInterface
     {
-        return $this->attributes ?? Attributes::make();
+        return $this->attributes ?? new Attributes();
     }
 
     /**

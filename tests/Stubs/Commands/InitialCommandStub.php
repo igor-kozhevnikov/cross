@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cross\Tests\Stubs\Commands;
 
-use Cross\Commands\PrimaryCommand;
+use Cross\Commands\InitialCommand;
 use Cross\Tests\Utils\Accessible;
 use Cross\Tests\Utils\Str;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -35,7 +35,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * @method void choice(string $question, array $choices, mixed $default = null, bool $multiSelect = false)
  * @method void confirm(string $question, bool $default = true)
  */
-class PrimaryCommandStub extends PrimaryCommand
+class InitialCommandStub extends InitialCommand
 {
     use Accessible;
 

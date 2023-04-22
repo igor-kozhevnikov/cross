@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Cross\Tests\Plugin;
 
 use Cross\Plugin\BasePlugin;
-use Cross\Tests\Stubs\Commands\PrimaryCommandStub;
+use Cross\Tests\Stubs\Commands\InitialCommandStub;
 use Cross\Tests\Stubs\Plugin\BasePluginStub;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -49,7 +49,7 @@ final class BasePluginTest extends TestCase
     public function commandsFromProperty(): void
     {
         $plugin = new BasePluginStub();
-        $plugin->commands = [new PrimaryCommandStub(), PrimaryCommandStub::class];
+        $plugin->commands = [new InitialCommandStub(), InitialCommandStub::class];
 
         $this->assertCount(2, $plugin->getCommands());
     }
@@ -59,7 +59,7 @@ final class BasePluginTest extends TestCase
     public function commandsFromConfig(): void
     {
         $plugin = new BasePluginStub();
-        $plugin->config = ['commands' => [PrimaryCommandStub::class, PrimaryCommandStub::class]];
+        $plugin->config = ['commands' => [InitialCommandStub::class, InitialCommandStub::class]];
 
         $this->assertCount(2, $plugin->getCommands());
     }

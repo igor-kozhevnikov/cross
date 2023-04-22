@@ -9,7 +9,12 @@ use Symfony\Component\Console\Command\Command;
 interface AttributeInterface
 {
     /**
-     * Add an attribute to the command.
+     * Returns a name.
+     */
+    public function getName(): string;
+
+    /**
+     * Adds the current attribute to a command.
      */
     public function appendTo(Command $command): void;
 }

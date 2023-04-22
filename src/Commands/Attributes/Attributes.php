@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace Cross\Commands\Attributes;
 
-use Cross\Commands\Attributes\Attribute\Argument\Argument;
-use Cross\Commands\Attributes\Attribute\Argument\ArgumentInterface;
+use ArrayIterator;
 use Cross\Commands\Attributes\Attribute\AttributeInterface;
-use Cross\Commands\Attributes\Attribute\Option\Option;
-use Cross\Commands\Attributes\Attribute\Option\OptionInterface;
+use IteratorAggregate;
+use Traversable;
 
-class Attributes implements AttributesInterface
+/**
+ * @implements IteratorAggregate<AttributeInterface>
+ */
+class Attributes implements AttributesInterface, IteratorAggregate
 {
     /**
      * Attributes.
      *
      * @var array<int, AttributeInterface>
      */
-    private array $attributes;
+    protected array $attributes;
 
     /**
      * Constructor.
@@ -30,65 +32,41 @@ class Attributes implements AttributesInterface
     }
 
     /**
-     * Static constructor.
+     * Merges the attributes.
+     */
+    public function merge(AttributesInterface $attributes): void
+    {
+        $this->attributes = array_merge($this->attributes, $attributes->all());
+    }
+
+    /**
+     * Defines the attributes.
      *
      * @param array<int, AttributeInterface> $attributes
      */
-    public static function make(array $attributes = []): self
+    public function set(array $attributes): void
     {
-        return new self($attributes);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function merge(AttributesInterface $attributes): AttributesInterface
-    {
-        $this->attributes = array_merge($this->attributes, $attributes->all());
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function set(array $attributes): self
-    {
-        $this->attributes = [];
+        $this->reset();
 
         foreach ($attributes as $attribute) {
             $this->add($attribute);
         }
-
-        return $this;
     }
 
     /**
-     * @inheritDoc
+     * Adds an attribute.
      */
-    public function add(AttributeInterface $attribute): self
+    public function add(AttributeInterface $attribute): void
     {
-        $this->attributes[] = $attribute;
-        return $this;
+        $this->attributes[$attribute->getName()] = $attribute;
     }
 
     /**
-     * @inheritDoc
+     * Returns an attribute by the given name.
      */
-    public function argument(string $name): ArgumentInterface
+    public function get(string $name): ?AttributeInterface
     {
-        $argument = Argument::make($name)->container($this);
-        $this->add($argument);
-        return $argument;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function option(string $name): OptionInterface
-    {
-        $option = Option::make($name)->container($this);
-        $this->add($option);
-        return $option;
+        return $this->attributes[$name];
     }
 
     /**
@@ -97,5 +75,21 @@ class Attributes implements AttributesInterface
     public function all(): array
     {
         return $this->attributes;
+    }
+
+    /**
+     * Resets all attributes.
+     */
+    public function reset(): void
+    {
+        $this->attributes = [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getIterator(): Traversable
+    {
+        return new ArrayIterator($this->attributes);
     }
 }

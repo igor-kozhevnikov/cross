@@ -20,7 +20,9 @@ final class MessagesTest extends TestCase
         $success = 'Oh, right!';
         $error = 'O.M.G.';
 
-        $messages = Messages::make($success, $error);
+        $messages = new Messages();
+        $messages->setSuccess($success);
+        $messages->setError($error);
 
         $this->assertTrue($messages->hasSuccess());
         $this->assertSame($success, $messages->getSuccess());
@@ -34,7 +36,9 @@ final class MessagesTest extends TestCase
     public function success(): void
     {
         $success = 'Oh, right!';
-        $messages = Messages::make()->success($success);
+
+        $messages = new Messages();
+        $messages->setSuccess($success);
 
         $this->assertSame($success, $messages->getSuccess());
     }
@@ -44,7 +48,9 @@ final class MessagesTest extends TestCase
     public function error(): void
     {
         $error = 'O.M.G.';
-        $messages = Messages::make()->error($error);
+
+        $messages = new Messages();
+        $messages->setError($error);
 
         $this->assertSame($error, $messages->getError());
     }

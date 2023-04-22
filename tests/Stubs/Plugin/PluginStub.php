@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cross\Tests\Stubs\Plugin;
 
-use Cross\Tests\Stubs\Commands\PrimaryCommandStub;
+use Cross\Tests\Stubs\Commands\InitialCommandStub;
 
 class PluginStub extends BasePluginStub
 {
@@ -14,6 +14,6 @@ class PluginStub extends BasePluginStub
     public function __construct()
     {
         parent::__construct();
-        $this->commands = [PrimaryCommandStub::class];
+        $this->commands = [InitialCommandStub::class];
     }
 }

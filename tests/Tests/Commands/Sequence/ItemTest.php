@@ -52,6 +52,7 @@ final class ItemTest extends TestCase
         $item->setSequence($sequence);
 
         $this->assertSame($sequence, $item->end());
+        $this->assertSame($sequence, $item->getSequence());
         $this->assertSame($item, $sequence->get($name));
     }
 
@@ -69,6 +70,7 @@ final class ItemTest extends TestCase
         $item->setAppend(false);
 
         $this->assertSame($sequence, $item->end());
+        $this->assertSame($sequence, $item->getSequence());
         $this->assertNull($sequence->get($name));
     }
 }

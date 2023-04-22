@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace Cross\Tests\Commands;
 
+use Cross\Commands\Attributes\Attribute\Argument\Argument;
+use Cross\Commands\Attributes\Attribute\Option\Option;
 use Cross\Commands\Attributes\Attributes;
 use Cross\Commands\BaseCommand;
 use Cross\Commands\Messages\Messages;
 use Cross\Commands\Statuses\Prepare;
 use Cross\Tests\Stubs\Commands\BaseCommandStub;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\IgnoreMethodForCodeCoverage;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -52,12 +54,15 @@ final class BaseCommandTest extends TestCase
         $input = new ArrayInput([]);
         $output = new SymfonyStyle($input, new BufferedOutput());
 
-        $attributes = Attributes::make()
-            ->argument('file')->default('php')->end()
-            ->option('silence')->required()->default('true')->end();
+        $argument = new Argument('file');
+        $argument->setDefault('php');
+
+        $option = new Option('silence');
+        $option->setMode(InputOption::VALUE_REQUIRED);
+        $option->setDefault('true');
 
         $command = new BaseCommandStub();
-        $command->attributes = $attributes;
+        $command->attributes = new Attributes([$argument, $option]);
         $command->configure();
         $command->run($input, $output);
 
@@ -74,8 +79,11 @@ final class BaseCommandTest extends TestCase
         $input = new ArrayInput([]);
         $output = new SymfonyStyle($input, new BufferedOutput());
 
+        $messages = new Messages();
+        $messages->setSuccess('Good for you!');
+
         $command = new BaseCommandStub();
-        $command->messages = Messages::make('Good for you!');
+        $command->messages = $messages;
         $command->run($input, $output);
 
         $this->assertTrue(true);
@@ -88,8 +96,11 @@ final class BaseCommandTest extends TestCase
         $input = new ArrayInput([]);
         $output = new SymfonyStyle($input, new BufferedOutput());
 
+        $messages = new Messages();
+        $messages->setError('Oh, poor boy!');
+
         $command = new BaseCommandStub();
-        $command->messages = Messages::make(error: 'Oh, poor boy!');
+        $command->messages = $messages;
         $command->run($input, $output);
 
         $this->assertTrue(true);

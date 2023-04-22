@@ -4,43 +4,15 @@ declare(strict_types=1);
 
 namespace Cross\Commands\Attributes;
 
-use Cross\Commands\Attributes\Attribute\Argument\ArgumentInterface;
 use Cross\Commands\Attributes\Attribute\AttributeInterface;
-use Cross\Commands\Attributes\Attribute\Option\OptionInterface;
+use Traversable;
 
-interface AttributesInterface
+interface AttributesInterface extends Traversable
 {
     /**
-     * Merges the attributes.
-     */
-    public function merge(AttributesInterface $attributes): self;
-
-    /**
-     * Defines the attributes.
+     * Returns all attributes.
      *
-     * @param array<int, AttributeInterface> $attributes
-     */
-    public function set(array $attributes): self;
-
-    /**
-     * Adds an attribute.
-     */
-    public function add(AttributeInterface $attribute): self;
-
-    /**
-     * Adds an argument.
-     */
-    public function argument(string $name): ArgumentInterface;
-
-    /**
-     * Adds an option.
-     */
-    public function option(string $name): OptionInterface;
-
-    /**
-     * Returns all attributes
-     *
-     * @return array<int, AttributeInterface>
+     * @return array<array-key, AttributeInterface>
      */
     public function all(): array;
 }
