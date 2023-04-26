@@ -10,24 +10,11 @@ use Cross\Composer\Exceptions\MissingComposerConfigException;
 class Composer
 {
     /**
-     * Name.
+     * Config.
+     *
+     * @var array<string, mixed>
      */
-    protected string $name;
-
-    /**
-     * Description.
-     */
-    protected string $description;
-
-    /**
-     * Version.
-     */
-    protected string $version;
-
-    /**
-     * Vendor directory.
-     */
-    protected string $vendorDirectory;
+    protected array $config = [];
 
     /**
      * Constructor.
@@ -35,10 +22,9 @@ class Composer
      * @throws MissingComposerConfigException
      * @throws InvalidComposerConfigException
      */
-    public function __construct()
+    public function __construct(string $path)
     {
-        $config = $this->fetchConfig();
-        $this->setConfig($config);
+        $this->config = $this->fetchConfig($path);
     }
 
     /**
@@ -49,51 +35,31 @@ class Composer
      * @throws MissingComposerConfigException
      * @throws InvalidComposerConfigException
      */
-    protected function fetchConfig(): array
+    protected function fetchConfig(string $path): array
     {
-        $path = $this->getConfigPath();
-
         if (! is_file($path)) {
-            throw new MissingComposerConfigException();
+            throw new MissingComposerConfigException($path);
         }
 
         $content = @file_get_contents($path);
+
         $data = json_decode($content, true);
 
         if (! is_array($data)) {
-            throw new InvalidComposerConfigException();
+            throw new InvalidComposerConfigException($path);
         }
 
         return $data;
     }
 
     /**
-     * Returns a config path.
-     */
-    protected function getConfigPath(): string
-    {
-        return getcwd() . '/composer.json';
-    }
-
-    /**
-     * Defines config.
+     * Returns config.
      *
-     * @param array<string, mixed> $config
+     * @return array<string, mixed>
      */
-    protected function setConfig(array $config): void
+    public function getConfig(): array
     {
-        $this->name = $config['name'];
-        $this->description = $config['description'];
-        $this->version = $config['version'];
-        $this->vendorDirectory = $config['config']['vendor-dir'] ?? 'vendor';
-    }
-
-    /**
-     * Returns a name.
-     */
-    public function getName(): string
-    {
-        return $this->name;
+        return $this->config;
     }
 
     /**
@@ -101,7 +67,7 @@ class Composer
      */
     public function getDescription(): string
     {
-        return $this->description;
+        return $this->config['description'];
     }
 
     /**
@@ -109,7 +75,7 @@ class Composer
      */
     public function getVersion(): string
     {
-        return $this->version;
+        return $this->config['version'];
     }
 
     /**
@@ -117,6 +83,6 @@ class Composer
      */
     public function getVendorDirectory(): string
     {
-        return $this->vendorDirectory;
+        return $this->config['config']['vendor-dir'] ?? 'vendor';
     }
 }

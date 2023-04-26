@@ -7,7 +7,6 @@ namespace Cross\Tests\Composer;
 use Cross\Composer\Composer;
 use Cross\Composer\Exceptions\InvalidComposerConfigException;
 use Cross\Composer\Exceptions\MissingComposerConfigException;
-use Cross\Tests\Stubs\Composer\ComposerStub;
 use Cross\Tests\Utils\File;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\IgnoreClassForCodeCoverage;
@@ -20,26 +19,29 @@ use PHPUnit\Framework\TestCase;
 #[IgnoreClassForCodeCoverage(MissingComposerConfigException::class)]
 final class ComposerTest extends TestCase
 {
-    #[Test]
-    #[TestDox('Getting a composer config path')]
-    public function configPath(): void
-    {
-        $composer = new ComposerStub();
+    /**
+     * Path to a composer config.
+     */
+    private static string $path;
 
-        $this->assertSame(getcwd() . '/composer.json', $composer->getConfigPath());
+    /**
+     * @inheritDoc
+     */
+    public static function setUpBeforeClass(): void
+    {
+        self::$path = getcwd() . '/composer.json';
     }
 
     #[Test]
     #[TestDox('Successful fetching of composer config')]
     public function configSuccess(): void
     {
-        $config = (new ComposerStub())->fetchConfig();
+        $config = (new Composer(self::$path))->getConfig();
 
         $this->assertIsArray($config);
-        $this->assertIsString($config['name']);
         $this->assertIsString($config['description']);
         $this->assertIsString($config['version']);
-        $this->assertNull($config['vendor-dir']);
+        $this->assertNull($config['config']['vendor-dir']);
     }
 
     #[Test]
@@ -48,9 +50,9 @@ final class ComposerTest extends TestCase
     {
         $this->expectException(MissingComposerConfigException::class);
 
-        $composer = new ComposerStub();
-        $composer->path = '~/andromeda-galaxy/composer.json';
-        $composer->fetchConfig();
+        $path = '~/andromeda-galaxy/composer.json';
+
+        new Composer($path);
     }
 
     #[Test]
@@ -61,29 +63,45 @@ final class ComposerTest extends TestCase
 
         $path = File::temp('invalid-composer.json');
 
-        $composer = new ComposerStub();
-        $composer->path = $path;
-        $composer->fetchConfig();
+        new Composer($path);
     }
 
     #[Test]
-    #[TestDox('Defining the all properties')]
-    public function properties(): void
+    #[TestDox('Getting config')]
+    public function config(): void
     {
-        $name = 'Name';
-        $description = 'Description';
-        $version = '1.2.3';
-        $vendorDirectory = 'vendor';
-        $config = ['vendor-dir' => $vendorDirectory];
+        $composer = new Composer(self::$path);
+        $config = $composer->getConfig();
 
-        $all = compact('name', 'description', 'version', 'config');
+        $this->assertIsArray($config);
+    }
 
-        $composer = new ComposerStub();
-        $composer->setConfig($all);
+    #[Test]
+    #[TestDox('Getting a description')]
+    public function description(): void
+    {
+        $composer = new Composer(self::$path);
+        $config = $composer->getConfig();
 
-        $this->assertSame($name, $composer->getName());
-        $this->assertSame($description, $composer->getDescription());
-        $this->assertSame($version, $composer->getVersion());
-        $this->assertSame($vendorDirectory, $composer->getVendorDirectory());
+        $this->assertSame($config['description'], $composer->getDescription());
+    }
+
+    #[Test]
+    #[TestDox('Getting a version')]
+    public function version(): void
+    {
+        $composer = new Composer(self::$path);
+        $config = $composer->getConfig();
+
+        $this->assertSame($config['version'], $composer->getVersion());
+    }
+
+    #[Test]
+    #[TestDox('Getting a vendor directory')]
+    public function vendor(): void
+    {
+        $composer = new Composer(self::$path);
+
+        $this->assertSame('vendor', $composer->getVendorDirectory());
     }
 }

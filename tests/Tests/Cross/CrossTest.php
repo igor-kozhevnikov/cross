@@ -44,7 +44,7 @@ final class CrossTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$composer = new Composer();
+        self::$composer = new Composer(__DIR__ . '/../../../composer.json');
     }
 
     /**
@@ -61,7 +61,7 @@ final class CrossTest extends TestCase
     protected function setUp(): void
     {
         $this->application = $this->getMockBuilder(Application::class)
-            ->setConstructorArgs([self::$composer->getName(), self::$composer->getVersion()])
+            ->setConstructorArgs([self::$composer->getDescription(), self::$composer->getVersion()])
             ->onlyMethods(['run'])
             ->getMock();
 
@@ -74,7 +74,7 @@ final class CrossTest extends TestCase
     public function application(): void
     {
         $this->assertInstanceOf(Application::class, $this->application);
-        $this->assertSame(self::$composer->getName(), $this->application->getName());
+        $this->assertSame(self::$composer->getDescription(), $this->application->getName());
         $this->assertSame(self::$composer->getVersion(), $this->application->getVersion());
     }
 

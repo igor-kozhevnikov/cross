@@ -11,8 +11,8 @@ class InvalidComposerConfigException extends Exception
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(string $path)
     {
-        parent::__construct('The composer.json file is invalid');
+        parent::__construct("The $path file is invalid");
     }
 }

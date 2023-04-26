@@ -11,8 +11,8 @@ class MissingComposerConfigException extends Exception
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(string $path)
     {
-        parent::__construct('The composer.json file does not exist');
+        parent::__construct("The $path file does not exist");
     }
 }

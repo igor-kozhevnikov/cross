@@ -9,14 +9,17 @@ use Cross\Composer\Composer;
 use Cross\Package\Package;
 use Symfony\Component\Console\Application;
 
-// Composer
-$composer = new Composer();
+// Application composer
+$composer = new Composer(getcwd() . '/composer.json');
 
 // Autoload
 require getcwd() . '/' . $composer->getVendorDirectory() . '/autoload.php';
 
 // Package
 $package = new Package();
+
+// Package composer
+$composer = new Composer(__DIR__ . '/../composer.json');
 
 // Application
 $application = new Application($composer->getDescription(), $composer->getVersion());
