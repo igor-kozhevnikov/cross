@@ -6,7 +6,6 @@
     cacheDirectory="phpunit/cache"
     executionOrder="depends,defects"
     requireCoverageMetadata="true"
-    beStrictAboutCoverageMetadata="false"
     beStrictAboutOutputDuringTests="true"
     failOnRisky="true"
     failOnWarning="true"
@@ -15,7 +14,7 @@
 >
     <testsuites>
         <testsuite name="default">
-            <directory>tests/Tests</directory>
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
 
@@ -25,7 +24,7 @@
         </include>
     </source>
 
-    <coverage ignoreDeprecatedCodeUnits="true" disableCodeCoverageIgnore="false">
+    <coverage ignoreDeprecatedCodeUnits="true">
         <report>
             <html outputDirectory="phpunit/coverage" />
         </report>
