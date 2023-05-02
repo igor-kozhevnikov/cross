@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cross\Tests\Stubs\Commands\Attrubutes\Attribute\Option;
+namespace Cross\Tests\Commands\Attributes\Attribute\Option;
 
 use Cross\Commands\Attributes\Attribute\Option\Option;
 use Cross\Tests\Utils\Str;

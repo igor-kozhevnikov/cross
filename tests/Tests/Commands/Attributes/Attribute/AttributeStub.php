@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cross\Tests\Stubs\Commands\Attrubutes\Attribute;
+namespace Cross\Tests\Commands\Attributes\Attribute;
 
 use Cross\Commands\Attributes\Attribute\Attribute;
 use Cross\Tests\Utils\Str;

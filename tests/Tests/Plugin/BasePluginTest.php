@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Cross\Tests\Plugin;
 
 use Cross\Plugin\BasePlugin;
-use Cross\Tests\Stubs\Commands\InitialCommandStub;
-use Cross\Tests\Stubs\Plugin\BasePluginStub;
+use Cross\Tests\Commands\InitialCommandStub;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;

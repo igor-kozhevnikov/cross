@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Cross\Tests\Commands;
 
 use Cross\Commands\InitialCommand;
-use Cross\Tests\Stubs\Commands\InitialCommandStub;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;

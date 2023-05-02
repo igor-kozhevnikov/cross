@@ -10,7 +10,6 @@ use Cross\Commands\Attributes\Attributes;
 use Cross\Commands\BaseCommand;
 use Cross\Commands\Messages\Messages;
 use Cross\Commands\Statuses\Prepare;
-use Cross\Tests\Stubs\Commands\BaseCommandStub;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;

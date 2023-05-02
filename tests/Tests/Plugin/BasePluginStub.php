@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cross\Tests\Stubs\Plugin;
+namespace Cross\Tests\Plugin;
 
 use Cross\Plugin\BasePlugin;
 use Cross\Tests\Utils\Accessible;

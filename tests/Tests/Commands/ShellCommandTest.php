@@ -6,7 +6,6 @@ namespace Cross\Tests\Commands;
 
 use Cross\Commands\ShellCommand;
 use Cross\Commands\Statuses\Exist;
-use Cross\Tests\Stubs\Commands\ShellCommandStub;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;

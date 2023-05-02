@@ -5,15 +5,24 @@ declare(strict_types=1);
 namespace Cross\Commands\Attributes;
 
 use ArrayIterator;
+use Cross\Commands\Attributes\Attribute\Argument\ArgumentInterface;
+use Cross\Commands\Attributes\Attribute\AttributeFactory;
 use Cross\Commands\Attributes\Attribute\AttributeInterface;
+use Cross\Commands\Attributes\Attribute\Option\OptionInterface;
+use Fluent\FluentFactory;
+use Fluent\FluentMaker;
 use IteratorAggregate;
 use Traversable;
 
 /**
- * @implements IteratorAggregate<AttributeInterface>
+ * @method ArgumentInterface argument(string $name)
+ * @method OptionInterface option(string $name)
  */
 class Attributes implements AttributesInterface, IteratorAggregate
 {
+    use FluentMaker;
+    use FluentFactory;
+
     /**
      * Attributes.
      *
@@ -54,7 +63,7 @@ class Attributes implements AttributesInterface, IteratorAggregate
     }
 
     /**
-     * Adds an attribute.
+     * @inheritDoc
      */
     public function add(AttributeInterface $attribute): void
     {
@@ -91,5 +100,13 @@ class Attributes implements AttributesInterface, IteratorAggregate
     public function getIterator(): Traversable
     {
         return new ArrayIterator($this->attributes);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFluentFactory(): object
+    {
+        return new AttributeFactory($this);
     }
 }

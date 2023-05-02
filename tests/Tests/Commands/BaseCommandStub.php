@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cross\Tests\Stubs\Commands;
+namespace Cross\Tests\Commands;
 
 use Cross\Commands\Attributes\AttributesInterface;
 use Cross\Commands\BaseCommand;

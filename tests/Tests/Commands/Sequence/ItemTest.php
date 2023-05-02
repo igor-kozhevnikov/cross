@@ -6,7 +6,6 @@ namespace Cross\Tests\Commands\Sequence;
 
 use Cross\Commands\Sequence\Item;
 use Cross\Commands\Sequence\Sequence;
-use Cross\Tests\Stubs\Commands\Sequence\ItemStub;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;

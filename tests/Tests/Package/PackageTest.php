@@ -6,12 +6,11 @@ namespace Cross\Tests\Package;
 
 use Cross\Package\Exceptions\InvalidAlternativeConfigException;
 use Cross\Package\Package;
-use Cross\Tests\Stubs\Package\PackageStub;
+use Cross\Tests\Utils\File;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\IgnoreClassForCodeCoverage;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
-use Cross\Tests\Utils\File;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Package::class)]

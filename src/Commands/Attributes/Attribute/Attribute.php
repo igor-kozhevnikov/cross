@@ -5,12 +5,33 @@ declare(strict_types=1);
 namespace Cross\Commands\Attributes\Attribute;
 
 use Closure;
+use Cross\Commands\Attributes\AttributesInterface;
+use Fluent\Fluent;
+use Fluent\FluentEnd;
+use Fluent\FluentMaker;
 use Symfony\Component\Console\Completion\CompletionInput;
 use Symfony\Component\Console\Completion\CompletionSuggestions;
 use Symfony\Component\Console\Completion\Suggestion;
 
+/**
+ * @method self name(string $name)
+ * @method self description(string $description)
+ * @method self mode(null|int|string $mode)
+ * @method self default(null|string|bool|int|float|array $default)
+ * @method self suggestions(array|Closure $suggestions)
+ * @method AttributesInterface end()
+ */
 abstract class Attribute implements AttributeInterface
 {
+    use Fluent;
+    use FluentMaker;
+    use FluentEnd;
+
+    /**
+     * Attributes.
+     */
+    protected AttributesInterface $attributes;
+
     /**
      * Name.
      */
@@ -47,11 +68,11 @@ abstract class Attribute implements AttributeInterface
     }
 
     /**
-     * Returns the name.
+     * Defines attributes.
      */
-    public function getName(): string
+    public function setAttributes(AttributesInterface $attributes): void
     {
-        return $this->name;
+        $this->attributes = $attributes;
     }
 
     /**
@@ -60,6 +81,14 @@ abstract class Attribute implements AttributeInterface
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    /**
+     * Returns the name.
+     */
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     /**
@@ -81,7 +110,7 @@ abstract class Attribute implements AttributeInterface
     /**
      * Defines the mode.
      */
-    public function setMode(?int $mode): void
+    public function setMode(null|int|string $mode): void
     {
         $this->mode = $mode;
     }
@@ -128,5 +157,13 @@ abstract class Attribute implements AttributeInterface
     public function getSuggestions(): array|Closure
     {
         return $this->suggestions;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFluentContainer(): AttributesInterface
+    {
+        return $this->attributes;
     }
 }

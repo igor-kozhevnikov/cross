@@ -10,6 +10,11 @@ use Traversable;
 interface AttributesInterface extends Traversable
 {
     /**
+     * Adds an attribute.
+     */
+    public function add(AttributeInterface $attribute): void;
+
+    /**
      * Returns all attributes.
      *
      * @return array<array-key, AttributeInterface>

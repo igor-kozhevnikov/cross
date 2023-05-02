@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cross\Tests\Stubs\Commands\Sequence;
+namespace Cross\Tests\Commands\Sequence;
 
 use Cross\Commands\Sequence\Item;
 use Cross\Commands\Sequence\SequenceInterface;

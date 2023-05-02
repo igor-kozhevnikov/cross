@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cross\Tests\Stubs\Package;
+namespace Cross\Tests\Package;
 
 use Cross\Package\Package;
 use Cross\Tests\Utils\Accessible;

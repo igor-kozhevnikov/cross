@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Cross\Tests\Commands\Attributes;
 
+use Cross\Commands\Attributes\Attribute\AttributeFactory;
 use Cross\Commands\Attributes\Attributes;
-use Cross\Tests\Stubs\Commands\Attrubutes\Attribute\Argument\ArgumentStub;
-use Cross\Tests\Stubs\Commands\Attrubutes\Attribute\Option\OptionStub;
+use Cross\Tests\Commands\Attributes\Attribute\Argument\ArgumentStub;
+use Cross\Tests\Commands\Attributes\Attribute\Option\OptionStub;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -95,5 +96,14 @@ final class AttributesTest extends TestCase
 
         $this->assertIsIterable($attributes);
         $this->assertIsIterable($attributes->getIterator());
+    }
+
+    #[Test]
+    #[TestDox('Returning a factory')]
+    public function factory(): void
+    {
+        $attributes = new Attributes();
+
+        $this->assertInstanceOf(AttributeFactory::class, $attributes->getFluentFactory());
     }
 }
