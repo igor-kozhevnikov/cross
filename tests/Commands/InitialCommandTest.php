@@ -11,6 +11,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Templates\Commands\InitialCommandTemplate;
 use Tests\TestCase;
@@ -29,6 +30,10 @@ final class InitialCommandTest extends TestCase
         $command->initialize($input, $output);
 
         $this->assertSame($input, $command->input());
+        $this->assertInstanceOf(SymfonyStyle::class, $command->output());
+
+        $command->initialize($input, new ConsoleOutput());
+
         $this->assertInstanceOf(SymfonyStyle::class, $command->output());
     }
 
