@@ -8,9 +8,10 @@ use Cross\Commands\Attributes\Attribute\Option\Option;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputOption;
-use Tests\Commands\InitialCommandStub;
+use Templates\Commands\Attributes\OptionTemplate;
+use Templates\Commands\InitialCommandTemplate;
+use Tests\TestCase;
 
 #[CoversClass(Option::class)]
 final class OptionTest extends TestCase
@@ -21,7 +22,7 @@ final class OptionTest extends TestCase
     {
         $shortcut = 's';
 
-        $option = new OptionStub();
+        $option = new OptionTemplate();
         $option->setShortcut($shortcut);
 
         $this->assertSame($shortcut, $option->getShortcut());
@@ -33,7 +34,7 @@ final class OptionTest extends TestCase
     {
         $shortcut = 'c';
 
-        $option = new OptionStub();
+        $option = new OptionTemplate();
         $option->shortcut($shortcut);
 
         $this->assertSame($shortcut, $option->getShortcut());
@@ -43,7 +44,7 @@ final class OptionTest extends TestCase
     #[TestDox('Defining the mode as none')]
     public function none(): void
     {
-        $option = new OptionStub();
+        $option = new OptionTemplate();
         $option->none();
 
         $this->assertSame($option->getMode(), InputOption::VALUE_NONE);
@@ -53,7 +54,7 @@ final class OptionTest extends TestCase
     #[TestDox('Defining the mode as optional')]
     public function optional(): void
     {
-        $option = new OptionStub();
+        $option = new OptionTemplate();
         $option->optional();
 
         $this->assertSame($option->getMode(), InputOption::VALUE_OPTIONAL);
@@ -63,7 +64,7 @@ final class OptionTest extends TestCase
     #[TestDox('Defining the mode required')]
     public function required(): void
     {
-        $option = new OptionStub();
+        $option = new OptionTemplate();
         $option->required();
 
         $this->assertSame($option->getMode(), InputOption::VALUE_REQUIRED);
@@ -73,7 +74,7 @@ final class OptionTest extends TestCase
     #[TestDox('Defining the mode as an array')]
     public function array(): void
     {
-        $option = new OptionStub();
+        $option = new OptionTemplate();
         $option->array();
 
         $this->assertSame($option->getMode(), InputOption::VALUE_IS_ARRAY);
@@ -83,7 +84,7 @@ final class OptionTest extends TestCase
     #[TestDox('Defining the mode as negatable')]
     public function negatable(): void
     {
-        $option = new OptionStub();
+        $option = new OptionTemplate();
         $option->negatable();
 
         $this->assertSame($option->getMode(), InputOption::VALUE_NEGATABLE);
@@ -93,10 +94,12 @@ final class OptionTest extends TestCase
     #[TestDox('Appending to a command')]
     public function appendTo(): void
     {
-        $command = new InitialCommandStub();
+        $command = new InitialCommandTemplate();
         $command->run();
 
-        $option = new OptionStub();
+        $option = new OptionTemplate();
+        $option->setMode(InputOption::VALUE_REQUIRED);
+        $option->setDefault('yes');
         $option->appendTo($command);
 
         $this->assertNotNull($command->option($option->getName()));

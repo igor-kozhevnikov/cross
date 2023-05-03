@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cross\Plugin;
 
-use Exception;
 use Symfony\Component\Console\Command\Command;
 
 abstract class BasePlugin implements PluginInterface
@@ -51,6 +50,10 @@ abstract class BasePlugin implements PluginInterface
      */
     public function getCommands(): array
     {
-        return $this->commands ?: $this->getConfig()['commands'] ?? [];
+        if ($this->commands) {
+            return $this->commands;
+        }
+
+        return $this->config['commands'] ?? [];
     }
 }

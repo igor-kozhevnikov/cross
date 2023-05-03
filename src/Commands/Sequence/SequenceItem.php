@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Cross\Commands\Sequence;
 
-class Item implements ItemInterface
+class SequenceItem implements SequenceItemInterface
 {
     /**
      * Sequence.
+     *
+     * @var SequenceInterface<SequenceItemInterface>
      */
     protected SequenceInterface $sequence;
 
@@ -22,7 +24,17 @@ class Item implements ItemInterface
     protected bool $append = true;
 
     /**
+     * Constructor.
+     */
+    public function __construct(string $name)
+    {
+        $this->setName($name);
+    }
+
+    /**
      * Defines the sequence.
+     *
+     * @param SequenceInterface<SequenceItemInterface> $sequence
      */
     public function setSequence(SequenceInterface $sequence): void
     {
@@ -31,6 +43,8 @@ class Item implements ItemInterface
 
     /**
      * Returns the sequence.
+     *
+     * @return SequenceInterface<SequenceItemInterface>
      */
     public function getSequence(): SequenceInterface
     {
@@ -46,7 +60,7 @@ class Item implements ItemInterface
     }
 
     /**
-     * Returns a name.
+     * @inheritDoc
      */
     public function getName(): string
     {
@@ -71,6 +85,7 @@ class Item implements ItemInterface
 
     /**
      * @inheritDoc
+     * @return SequenceInterface<SequenceItemInterface>
      */
     public function end(): SequenceInterface
     {

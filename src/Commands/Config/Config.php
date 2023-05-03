@@ -39,6 +39,7 @@ final class Config
     /**
      * Unserialize.
      *
+     * @param array<string, mixed> $data
      * @throws Exception
      */
     public function __unserialize(array $data): void

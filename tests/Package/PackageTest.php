@@ -10,6 +10,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\IgnoreClassForCodeCoverage;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
+use Templates\Packages\PackageTemplate;
 use Tests\TestCase;
 
 #[CoversClass(Package::class)]
@@ -17,10 +18,11 @@ use Tests\TestCase;
 final class PackageTest extends TestCase
 {
     #[Test]
-    #[TestDox('Getting the correct base configuration')]
+    #[TestDox('Getting a correct base config')]
     public function baseConfig(): void
     {
-        $package = new PackageStub();
+        $package = new PackageTemplate();
+
         $config = $package->fetchBaseConfig();
 
         $this->assertIsArray($config);
@@ -29,10 +31,10 @@ final class PackageTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Getting the initial alternative config')]
+    #[TestDox('Getting an initial alternative config')]
     public function alternativeConfigMissing(): void
     {
-        $package = new PackageStub();
+        $package = new PackageTemplate();
 
         $this->assertSame([], $package->fetchAlternativeConfig());
     }
@@ -41,9 +43,13 @@ final class PackageTest extends TestCase
     #[TestDox('Getting a valid alternative config')]
     public function alternativeConfigValid(): void
     {
-        $path = $this->makeFile('valid-alternative-config.php', "<?php return ['enable' => true];");
+        $path = $this->file()
+            ->name('valid-alternative-config.php')
+            ->content("<?php return ['enable' => true];")
+            ->make()
+            ->getPath();
 
-        $package = new PackageStub($path);
+        $package = new PackageTemplate($path);
 
         $this->assertSame(['enable' => true], $package->fetchAlternativeConfig($path));
     }
@@ -54,7 +60,11 @@ final class PackageTest extends TestCase
     {
         $this->expectException(InvalidAlternativeConfigException::class);
 
-        $path = $this->makeFile('invalid-alternative-config.php', '<?php return null;');
+        $path = $this->file()
+            ->name('invalid-alternative-config.php')
+            ->content('<?php return null;')
+            ->make()
+            ->getPath();
 
         new Package($path);
     }
@@ -63,14 +73,15 @@ final class PackageTest extends TestCase
     #[TestDox('Getting the initial configuration')]
     public function config(): void
     {
-        $package = new PackageStub();
         $config = ['plugins' => [], 'commands' => []];
 
-        $this->assertSame($config, $package->config);
+        $package = new Package();
+
+        $this->assertSame($config, $package->getConfig());
     }
 
     #[Test]
-    #[TestDox('Getting the initial list of plugins')]
+    #[TestDox('Getting an initial list of plugins')]
     public function plugins(): void
     {
         $package = new Package();

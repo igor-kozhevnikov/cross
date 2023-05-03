@@ -40,6 +40,8 @@ abstract class BaseCommand extends InitialCommand
 
     /**
      * Attributes.
+     *
+     * @var null|AttributesInterface<AttributeInterface>
      */
     protected ?AttributesInterface $attributes = null;
 
@@ -115,6 +117,8 @@ abstract class BaseCommand extends InitialCommand
 
     /**
      * Defines attributes.
+     *
+     * @return AttributesInterface<AttributeInterface>
      */
     protected function attributes(): AttributesInterface
     {

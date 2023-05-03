@@ -32,7 +32,7 @@ class Package
      *
      * @return array<string, mixed>
      */
-    private function fetchBaseConfig(): array
+    protected function fetchBaseConfig(): array
     {
         return require __DIR__ . '/../../config/config.php';
     }
@@ -83,13 +83,23 @@ class Package
     }
 
     /**
+     * Returns config.
+     *
+     * @return array<string, mixed>
+     */
+    public function getConfig(): array
+    {
+        return $this->config;
+    }
+
+    /**
      * Returns a list of plugins.
      *
      * @return array<array-key, class-string|PluginInterface>
      */
     public function getPlugins(): array
     {
-        return $this->config['plugins'] ?? [];
+        return $this->getConfig()['plugins'] ?? [];
     }
 
     /**
@@ -99,6 +109,6 @@ class Package
      */
     public function getCommands(): array
     {
-        return $this->config['commands'] ?? [];
+        return $this->getConfig()['commands'] ?? [];
     }
 }

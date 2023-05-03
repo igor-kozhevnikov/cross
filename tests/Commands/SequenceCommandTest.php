@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Tests\Commands;
 
 use Cross\Commands\Sequence\Sequence;
+use Cross\Commands\Sequence\SequenceItem;
 use Cross\Commands\SequenceCommand;
 use Cross\Commands\Statuses\Exist;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use Tests\Commands\Sequence\ItemStub;
+use Templates\Commands\BaseCommandTemplate;
+use Templates\Commands\InitialCommandTemplate;
+use Templates\Commands\SequenceCommandTemplate;
+use Tests\TestCase;
 
 #[CoversClass(SequenceCommand::class)]
 final class SequenceCommandTest extends TestCase
@@ -24,44 +24,48 @@ final class SequenceCommandTest extends TestCase
     #[TestDox('Successful handling a sequence')]
     public function handleSuccessful(): void
     {
-        $item = new ItemStub();
+        $firstCommand = new InitialCommandTemplate();
+        $secondCommand = new InitialCommandTemplate();
 
-        $command = new BaseCommandStub();
-        $command->name = $item->getName();
-        $command->configure();
+        $firstSequenceItem = new SequenceItem($firstCommand->getName());
+        $secondSequenceItem = new SequenceItem($secondCommand->getName());
 
         $application = new Application();
-        $application->add($command);
+        $application->add($firstCommand);
+        $application->add($secondCommand);
 
-        $sequence = new SequenceCommandStub();
-        $sequence->input = new ArrayInput([]);
-        $sequence->output = new SymfonyStyle($sequence->input, new BufferedOutput());
-        $sequence->setApplication($application);
-        $sequence->sequence = new Sequence([$item]);
+        $sequence = new Sequence();
+        $sequence->add($firstSequenceItem);
+        $sequence->add($secondSequenceItem);
 
-        $this->assertSame(Exist::Success, $sequence->handle());
+        $command = new SequenceCommandTemplate();
+        $command->sequence = $sequence;
+        $command->initialize();
+        $command->setApplication($application);
+
+        $this->assertSame(Exist::Success, $command->handle());
     }
 
     #[Test]
     #[TestDox('Unsuccessful handling a sequence')]
     public function handleUnsuccessful(): void
     {
-        $item = new ItemStub();
+        $command = new BaseCommandTemplate();
+        $command->handle = Exist::Failure;
 
-        $command = new BaseCommandStub();
-        $command->name = $item->getName();
-        $command->exist = Exist::Failure;
-        $command->configure();
+        $sequenceItem = new SequenceItem($command->getName());
+
+        $sequence = new Sequence();
+        $sequence->add($sequenceItem);
 
         $application = new Application();
         $application->add($command);
 
-        $sequence = new SequenceCommandStub();
-        $sequence->input = new ArrayInput([]);
-        $sequence->output = new SymfonyStyle($sequence->input, new BufferedOutput());
-        $sequence->setApplication($application);
-        $sequence->sequence = new Sequence([$item]);
+        $command = new SequenceCommandTemplate();
+        $command->sequence = $sequence;
+        $command->initialize();
+        $command->setApplication($application);
 
-        $this->assertSame(Exist::Failure, $sequence->handle());
+        $this->assertSame(Exist::Failure, $command->handle());
     }
 }

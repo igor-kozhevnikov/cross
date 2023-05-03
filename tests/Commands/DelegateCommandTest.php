@@ -9,11 +9,10 @@ use Cross\Commands\Statuses\Exist;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use Templates\Commands\BaseCommandTemplate;
+use Templates\Commands\DelegateCommandTemplate;
+use Tests\TestCase;
 
 #[CoversClass(DelegateCommand::class)]
 final class DelegateCommandTest extends TestCase
@@ -22,14 +21,14 @@ final class DelegateCommandTest extends TestCase
     #[TestDox('Getting a delegate by a key')]
     public function delegateKey(): void
     {
-        $delegate = new ShellCommandStub();
+        $delegate = new BaseCommandTemplate();
 
         $application = new Application();
         $application->add($delegate);
 
-        $command = new DelegateCommandStub();
+        $command = new DelegateCommandTemplate();
+        $command->delegate = $delegate->getName();
         $command->setApplication($application);
-        $command->delegate = $delegate->name();
 
         $this->assertSame($command->delegate, $command->delegate()->getName());
     }
@@ -38,23 +37,21 @@ final class DelegateCommandTest extends TestCase
     #[TestDox('Getting a command delegate')]
     public function delegateCommand(): void
     {
-        $command = new DelegateCommandStub();
-        $command->delegate = new ShellCommandStub();
+        $delegate = new BaseCommandTemplate();
 
-        $this->assertSame($command->delegate, $command->delegate());
+        $command = new DelegateCommandTemplate();
+        $command->delegate = $delegate;
+
+        $this->assertSame($delegate, $command->delegate());
     }
 
     #[Test]
     #[TestDox('Executing the handler() method')]
     public function handler(): void
     {
-        $delegate = new ShellCommandStub();
-        $delegate->command = [];
-
-        $command = new DelegateCommandStub();
-        $command->input = new ArrayInput([]);
-        $command->output = new SymfonyStyle($command->input, new BufferedOutput());
-        $command->delegate = $delegate;
+        $command = new DelegateCommandTemplate();
+        $command->initialize();
+        $command->delegate = new BaseCommandTemplate();
 
         $this->assertSame(Exist::Success, $command->handle());
     }

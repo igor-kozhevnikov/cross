@@ -6,11 +6,15 @@ namespace Cross\Commands;
 
 use Cross\Commands\Sequence\SequenceInterface;
 use Cross\Commands\Statuses\Exist;
+use Symfony\Component\Console\Command\Command;
+use Traversable;
 
 abstract class SequenceCommand extends BaseCommand
 {
     /**
      * Returns a sequence.
+     *
+     * @return SequenceInterface<Command>
      */
     abstract protected function sequence(): SequenceInterface;
 

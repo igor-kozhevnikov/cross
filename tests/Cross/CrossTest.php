@@ -10,11 +10,11 @@ use Cross\Cross\Cross;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
-use Tests\Commands\InitialCommandStub;
-use Tests\Plugin\PluginStub;
+use Templates\Commands\BaseCommandTemplate;
+use Templates\Commands\InitialCommandTemplate;
+use Templates\Plugins\PluginTemplate;
 
 #[CoversClass(Cross::class)]
 final class CrossTest extends TestCase
@@ -32,7 +32,7 @@ final class CrossTest extends TestCase
     /**
      * Application.
      */
-    private Application & MockObject $application;
+    private Application $application;
 
     /**
      * Counter of default commands in the application.
@@ -60,11 +60,7 @@ final class CrossTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->application = $this->getMockBuilder(Application::class)
-            ->setConstructorArgs([self::$composer->getDescription(), self::$composer->getVersion()])
-            ->onlyMethods(['run'])
-            ->getMock();
-
+        $this->application = new Application(self::$composer->getDescription(), self::$composer->getVersion());
         $this->cross = new Cross($this->application);
         $this->counter = count($this->application->all());
     }
@@ -82,7 +78,7 @@ final class CrossTest extends TestCase
     #[TestDox('Adding all commands from a list of plugins')]
     public function plugins(): void
     {
-        $this->cross->plugins([new PluginStub(), PluginStub::class]);
+        $this->cross->plugins([new PluginTemplate(), PluginTemplate::class]);
 
         $this->assertCount($this->counter + 2, $this->application->all());
     }
@@ -91,8 +87,8 @@ final class CrossTest extends TestCase
     #[TestDox('Adding all commands from a plugin')]
     public function pluginCommands(): void
     {
-        $this->cross->plugin(new PluginStub());
-        $this->cross->plugin(PluginStub::class);
+        $this->cross->plugin(new PluginTemplate());
+        $this->cross->plugin(PluginTemplate::class);
 
         $this->assertCount($this->counter + 2, $this->application->all());
     }
@@ -103,20 +99,18 @@ final class CrossTest extends TestCase
     {
         Config::reset();
 
-        $plugin = new PluginStub();
-        $plugin->key = 'elephant';
-        $plugin->config = ['legs' => 4];
+        $plugin = new PluginTemplate();
 
         $this->cross->plugin($plugin);
 
-        $this->assertSame(Config::get($plugin->key), $plugin->config);
+        $this->assertSame(Config::get($plugin->getKey()), $plugin->getConfig());
     }
 
     #[Test]
     #[TestDox('Adding a list of commands')]
     public function commands(): void
     {
-        $commands = [new InitialCommandStub(), InitialCommandStub::class];
+        $commands = [new BaseCommandTemplate(), BaseCommandTemplate::class];
 
         $this->cross->commands($commands);
 
@@ -127,8 +121,8 @@ final class CrossTest extends TestCase
     #[TestDox('Adding a command')]
     public function command(): void
     {
-        $this->cross->command(new InitialCommandStub());
-        $this->cross->command(InitialCommandStub::class);
+        $this->cross->command(new InitialCommandTemplate());
+        $this->cross->command(InitialCommandTemplate::class);
 
         $this->assertCount($this->counter + 2, $this->application->all());
     }
@@ -137,7 +131,10 @@ final class CrossTest extends TestCase
     #[TestDox('Running an application')]
     public function running(): void
     {
+        $this->application = $this->createMock(Application::class);
         $this->application->method('run')->willReturn(15);
+
+        $this->cross = new Cross($this->application);
 
         $this->assertSame($this->cross->run(), $this->application->run());
     }

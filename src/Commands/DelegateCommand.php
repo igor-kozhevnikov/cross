@@ -33,7 +33,6 @@ abstract class DelegateCommand extends BaseCommand
     {
         $command = $this->delegate();
         $code = $command->run($this->input(), $this->output());
-
         return Exist::from($code);
     }
 }

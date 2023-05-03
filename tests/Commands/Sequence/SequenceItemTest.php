@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Tests\Commands\Sequence;
 
-use Cross\Commands\Sequence\Item;
 use Cross\Commands\Sequence\Sequence;
+use Cross\Commands\Sequence\SequenceItem;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
+use Templates\Commands\Sequence\SequenceItemTemplate;
+use Tests\TestCase;
 
-#[CoversClass(Item::class)]
-final class ItemTest extends TestCase
+#[CoversClass(SequenceItem::class)]
+final class SequenceItemTest extends TestCase
 {
     #[Test]
     #[TestDox('Defining a name')]
@@ -20,8 +21,7 @@ final class ItemTest extends TestCase
     {
         $name = 'Monkey';
 
-        $item = new Item();
-        $item->setName($name);
+        $item = new SequenceItemTemplate($name);
 
         $this->assertSame($name, $item->getName());
     }
@@ -32,7 +32,7 @@ final class ItemTest extends TestCase
     {
         $sequence = new Sequence();
 
-        $item = new ItemStub();
+        $item = new SequenceItemTemplate();
         $item->setSequence($sequence);
 
         $this->assertSame($sequence, $item->sequence);
@@ -46,7 +46,7 @@ final class ItemTest extends TestCase
 
         $name = 'Monkey';
 
-        $item = new Item();
+        $item = new SequenceItemTemplate();
         $item->setName($name);
         $item->setSequence($sequence);
 
@@ -63,7 +63,7 @@ final class ItemTest extends TestCase
 
         $name = 'Monkey';
 
-        $item = new Item();
+        $item = new SequenceItemTemplate();
         $item->setName($name);
         $item->setSequence($sequence);
         $item->setAppend(false);

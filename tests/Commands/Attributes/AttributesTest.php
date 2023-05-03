@@ -10,8 +10,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Tests\Commands\Attributes\Attribute\Argument\ArgumentStub;
-use Tests\Commands\Attributes\Attribute\Option\OptionStub;
+use Templates\Commands\Attributes\ArgumentTemplate;
+use Templates\Commands\Attributes\OptionTemplate;
 
 #[CoversClass(Attributes::class)]
 final class AttributesTest extends TestCase
@@ -20,8 +20,8 @@ final class AttributesTest extends TestCase
     #[TestDox('Initializing attributes')]
     public function constructor(): void
     {
-        $argument = new ArgumentStub();
-        $option = new OptionStub();
+        $argument = new ArgumentTemplate();
+        $option = new OptionTemplate();
 
         $set = [$argument->getName() => $argument, $option->getName() => $option];
 
@@ -34,8 +34,8 @@ final class AttributesTest extends TestCase
     #[TestDox('Defining attributes')]
     public function set(): void
     {
-        $argument = new ArgumentStub();
-        $option = new OptionStub();
+        $argument = new ArgumentTemplate();
+        $option = new OptionTemplate();
 
         $set = [$argument->getName() => $argument, $option->getName() => $option];
 
@@ -49,8 +49,8 @@ final class AttributesTest extends TestCase
     #[TestDox('Adding an attribute')]
     public function add(): void
     {
-        $argument = new ArgumentStub();
-        $option = new OptionStub();
+        $argument = new ArgumentTemplate();
+        $option = new OptionTemplate();
 
         $attributes = new Attributes();
         $attributes->add($argument);
@@ -65,7 +65,7 @@ final class AttributesTest extends TestCase
     public function reset(): void
     {
         $attributes = new Attributes();
-        $attributes->set([new ArgumentStub(),  new OptionStub()]);
+        $attributes->set([new ArgumentTemplate(), new OptionTemplate()]);
 
         $this->assertCount(2, $attributes->all());
 
@@ -78,8 +78,8 @@ final class AttributesTest extends TestCase
     #[TestDox('Merging attributes')]
     public function merge(): void
     {
-        $first = new Attributes([new ArgumentStub(),  new OptionStub()]);
-        $second  = new Attributes([new ArgumentStub(),  new OptionStub()]);
+        $first = new Attributes([new ArgumentTemplate(), new OptionTemplate()]);
+        $second = new Attributes([new ArgumentTemplate(), new OptionTemplate()]);
 
         $merged = array_merge($first->all(), $second->all());
 

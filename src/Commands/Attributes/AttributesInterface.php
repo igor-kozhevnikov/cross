@@ -7,6 +7,9 @@ namespace Cross\Commands\Attributes;
 use Cross\Commands\Attributes\Attribute\AttributeInterface;
 use Traversable;
 
+/**
+ * @extends Traversable<AttributeInterface>
+ */
 interface AttributesInterface extends Traversable
 {
     /**
@@ -17,7 +20,7 @@ interface AttributesInterface extends Traversable
     /**
      * Returns all attributes.
      *
-     * @return array<array-key, AttributeInterface>
+     * @return array<string, AttributeInterface>
      */
     public function all(): array;
 }

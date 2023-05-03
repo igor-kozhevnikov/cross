@@ -49,6 +49,8 @@ abstract class Attribute implements AttributeInterface
 
     /**
      * Default.
+     *
+     * @var null|string|bool|int|float|array<array-key, mixed>
      */
     protected null|string|bool|int|float|array $default = null;
 
@@ -125,6 +127,8 @@ abstract class Attribute implements AttributeInterface
 
     /**
      * Defines the default value.
+     *
+     * @param null|string|bool|int|float|array<array-key, mixed> $default
      */
     public function setDefault(null|string|bool|int|float|array $default): void
     {
@@ -133,6 +137,8 @@ abstract class Attribute implements AttributeInterface
 
     /**
      * Returns the default value.
+     *
+     * @return null|string|bool|int|float|array<array-key, mixed>
      */
     public function getDefault(): null|string|bool|int|float|array
     {

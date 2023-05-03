@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cross\Commands\Attributes\Attribute\Option;
 
+use Closure;
 use Cross\Commands\Attributes\Attribute\Attribute;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
@@ -46,11 +47,11 @@ class Option extends Attribute implements OptionInterface
     protected function getFluentPredefinedSetters(): array
     {
         return [
-            'none' => fn () => $this->setMode(InputOption::VALUE_NONE),
-            'optional' => fn () => $this->setMode(InputOption::VALUE_OPTIONAL),
-            'required' => fn () => $this->setMode(InputOption::VALUE_REQUIRED),
-            'array' => fn () => $this->setMode(InputOption::VALUE_IS_ARRAY),
-            'negatable' => fn () => $this->setMode(InputOption::VALUE_NEGATABLE),
+            'none' => fn() => $this->setMode(InputOption::VALUE_NONE),
+            'optional' => fn() => $this->setMode(InputOption::VALUE_OPTIONAL),
+            'required' => fn() => $this->setMode(InputOption::VALUE_REQUIRED),
+            'array' => fn() => $this->setMode(InputOption::VALUE_IS_ARRAY),
+            'negatable' => fn() => $this->setMode(InputOption::VALUE_NEGATABLE),
         ];
     }
 

@@ -10,8 +10,10 @@ use Cross\Commands\Attributes\AttributesInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Completion\Suggestion;
+use Templates\Commands\Attributes\ArgumentTemplate;
+use Templates\Commands\Attributes\OptionTemplate;
+use Tests\TestCase;
 
 #[CoversClass(Attribute::class)]
 final class AttributeTest extends TestCase
@@ -20,9 +22,9 @@ final class AttributeTest extends TestCase
     #[TestDox('Defining a name via a setter')]
     public function nameViaSetter(): void
     {
-        $name = 'timeout';
+        $name = 'title';
 
-        $attribute = new AttributeStub();
+        $attribute = new ArgumentTemplate();
         $attribute->setName($name);
 
         $this->assertSame($name, $attribute->getName());
@@ -32,9 +34,9 @@ final class AttributeTest extends TestCase
     #[TestDox('Defining a name via a fluent method')]
     public function nameViaFluent(): void
     {
-        $name = 'timeout';
+        $name = 'title';
 
-        $attribute = new AttributeStub();
+        $attribute = new ArgumentTemplate();
         $attribute->name($name);
 
         $this->assertSame($name, $attribute->getName());
@@ -46,10 +48,10 @@ final class AttributeTest extends TestCase
     {
         $description = 'Rapid walking';
 
-        $option = new AttributeStub();
-        $option->setDescription($description);
+        $attribute = new OptionTemplate();
+        $attribute->setDescription($description);
 
-        $this->assertSame($description, $option->getDescription());
+        $this->assertSame($description, $attribute->getDescription());
     }
 
     #[Test]
@@ -58,10 +60,10 @@ final class AttributeTest extends TestCase
     {
         $description = 'Rapid walking';
 
-        $option = new AttributeStub();
-        $option->description($description);
+        $attribute = new OptionTemplate();
+        $attribute->description($description);
 
-        $this->assertSame($description, $option->getDescription());
+        $this->assertSame($description, $attribute->getDescription());
     }
 
     #[Test]
@@ -70,7 +72,7 @@ final class AttributeTest extends TestCase
     {
         $mode = 10;
 
-        $attribute = new AttributeStub();
+        $attribute = new OptionTemplate();
         $attribute->setMode($mode);
 
         $this->assertSame($mode, $attribute->getMode());
@@ -82,7 +84,7 @@ final class AttributeTest extends TestCase
     {
         $mode = 10;
 
-        $attribute = new AttributeStub();
+        $attribute = new OptionTemplate();
         $attribute->mode($mode);
 
         $this->assertSame($mode, $attribute->getMode());
@@ -94,7 +96,7 @@ final class AttributeTest extends TestCase
     {
         $default = 10.5;
 
-        $attribute = new AttributeStub();
+        $attribute = new ArgumentTemplate();
         $attribute->setDefault($default);
 
         $this->assertSame($default, $attribute->getDefault());
@@ -106,7 +108,7 @@ final class AttributeTest extends TestCase
     {
         $default = 10.5;
 
-        $attribute = new AttributeStub();
+        $attribute = new ArgumentTemplate();
         $attribute->default($default);
 
         $this->assertSame($default, $attribute->getDefault());
@@ -118,7 +120,7 @@ final class AttributeTest extends TestCase
     {
         $suggestions = [new Suggestion('10')];
 
-        $attribute = new AttributeStub();
+        $attribute = new OptionTemplate();
         $attribute->setSuggestions($suggestions);
 
         $this->assertSame($suggestions, $attribute->getSuggestions());
@@ -130,7 +132,7 @@ final class AttributeTest extends TestCase
     {
         $suggestions = [new Suggestion('10')];
 
-        $attribute = new AttributeStub();
+        $attribute = new OptionTemplate();
         $attribute->setSuggestions($suggestions);
 
         $this->assertSame($suggestions, $attribute->getSuggestions());
@@ -140,11 +142,9 @@ final class AttributeTest extends TestCase
     #[TestDox('Adding an attribute to container')]
     public function end(): void
     {
-        $attribute = new AttributeStub();
+        $attribute = new OptionTemplate();
         $attribute->setAttributes(new Attributes());
 
-        $attributes = $attribute->name('over')->end();
-
-        $this->assertInstanceOf(AttributesInterface::class, $attributes);
+        $this->assertInstanceOf(AttributesInterface::class, $attribute->end());
     }
 }

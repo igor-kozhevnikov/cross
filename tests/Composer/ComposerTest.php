@@ -60,7 +60,7 @@ final class ComposerTest extends TestCase
     {
         $this->expectException(InvalidComposerConfigException::class);
 
-        $path = $this->makeFile('invalid-composer.json');
+        $path = $this->file()->name('invalid-composer.json')->make()->getPath();
 
         new Composer($path);
     }

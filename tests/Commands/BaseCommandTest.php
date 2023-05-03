@@ -13,11 +13,9 @@ use Cross\Commands\Statuses\Prepare;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use Templates\Commands\BaseCommandTemplate;
+use Tests\TestCase;
 
 #[CoversClass(BaseCommand::class)]
 final class BaseCommandTest extends TestCase
@@ -26,33 +24,35 @@ final class BaseCommandTest extends TestCase
     #[TestDox('Defining simple properties')]
     public function properties(): void
     {
-        $command = new BaseCommandStub();
-        $command->name = 'elephant';
-        $command->description = 'a big animal';
-        $command->aliases = ['mammoth'];
-        $command->hidden = true;
+        $name = 'elephant';
+        $description = 'A big animal';
+        $aliases = ['mammoth'];
+        $hidden = true;
+
+        $command = new BaseCommandTemplate();
+        $command->name = $name;
+        $command->description = $description;
+        $command->aliases = $aliases;
+        $command->hidden = $hidden;
         $command->configure();
 
-        $this->assertSame($command->name, $command->getName());
-        $this->assertSame($command->name, $command->name());
+        $this->assertSame($name, $command->getName());
+        $this->assertSame($name, $command->name());
 
-        $this->assertSame($command->description, $command->getDescription());
-        $this->assertSame($command->description, $command->description());
+        $this->assertSame($description, $command->getDescription());
+        $this->assertSame($description, $command->description());
 
-        $this->assertSame($command->aliases, $command->getAliases());
-        $this->assertSame($command->aliases, $command->aliases());
+        $this->assertSame($aliases, $command->getAliases());
+        $this->assertSame($aliases, $command->aliases());
 
-        $this->assertSame($command->hidden, $command->isHidden());
-        $this->assertSame($command->hidden, $command->hidden());
+        $this->assertSame($hidden, $command->isHidden());
+        $this->assertSame($hidden, $command->hidden());
     }
 
     #[Test]
     #[TestDox('Defining attributes')]
     public function attributes(): void
     {
-        $input = new ArrayInput([]);
-        $output = new SymfonyStyle($input, new BufferedOutput());
-
         $argument = new Argument('file');
         $argument->setDefault('php');
 
@@ -60,57 +60,50 @@ final class BaseCommandTest extends TestCase
         $option->setMode(InputOption::VALUE_REQUIRED);
         $option->setDefault('true');
 
-        $command = new BaseCommandStub();
+        $command = new BaseCommandTemplate();
         $command->attributes = new Attributes([$argument, $option]);
         $command->configure();
-        $command->run($input, $output);
+        $command->run();
 
         $this->assertIsIterable($command->arguments());
         $this->assertIsIterable($command->options());
-        $this->assertSame('php', $command->argument('file'));
-        $this->assertSame('true', $command->option('silence'));
+        $this->assertSame($argument->getDefault(), $command->argument('file'));
+        $this->assertSame($option->getDefault(), $command->option('silence'));
     }
 
     #[Test]
     #[TestDox('Showing a success message')]
     public function messageSuccess(): void
     {
-        $input = new ArrayInput([]);
-        $output = new SymfonyStyle($input, new BufferedOutput());
-
         $messages = new Messages();
         $messages->setSuccess('Good for you!');
 
-        $command = new BaseCommandStub();
+        $command = new BaseCommandTemplate();
         $command->messages = $messages;
-        $command->run($input, $output);
+        $command->run();
 
-        $this->assertTrue(true);
+        $this->assertSame($messages, $command->messages());
     }
 
     #[Test]
     #[TestDox('Showing a error message')]
     public function messageError(): void
     {
-        $input = new ArrayInput([]);
-        $output = new SymfonyStyle($input, new BufferedOutput());
-
         $messages = new Messages();
         $messages->setError('Oh, poor boy!');
 
-        $command = new BaseCommandStub();
+        $command = new BaseCommandTemplate();
         $command->messages = $messages;
-        $command->run($input, $output);
+        $command->run();
 
-        $this->assertTrue(true);
+        $this->assertSame($messages, $command->messages());
     }
 
     #[Test]
     #[TestDox('Defining a prepare code')]
     public function prepare(): void
     {
-        $command = new BaseCommandStub();
-        $command->prepare = Prepare::Continue;
+        $command = new BaseCommandTemplate();
 
         $this->assertSame(Prepare::Continue, $command->prepare());
     }
@@ -119,29 +112,19 @@ final class BaseCommandTest extends TestCase
     #[TestDox('Executing the execute() method with the stop prepare status')]
     public function executePrepareStop(): void
     {
-        $input = new ArrayInput([]);
-        $output = new BufferedOutput();
-
-        $command = new BaseCommandStub();
+        $command = new BaseCommandTemplate();
         $command->prepare = Prepare::Stop;
 
-        $exist = $command->execute($input, $output);
-
-        $this->assertSame(Prepare::Stop->exist(), $exist);
+        $this->assertSame(Prepare::Stop->exist(), $command->execute());
     }
 
     #[Test]
     #[TestDox('Executing the execute() with the skip prepare status')]
     public function executePrepareSkip(): void
     {
-        $input = new ArrayInput([]);
-        $output = new BufferedOutput();
-
-        $command = new BaseCommandStub();
+        $command = new  BaseCommandTemplate();
         $command->prepare = Prepare::Skip;
 
-        $exist = $command->execute($input, $output);
-
-        $this->assertSame(Prepare::Skip->exist(), $exist);
+        $this->assertSame(Prepare::Skip->exist(), $command->execute());
     }
 }

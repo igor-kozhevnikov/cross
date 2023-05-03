@@ -8,8 +8,9 @@ use Cross\Plugin\BasePlugin;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
-use Tests\Commands\InitialCommandStub;
+use Templates\Commands\InitialCommandTemplate;
+use Templates\Plugins\PluginTemplate;
+use Tests\TestCase;
 
 #[CoversClass(BasePlugin::class)]
 final class BasePluginTest extends TestCase
@@ -18,48 +19,48 @@ final class BasePluginTest extends TestCase
     #[TestDox('Getting a key')]
     public function key(): void
     {
-        $plugin = new BasePluginStub();
-        $plugin->key = 'key';
+        $key = 'reader';
 
-        $this->assertSame($plugin->key, $plugin->getKey());
+        $plugin = new PluginTemplate();
+        $plugin->key = $key;
+
+        $this->assertSame($key, $plugin->getKey());
     }
 
     #[Test]
     #[TestDox('Getting config')]
     public function config(): void
     {
-        $plugin = new BasePluginStub();
-        $plugin->config = ['legs' => 4];
+        $config = ['timeout' => 200];
 
-        $this->assertSame($plugin->config, $plugin->getConfig());
-    }
+        $plugin = new PluginTemplate();
+        $plugin->config = $config;
 
-    #[Test]
-    #[TestDox('Getting initial commands')]
-    public function commandsMissing(): void
-    {
-        $plugin = new BasePluginStub();
-
-        $this->assertSame([], $plugin->getCommands());
+        $this->assertSame($config, $plugin->getConfig());
     }
 
     #[Test]
     #[TestDox('Getting commands from the special property')]
     public function commandsFromProperty(): void
     {
-        $plugin = new BasePluginStub();
-        $plugin->commands = [new InitialCommandStub(), InitialCommandStub::class];
+        $commands = [InitialCommandTemplate::class];
 
-        $this->assertCount(2, $plugin->getCommands());
+        $plugin = new PluginTemplate();
+        $plugin->commands = $commands;
+
+        $this->assertSame($commands, $plugin->getCommands());
     }
 
     #[Test]
     #[TestDox('Getting commands from config')]
     public function commandsFromConfig(): void
     {
-        $plugin = new BasePluginStub();
-        $plugin->config = ['commands' => [InitialCommandStub::class, InitialCommandStub::class]];
+        $commands = [InitialCommandTemplate::class];
 
-        $this->assertCount(2, $plugin->getCommands());
+        $plugin = new PluginTemplate();
+        $plugin->commands = [];
+        $plugin->config = compact('commands');
+
+        $this->assertSame($commands, $plugin->getCommands());
     }
 }

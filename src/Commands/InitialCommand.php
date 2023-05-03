@@ -7,6 +7,7 @@ namespace Cross\Commands;
 use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -20,7 +21,7 @@ abstract class InitialCommand extends Command
     /**
      * Output.
      */
-    protected OutputInterface|SymfonyStyle $output;
+    protected SymfonyStyle $output;
 
     /**
      * @inheritDoc
@@ -28,6 +29,11 @@ abstract class InitialCommand extends Command
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->input = $input;
+
+        if (! ($output instanceof SymfonyStyle)) {
+            $output = new SymfonyStyle($input, $output);
+        }
+
         $this->output = $output;
     }
 
@@ -147,6 +153,8 @@ abstract class InitialCommand extends Command
 
     /**
      * Formats an info message.
+     *
+     * @param string|string[] $message
      */
     protected function info(string|array $message): void
     {
@@ -155,6 +163,8 @@ abstract class InitialCommand extends Command
 
     /**
      * Formats a command comment.
+     *
+     * @param string|string[] $message
      */
     protected function comment(string|array $message): void
     {
@@ -171,6 +181,8 @@ abstract class InitialCommand extends Command
 
     /**
      * Gives a choice.
+     *
+     * @param string[] $choices
      */
     protected function choice(string $question, array $choices, mixed $default = null, bool $multiSelect = false): mixed
     {

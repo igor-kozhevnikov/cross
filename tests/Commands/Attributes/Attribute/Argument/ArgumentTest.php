@@ -8,9 +8,10 @@ use Cross\Commands\Attributes\Attribute\Argument\Argument;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputArgument;
-use Tests\Commands\InitialCommandStub;
+use Templates\Commands\Attributes\ArgumentTemplate;
+use Templates\Commands\InitialCommandTemplate;
+use Tests\TestCase;
 
 #[CoversClass(Argument::class)]
 final class ArgumentTest extends TestCase
@@ -19,7 +20,7 @@ final class ArgumentTest extends TestCase
     #[TestDox('Defining the mode as required')]
     public function required(): void
     {
-        $argument = new ArgumentStub();
+        $argument = new ArgumentTemplate();
         $argument->required();
 
         $this->assertSame($argument->getMode(), InputArgument::REQUIRED);
@@ -29,7 +30,7 @@ final class ArgumentTest extends TestCase
     #[TestDox('Defining the mode as optional')]
     public function optional(): void
     {
-        $argument = new ArgumentStub();
+        $argument = new ArgumentTemplate();
         $argument->optional();
 
         $this->assertSame($argument->getMode(), InputArgument::OPTIONAL);
@@ -39,7 +40,7 @@ final class ArgumentTest extends TestCase
     #[TestDox('Defining the mode as an array')]
     public function array(): void
     {
-        $argument = new ArgumentStub();
+        $argument = new ArgumentTemplate();
         $argument->array();
 
         $this->assertSame($argument->getMode(), InputArgument::IS_ARRAY);
@@ -49,10 +50,10 @@ final class ArgumentTest extends TestCase
     #[TestDox('Appending to a command')]
     public function appendTo(): void
     {
-        $command = new InitialCommandStub();
+        $command = new InitialCommandTemplate();
         $command->run();
 
-        $argument = new ArgumentStub();
+        $argument = new ArgumentTemplate();
         $argument->setDefault('time');
         $argument->appendTo($command);
 

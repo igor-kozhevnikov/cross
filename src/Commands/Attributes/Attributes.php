@@ -17,6 +17,8 @@ use Traversable;
 /**
  * @method ArgumentInterface argument(string $name)
  * @method OptionInterface option(string $name)
+ *
+ * @implements IteratorAggregate<string, AttributeInterface>
  */
 class Attributes implements AttributesInterface, IteratorAggregate
 {
@@ -26,14 +28,14 @@ class Attributes implements AttributesInterface, IteratorAggregate
     /**
      * Attributes.
      *
-     * @var array<int, AttributeInterface>
+     * @var array<string, AttributeInterface>
      */
     protected array $attributes;
 
     /**
      * Constructor.
      *
-     * @param array<int, AttributeInterface> $attributes
+     * @param array<string, AttributeInterface> $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -42,6 +44,8 @@ class Attributes implements AttributesInterface, IteratorAggregate
 
     /**
      * Merges the attributes.
+     *
+     * @param AttributesInterface<string, AttributeInterface> $attributes
      */
     public function merge(AttributesInterface $attributes): void
     {
@@ -51,7 +55,7 @@ class Attributes implements AttributesInterface, IteratorAggregate
     /**
      * Defines the attributes.
      *
-     * @param array<int, AttributeInterface> $attributes
+     * @param array<string, AttributeInterface> $attributes
      */
     public function set(array $attributes): void
     {
@@ -96,6 +100,7 @@ class Attributes implements AttributesInterface, IteratorAggregate
 
     /**
      * @inheritDoc
+     * @implements AttributeInterface<string, AttributeInterface>
      */
     public function getIterator(): Traversable
     {

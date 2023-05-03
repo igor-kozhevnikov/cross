@@ -14,11 +14,15 @@ class AttributeFactory
 {
     /**
      * Attributes.
+     *
+     * @var AttributesInterface<AttributeInterface>
      */
     private AttributesInterface $attributes;
 
     /**
      * Constructor.
+     *
+     * @param AttributesInterface<AttributeInterface> $attributes
      */
     public function __construct(AttributesInterface $attributes)
     {

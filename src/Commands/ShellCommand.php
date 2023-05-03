@@ -12,7 +12,7 @@ abstract class ShellCommand extends BaseCommand
     /**
      * Command.
      *
-     * @var string|array<array-key, mixed>
+     * @var string|array<array-key, int|string>
      */
     protected string|array $command;
 
@@ -66,6 +66,8 @@ abstract class ShellCommand extends BaseCommand
 
     /**
      * Returns a command.
+     *
+     * @return string|array<array-key, int|string>
      */
     protected function command(): string|array
     {
