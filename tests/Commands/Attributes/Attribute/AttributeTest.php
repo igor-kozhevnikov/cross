@@ -11,8 +11,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\Console\Completion\Suggestion;
-use Templates\Commands\Attributes\ArgumentTemplate;
-use Templates\Commands\Attributes\OptionTemplate;
+use Templates\Commands\Attributes\Attribute\AttributeTemplate;
 use Tests\TestCase;
 
 #[CoversClass(Attribute::class)]
@@ -24,7 +23,7 @@ final class AttributeTest extends TestCase
     {
         $name = 'title';
 
-        $attribute = new ArgumentTemplate();
+        $attribute = new AttributeTemplate();
         $attribute->setName($name);
 
         $this->assertSame($name, $attribute->getName());
@@ -36,7 +35,7 @@ final class AttributeTest extends TestCase
     {
         $name = 'title';
 
-        $attribute = new ArgumentTemplate();
+        $attribute = new AttributeTemplate();
         $attribute->name($name);
 
         $this->assertSame($name, $attribute->getName());
@@ -48,7 +47,7 @@ final class AttributeTest extends TestCase
     {
         $description = 'Rapid walking';
 
-        $attribute = new OptionTemplate();
+        $attribute = new AttributeTemplate();
         $attribute->setDescription($description);
 
         $this->assertSame($description, $attribute->getDescription());
@@ -60,7 +59,7 @@ final class AttributeTest extends TestCase
     {
         $description = 'Rapid walking';
 
-        $attribute = new OptionTemplate();
+        $attribute = new AttributeTemplate();
         $attribute->description($description);
 
         $this->assertSame($description, $attribute->getDescription());
@@ -72,7 +71,7 @@ final class AttributeTest extends TestCase
     {
         $mode = 10;
 
-        $attribute = new OptionTemplate();
+        $attribute = new AttributeTemplate();
         $attribute->setMode($mode);
 
         $this->assertSame($mode, $attribute->getMode());
@@ -84,7 +83,7 @@ final class AttributeTest extends TestCase
     {
         $mode = 10;
 
-        $attribute = new OptionTemplate();
+        $attribute = new AttributeTemplate();
         $attribute->mode($mode);
 
         $this->assertSame($mode, $attribute->getMode());
@@ -96,7 +95,7 @@ final class AttributeTest extends TestCase
     {
         $default = 10.5;
 
-        $attribute = new ArgumentTemplate();
+        $attribute = new AttributeTemplate();
         $attribute->setDefault($default);
 
         $this->assertSame($default, $attribute->getDefault());
@@ -108,7 +107,7 @@ final class AttributeTest extends TestCase
     {
         $default = 10.5;
 
-        $attribute = new ArgumentTemplate();
+        $attribute = new AttributeTemplate();
         $attribute->default($default);
 
         $this->assertSame($default, $attribute->getDefault());
@@ -120,7 +119,7 @@ final class AttributeTest extends TestCase
     {
         $suggestions = [new Suggestion('10')];
 
-        $attribute = new OptionTemplate();
+        $attribute = new AttributeTemplate();
         $attribute->setSuggestions($suggestions);
 
         $this->assertSame($suggestions, $attribute->getSuggestions());
@@ -132,19 +131,19 @@ final class AttributeTest extends TestCase
     {
         $suggestions = [new Suggestion('10')];
 
-        $attribute = new OptionTemplate();
+        $attribute = new AttributeTemplate();
         $attribute->setSuggestions($suggestions);
 
         $this->assertSame($suggestions, $attribute->getSuggestions());
     }
 
     #[Test]
-    #[TestDox('Adding an attribute to container')]
-    public function end(): void
+    #[TestDox('Returning attributes')]
+    public function attributes(): void
     {
-        $attribute = new OptionTemplate();
+        $attribute = new AttributeTemplate();
         $attribute->setAttributes(new Attributes());
 
-        $this->assertInstanceOf(AttributesInterface::class, $attribute->end());
+        $this->assertInstanceOf(AttributesInterface::class, $attribute->getAttributes());
     }
 }

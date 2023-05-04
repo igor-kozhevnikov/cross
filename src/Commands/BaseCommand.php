@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Cross\Commands;
 
-use Cross\Commands\Attributes\Attribute\AttributeInterface;
 use Cross\Commands\Attributes\Attributes;
 use Cross\Commands\Attributes\AttributesInterface;
+use Cross\Commands\Attributes\HasAttributes;
 use Cross\Commands\Messages\Messages;
 use Cross\Commands\Messages\MessagesInterface;
 use Cross\Commands\Statuses\Exist;
@@ -40,10 +40,8 @@ abstract class BaseCommand extends InitialCommand
 
     /**
      * Attributes.
-     *
-     * @var null|AttributesInterface<AttributeInterface>
      */
-    protected ?AttributesInterface $attributes = null;
+    protected null|AttributesInterface|HasAttributes $attributes = null;
 
     /**
      * Messages.
@@ -98,13 +96,24 @@ abstract class BaseCommand extends InitialCommand
         $this->setDescription($this->description());
         $this->setAliases($this->aliases());
         $this->setHidden($this->hidden());
+        $this->setAttributes();
+        $this->setup();
+    }
 
-        /** @var AttributeInterface $attribute */
-        foreach ($this->attributes() as $attribute) {
-            $attribute->appendTo($this);
+    /**
+     * Configure attributes.
+     */
+    protected function setAttributes(): void
+    {
+        $attributes = $this->attributes();
+
+        if ($attributes instanceof HasAttributes) {
+            $attributes = $attributes->getAttributes();
         }
 
-        $this->setup();
+        foreach ($attributes->getAll() as $attribute) {
+            $attribute->appendTo($this);
+        }
     }
 
     /**
@@ -117,10 +126,8 @@ abstract class BaseCommand extends InitialCommand
 
     /**
      * Defines attributes.
-     *
-     * @return AttributesInterface<AttributeInterface>
      */
-    protected function attributes(): AttributesInterface
+    protected function attributes(): AttributesInterface|HasAttributes
     {
         return $this->attributes ?? new Attributes();
     }

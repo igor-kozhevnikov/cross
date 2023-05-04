@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Templates\Commands\Attributes;
+namespace Templates\Commands\Attributes\Attribute\Option;
 
-use Cross\Commands\Attributes\Attribute\Argument\Argument;
+use Cross\Commands\Attributes\Attribute\Option\Option;
+use Cross\Commands\Attributes\AttributesInterface;
 
-class ArgumentTemplate extends Argument
+class OptionTemplate extends Option
 {
     /**
      * @inheritDoc

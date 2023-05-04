@@ -25,6 +25,14 @@ class Option extends Attribute implements OptionInterface
     protected ?string $shortcut = null;
 
     /**
+     * Makes an instance.
+     */
+    public static function make(string $name): self
+    {
+        return new self($name);
+    }
+
+    /**
      * Defines the shortcut.
      */
     public function setShortcut(?string $shortcut): void
@@ -42,17 +50,17 @@ class Option extends Attribute implements OptionInterface
 
     /**
      * @inheritDoc
-     * @return array<string, Closure>
      */
-    protected function getFluentPredefinedSetters(): array
+    protected function getFluentAlias(string $name): ?Closure
     {
-        return [
+        return match ($name) {
             'none' => fn() => $this->setMode(InputOption::VALUE_NONE),
             'optional' => fn() => $this->setMode(InputOption::VALUE_OPTIONAL),
             'required' => fn() => $this->setMode(InputOption::VALUE_REQUIRED),
             'array' => fn() => $this->setMode(InputOption::VALUE_IS_ARRAY),
             'negatable' => fn() => $this->setMode(InputOption::VALUE_NEGATABLE),
-        ];
+            default => null,
+        };
     }
 
     /**

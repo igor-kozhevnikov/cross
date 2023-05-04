@@ -4,26 +4,11 @@ declare(strict_types=1);
 
 namespace Cross\Commands\Attributes;
 
-use ArrayIterator;
-use Cross\Commands\Attributes\Attribute\Argument\ArgumentInterface;
-use Cross\Commands\Attributes\Attribute\AttributeFactory;
 use Cross\Commands\Attributes\Attribute\AttributeInterface;
-use Cross\Commands\Attributes\Attribute\Option\OptionInterface;
-use Fluent\FluentFactory;
-use Fluent\FluentMaker;
-use IteratorAggregate;
-use Traversable;
 
-/**
- * @method ArgumentInterface argument(string $name)
- * @method OptionInterface option(string $name)
- *
- * @implements IteratorAggregate<string, AttributeInterface>
- */
-class Attributes implements AttributesInterface, IteratorAggregate
+class Attributes implements AttributesInterface
 {
-    use FluentMaker;
-    use FluentFactory;
+    use AttributesFactory;
 
     /**
      * Attributes.
@@ -43,13 +28,21 @@ class Attributes implements AttributesInterface, IteratorAggregate
     }
 
     /**
+     * Makes and returns an instance.
+     */
+    public static function make(): self
+    {
+        return new self();
+    }
+
+    /**
      * Merges the attributes.
      *
      * @param AttributesInterface<string, AttributeInterface> $attributes
      */
     public function merge(AttributesInterface $attributes): void
     {
-        $this->attributes = array_merge($this->attributes, $attributes->all());
+        $this->attributes = array_merge($this->attributes, $attributes->getAll());
     }
 
     /**
@@ -85,7 +78,7 @@ class Attributes implements AttributesInterface, IteratorAggregate
     /**
      * @inheritDoc
      */
-    public function all(): array
+    public function getAll(): array
     {
         return $this->attributes;
     }
@@ -100,18 +93,9 @@ class Attributes implements AttributesInterface, IteratorAggregate
 
     /**
      * @inheritDoc
-     * @implements AttributeInterface<string, AttributeInterface>
      */
-    public function getIterator(): Traversable
+    public function getAttributes(): AttributesInterface
     {
-        return new ArrayIterator($this->attributes);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getFluentFactory(): object
-    {
-        return new AttributeFactory($this);
+        return $this;
     }
 }

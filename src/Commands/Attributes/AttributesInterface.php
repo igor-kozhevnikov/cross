@@ -5,12 +5,8 @@ declare(strict_types=1);
 namespace Cross\Commands\Attributes;
 
 use Cross\Commands\Attributes\Attribute\AttributeInterface;
-use Traversable;
 
-/**
- * @extends Traversable<AttributeInterface>
- */
-interface AttributesInterface extends Traversable
+interface AttributesInterface
 {
     /**
      * Adds an attribute.
@@ -22,5 +18,5 @@ interface AttributesInterface extends Traversable
      *
      * @return array<string, AttributeInterface>
      */
-    public function all(): array;
+    public function getAll(): array;
 }

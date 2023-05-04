@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Templates\Commands;
 
 use Cross\Commands\Attributes\AttributesInterface;
+use Cross\Commands\Attributes\HasAttributes;
 use Cross\Commands\BaseCommand;
 use Cross\Commands\Messages\MessagesInterface;
 use Cross\Commands\Statuses\Exist;
@@ -23,7 +24,7 @@ use Templates\Accessible;
  * @property bool $hidden
  *
  * @property MessagesInterface $messages
- * @property AttributesInterface $attributes
+ * @property null|AttributesInterface|HasAttributes $attributes
  *
  * @method void configure()
  *

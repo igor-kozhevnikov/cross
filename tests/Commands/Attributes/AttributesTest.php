@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Commands\Attributes;
 
-use Cross\Commands\Attributes\Attribute\AttributeFactory;
 use Cross\Commands\Attributes\Attributes;
+use Cross\Commands\Attributes\AttributesInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Templates\Commands\Attributes\ArgumentTemplate;
-use Templates\Commands\Attributes\OptionTemplate;
+use Templates\Commands\Attributes\Attribute\Argument\ArgumentTemplate;
+use Templates\Commands\Attributes\Attribute\Option\OptionTemplate;
 
 #[CoversClass(Attributes::class)]
 final class AttributesTest extends TestCase
@@ -27,7 +27,16 @@ final class AttributesTest extends TestCase
 
         $attributes = new Attributes($set);
 
-        $this->assertSame($set, $attributes->all());
+        $this->assertSame($set, $attributes->getAll());
+    }
+
+    #[Test]
+    #[TestDox('Making an instance')]
+    public function make(): void
+    {
+        $attributes = Attributes::make();
+
+        $this->assertInstanceOf(AttributesInterface::class, $attributes);
     }
 
     #[Test]
@@ -42,7 +51,7 @@ final class AttributesTest extends TestCase
         $attributes = new Attributes();
         $attributes->set($set);
 
-        $this->assertSame($set, $attributes->all());
+        $this->assertSame($set, $attributes->getAll());
     }
 
     #[Test]
@@ -67,11 +76,11 @@ final class AttributesTest extends TestCase
         $attributes = new Attributes();
         $attributes->set([new ArgumentTemplate(), new OptionTemplate()]);
 
-        $this->assertCount(2, $attributes->all());
+        $this->assertCount(2, $attributes->getAll());
 
         $attributes->reset();
 
-        $this->assertEmpty($attributes->all());
+        $this->assertEmpty($attributes->getAll());
     }
 
     #[Test]
@@ -81,29 +90,19 @@ final class AttributesTest extends TestCase
         $first = new Attributes([new ArgumentTemplate(), new OptionTemplate()]);
         $second = new Attributes([new ArgumentTemplate(), new OptionTemplate()]);
 
-        $merged = array_merge($first->all(), $second->all());
+        $merged = array_merge($first->getAll(), $second->getAll());
 
         $first->merge($second);
 
-        $this->assertSame($merged, $first->all());
+        $this->assertSame($merged, $first->getAll());
     }
 
     #[Test]
-    #[TestDox('Iteration attributes')]
-    public function iterator(): void
+    #[TestDox('Returning attributes')]
+    public function attributes(): void
     {
         $attributes = new Attributes();
 
-        $this->assertIsIterable($attributes);
-        $this->assertIsIterable($attributes->getIterator());
-    }
-
-    #[Test]
-    #[TestDox('Returning a factory')]
-    public function factory(): void
-    {
-        $attributes = new Attributes();
-
-        $this->assertInstanceOf(AttributeFactory::class, $attributes->getFluentFactory());
+        $this->assertInstanceOf(AttributesInterface::class, $attributes->getAttributes());
     }
 }

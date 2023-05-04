@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Cross\Commands\Attributes\Attribute;
 
 use Closure;
+use Cross\Commands\Attributes\AttributesFactory;
 use Cross\Commands\Attributes\AttributesInterface;
-use Fluent\Fluent;
-use Fluent\FluentEnd;
-use Fluent\FluentMaker;
+use Cross\Commands\Attributes\HasAttributes;
+use Cross\Fluent\Fluent;
 use Symfony\Component\Console\Completion\CompletionInput;
 use Symfony\Component\Console\Completion\CompletionSuggestions;
 use Symfony\Component\Console\Completion\Suggestion;
@@ -19,18 +19,12 @@ use Symfony\Component\Console\Completion\Suggestion;
  * @method self mode(null|int|string $mode)
  * @method self default(null|string|bool|int|float|array $default)
  * @method self suggestions(array|Closure $suggestions)
- * @method AttributesInterface end()
+ * @method self attributes(AttributesInterface $attributes)
  */
-abstract class Attribute implements AttributeInterface
+abstract class Attribute implements AttributeInterface, HasAttributes
 {
+    use AttributesFactory;
     use Fluent;
-    use FluentMaker;
-    use FluentEnd;
-
-    /**
-     * Attributes.
-     */
-    protected AttributesInterface $attributes;
 
     /**
      * Name.
@@ -62,19 +56,16 @@ abstract class Attribute implements AttributeInterface
     protected array|Closure $suggestions = [];
 
     /**
+     * Attributes.
+     */
+    protected AttributesInterface $attributes;
+
+    /**
      * Constructor.
      */
     public function __construct(string $name)
     {
         $this->setName($name);
-    }
-
-    /**
-     * Defines attributes.
-     */
-    public function setAttributes(AttributesInterface $attributes): void
-    {
-        $this->attributes = $attributes;
     }
 
     /**
@@ -166,9 +157,17 @@ abstract class Attribute implements AttributeInterface
     }
 
     /**
-     * @inheritDoc
+     * Defines attributes.
      */
-    public function getFluentContainer(): AttributesInterface
+    public function setAttributes(AttributesInterface $attributes): void
+    {
+        $this->attributes = $attributes;
+    }
+
+    /**
+     * Returns attributes.
+     */
+    public function getAttributes(): AttributesInterface
     {
         return $this->attributes;
     }

@@ -9,13 +9,22 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\Console\Input\InputArgument;
-use Templates\Commands\Attributes\ArgumentTemplate;
+use Templates\Commands\Attributes\Attribute\Argument\ArgumentTemplate;
 use Templates\Commands\InitialCommandTemplate;
 use Tests\TestCase;
 
 #[CoversClass(Argument::class)]
 final class ArgumentTest extends TestCase
 {
+    #[Test]
+    #[TestDox('Making an instance')]
+    public function make(): void
+    {
+        $argument = Argument::make('name');
+
+        $this->assertInstanceOf(Argument::class, $argument);
+    }
+
     #[Test]
     #[TestDox('Defining the mode as required')]
     public function required(): void

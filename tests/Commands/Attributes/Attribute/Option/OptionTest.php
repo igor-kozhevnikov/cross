@@ -9,13 +9,22 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\Console\Input\InputOption;
-use Templates\Commands\Attributes\OptionTemplate;
+use Templates\Commands\Attributes\Attribute\Option\OptionTemplate;
 use Templates\Commands\InitialCommandTemplate;
 use Tests\TestCase;
 
 #[CoversClass(Option::class)]
 final class OptionTest extends TestCase
 {
+    #[Test]
+    #[TestDox('Making an instance')]
+    public function make(): void
+    {
+        $option = Option::make('--silence');
+
+        $this->assertInstanceOf(Option::class, $option);
+    }
+
     #[Test]
     #[TestDox('Defining a shortcut via a setter')]
     public function shortcutViaSetter(): void

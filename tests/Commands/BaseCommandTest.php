@@ -50,8 +50,8 @@ final class BaseCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Defining attributes')]
-    public function attributes(): void
+    #[TestDox('Defining attributes as the AttributesInterface')]
+    public function attributesAsAttributesInterface(): void
     {
         $argument = new Argument('file');
         $argument->setDefault('php');
@@ -69,6 +69,28 @@ final class BaseCommandTest extends TestCase
         $this->assertIsIterable($command->options());
         $this->assertSame($argument->getDefault(), $command->argument('file'));
         $this->assertSame($option->getDefault(), $command->option('silence'));
+    }
+
+    #[Test]
+    #[TestDox('Defining attributes as the HasAttributes')]
+    public function attributesAsHasAttributes(): void
+    {
+        $name = 'file';
+
+        $attributes = new Attributes();
+
+        $argument = new Argument($name);
+        $argument->setDefault('php');
+        $argument->setAttributes($attributes);
+
+        $attributes->add($argument);
+
+        $command = new BaseCommandTemplate();
+        $command->attributes = $argument;
+        $command->configure();
+        $command->run();
+
+        $this->assertSame($argument->getDefault(), $command->argument($name));
     }
 
     #[Test]

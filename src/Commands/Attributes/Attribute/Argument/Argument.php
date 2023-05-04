@@ -17,16 +17,24 @@ use Symfony\Component\Console\Input\InputArgument;
 class Argument extends Attribute implements ArgumentInterface
 {
     /**
-     * @inheritDoc
-     * @return array<string, Closure>
+     * Makes an instance.
      */
-    protected function getFluentPredefinedSetters(): array
+    public static function make(string $name): self
     {
-        return [
+        return new self($name);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getFluentAlias(string $name): ?Closure
+    {
+        return match ($name) {
             'optional' => fn () => $this->setMode(InputArgument::OPTIONAL),
             'required' => fn () => $this->setMode(InputArgument::REQUIRED),
             'array' => fn () => $this->setMode(InputArgument::IS_ARRAY),
-        ];
+            default => null,
+        };
     }
 
     /**
