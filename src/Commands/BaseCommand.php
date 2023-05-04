@@ -54,6 +54,14 @@ abstract class BaseCommand extends InitialCommand
     abstract protected function handle(): Exist;
 
     /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct($this->name());
+    }
+
+    /**
      * Returns a name.
      */
     protected function name(): string

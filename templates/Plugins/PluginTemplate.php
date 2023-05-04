@@ -11,8 +11,6 @@ use Templates\Commands\InitialCommandTemplate;
 
 /**
  * @property string $key
- * @property array $config
- * @property array $commands
  */
 class PluginTemplate extends BasePlugin
 {
@@ -23,14 +21,14 @@ class PluginTemplate extends BasePlugin
      *
      * @var array<string, mixed>
      */
-    protected array $config = ['timeout' => 200];
+    public array $config = ['timeout' => 200];
 
     /**
      * Commands.
      *
      * @var array<array-key, class-string|Command>
      */
-    protected array $commands = [InitialCommandTemplate::class];
+    public array $commands = [InitialCommandTemplate::class];
 
     /**
      * Constructor.

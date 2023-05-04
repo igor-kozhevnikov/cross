@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Cross;
 
-use Cross\Commands\Config\Config;
 use Cross\Composer\Composer;
+use Cross\Config\Config;
 use Cross\Cross\Cross;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -78,9 +78,15 @@ final class CrossTest extends TestCase
     #[TestDox('Adding all commands from a list of plugins')]
     public function plugins(): void
     {
-        $this->cross->plugins([new PluginTemplate(), PluginTemplate::class]);
+        $plugins = [
+            new PluginTemplate(),
+            PluginTemplate::class,
+            PluginTemplate::class => ['timeout' => 400],
+        ];
 
-        $this->assertCount($this->counter + 2, $this->application->all());
+        $this->cross->plugins($plugins);
+
+        $this->assertCount($this->counter + count($plugins), $this->application->all());
     }
 
     #[Test]
@@ -110,7 +116,11 @@ final class CrossTest extends TestCase
     #[TestDox('Adding a list of commands')]
     public function commands(): void
     {
-        $commands = [new BaseCommandTemplate(), BaseCommandTemplate::class];
+        $commands = [
+            new BaseCommandTemplate(),
+            BaseCommandTemplate::class,
+            BaseCommandTemplate::class => ['delay' => false],
+        ];
 
         $this->cross->commands($commands);
 

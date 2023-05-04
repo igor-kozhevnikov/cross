@@ -46,14 +46,10 @@ abstract class BasePlugin implements PluginInterface
 
     /**
      * @inheritDoc
-     * @return array<array-key, class-string|Command>
+     * @return array<int, class-string|Command>|array<class-string, array<string, mixed>>
      */
     public function getCommands(): array
     {
-        if ($this->commands) {
-            return $this->commands;
-        }
-
-        return $this->getConfig()['commands'] ?? [];
+        return $this->commands;
     }
 }

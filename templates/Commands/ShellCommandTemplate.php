@@ -33,8 +33,9 @@ class ShellCommandTemplate extends ShellCommand
     /**
      * Constructor.
      */
-    public function __construct(string $name = null)
+    public function __construct()
     {
-        parent::__construct($this->name = $name ?: (string) rand());
+        $this->name = (string) rand();
+        parent::__construct();
     }
 }

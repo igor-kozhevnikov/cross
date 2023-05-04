@@ -40,26 +40,13 @@ final class BasePluginTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Getting commands from the special property')]
-    public function commandsFromProperty(): void
+    #[TestDox('Getting commands')]
+    public function commands(): void
     {
         $commands = [InitialCommandTemplate::class];
 
         $plugin = new PluginTemplate();
         $plugin->commands = $commands;
-
-        $this->assertSame($commands, $plugin->getCommands());
-    }
-
-    #[Test]
-    #[TestDox('Getting commands from config')]
-    public function commandsFromConfig(): void
-    {
-        $commands = [InitialCommandTemplate::class];
-
-        $plugin = new PluginTemplate();
-        $plugin->commands = [];
-        $plugin->config = compact('commands');
 
         $this->assertSame($commands, $plugin->getCommands());
     }

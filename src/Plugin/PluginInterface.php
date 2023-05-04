@@ -23,7 +23,7 @@ interface PluginInterface
     /**
      * Returns a list of commands.
      *
-     * @return array<array-key, class-string|Command>
+     * @return array<int, class-string|Command>|array<class-string, array<string, mixed>>
      */
     public function getCommands(): array;
 }

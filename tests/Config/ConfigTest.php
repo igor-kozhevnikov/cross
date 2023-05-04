@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\Commands\Config;
+namespace Tests\Config;
 
-use Cross\Commands\Config\Config;
+use Cross\Config\Config;
 use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\IgnoreMethodForCodeCoverage;

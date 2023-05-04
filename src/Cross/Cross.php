@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cross\Cross;
 
-use Cross\Commands\Config\Config;
+use Cross\Config\Config;
 use Cross\Plugin\PluginInterface;
 use Exception;
 use Symfony\Component\Console\Application;
@@ -28,25 +28,35 @@ class Cross
     /**
      * Sets plugins.
      *
-     * @param array<array-key, class-string|PluginInterface> $plugins
+     * @param array<int, class-string|PluginInterface>|array<class-string, array<string, mixed>> $plugins
      */
     public function plugins(array $plugins): void
     {
-        foreach ($plugins as $plugin) {
-            $this->plugin($plugin);
+        foreach ($plugins as $key => $value) {
+            if (is_int($key)) {
+                $this->plugin($value);
+            } else {
+                $this->plugin($key, $value);
+            }
         }
     }
 
     /**
      * Sets a plugin.
      */
-    public function plugin(string|PluginInterface $plugin): void
+    public function plugin(string|PluginInterface $plugin, array $config = []): void
     {
         if (is_string($plugin)) {
             $plugin = new $plugin();
         }
 
-        Config::set($plugin->getKey(), $plugin->getConfig());
+        if ($config) {
+            $config = array_merge($plugin->getConfig(), $config);
+        } else {
+            $config = $plugin->getConfig();
+        }
+
+        Config::set($plugin->getKey(), $config);
 
         $this->commands($plugin->getCommands());
     }
@@ -54,22 +64,30 @@ class Cross
     /**
      * Sets commands.
      *
-     * @param array<class-string|Command> $commands
+     * @param array<int, class-string|Command>|array<class-string, array<string, mixed>> $commands
      */
     public function commands(array $commands): void
     {
-        foreach ($commands as $command) {
-            $this->command($command);
+        foreach ($commands as $key => $value) {
+            if (is_int($key)) {
+                $this->command($value);
+            } else {
+                $this->command($key, $value);
+            }
         }
     }
 
     /**
      * Adds a command.
      */
-    public function command(string|Command $command): void
+    public function command(string|Command $command, array $config = []): void
     {
         if (is_string($command)) {
             $command = new $command();
+        }
+
+        if ($config) {
+            Config::set($command->getName(), $config);
         }
 
         $this->application->add($command);
