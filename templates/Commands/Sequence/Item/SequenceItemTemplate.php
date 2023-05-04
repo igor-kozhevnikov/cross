@@ -2,19 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Templates\Commands\Sequence;
+namespace Templates\Commands\Sequence\Item;
 
-use Cross\Commands\Sequence\SequenceInterface;
-use Cross\Commands\Sequence\SequenceItem;
-use Templates\Accessible;
+use Cross\Commands\Sequence\Item\SequenceItem;
 
-/**
- * @property SequenceInterface $sequence
- */
 class SequenceItemTemplate extends SequenceItem
 {
-    use Accessible;
-
     /**
      * @inheritDoc
      */

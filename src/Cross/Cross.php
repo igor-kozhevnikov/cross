@@ -86,9 +86,9 @@ class Cross
             $command = new $command();
         }
 
-        if ($config) {
-            Config::set($command->getName(), $config);
-        }
+        $old = Config::get($command->getName(), []);
+
+        Config::set($command->getName(), array_merge($old, $config));
 
         $this->application->add($command);
     }

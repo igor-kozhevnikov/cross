@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cross\Commands\Attributes;
 
-interface HasAttributes
+interface AttributesKeeper
 {
     /**
      * Returns a stack of attributes.

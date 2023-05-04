@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Commands;
 
+use Cross\Commands\Sequence\Item\SequenceItem;
 use Cross\Commands\Sequence\Sequence;
-use Cross\Commands\Sequence\SequenceItem;
 use Cross\Commands\SequenceCommand;
 use Cross\Commands\Statuses\Exist;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -53,16 +53,18 @@ final class SequenceCommandTest extends TestCase
         $command = new BaseCommandTemplate();
         $command->handle = Exist::Failure;
 
-        $sequenceItem = new SequenceItem($command->getName());
-
         $sequence = new Sequence();
+
+        $sequenceItem = new SequenceItem($command->getName());
+        $sequenceItem->setSequence($sequence);
+
         $sequence->add($sequenceItem);
 
         $application = new Application();
         $application->add($command);
 
         $command = new SequenceCommandTemplate();
-        $command->sequence = $sequence;
+        $command->sequence = $sequenceItem;
         $command->initialize();
         $command->setApplication($application);
 

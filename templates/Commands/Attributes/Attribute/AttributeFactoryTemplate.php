@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Templates\Commands\Attributes;
+namespace Templates\Commands\Attributes\Attribute;
 
+use Cross\Commands\Attributes\Attribute\AttributeFactory;
 use Cross\Commands\Attributes\Attributes;
-use Cross\Commands\Attributes\AttributesFactory;
 use Cross\Commands\Attributes\AttributesInterface;
 
-class AttributesFactoryTemplate
+class AttributeFactoryTemplate
 {
-    use AttributesFactory;
+    use AttributeFactory;
 
     /**
      * Attributes.

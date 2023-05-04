@@ -5,26 +5,29 @@ declare(strict_types=1);
 namespace Cross\Commands;
 
 use Cross\Commands\Sequence\SequenceInterface;
+use Cross\Commands\Sequence\SequenceKeeper;
 use Cross\Commands\Statuses\Exist;
-use Symfony\Component\Console\Command\Command;
-use Traversable;
 
 abstract class SequenceCommand extends BaseCommand
 {
     /**
      * Returns a sequence.
-     *
-     * @return SequenceInterface<Command>
      */
-    abstract protected function sequence(): SequenceInterface;
+    abstract protected function sequence(): SequenceInterface|SequenceKeeper;
 
     /**
      * @inheritDoc
      */
     protected function handle(): Exist
     {
-        foreach ($this->sequence() as $command) {
-            $command = $this->getApplication()->find($command->getName());
+        $sequence = $this->sequence();
+
+        if ($sequence instanceof SequenceKeeper) {
+            $sequence = $sequence->getSequence();
+        }
+
+        foreach ($sequence->getAll() as $item) {
+            $command = $this->getApplication()->find($item->getName());
             $code = $command->run($this->input(), $this->output());
             $exist = Exist::from($code);
 

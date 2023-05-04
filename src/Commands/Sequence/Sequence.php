@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace Cross\Commands\Sequence;
 
-use ArrayIterator;
-use IteratorAggregate;
-use Traversable;
+use Cross\Commands\Sequence\Item\SequenceItemFactory;
+use Cross\Commands\Sequence\Item\SequenceItemInterface;
 
-/**
- * @implements IteratorAggregate<string, SequenceItemInterface>
- */
-class Sequence implements SequenceInterface, IteratorAggregate
+class Sequence implements SequenceInterface
 {
+    use SequenceItemFactory;
+
     /**
      * Sequence.
      *
@@ -28,6 +26,14 @@ class Sequence implements SequenceInterface, IteratorAggregate
     public function __construct(array $items = [])
     {
         $this->set($items);
+    }
+
+    /**
+     * Makes and returns an instance.
+     */
+    public static function make(): self
+    {
+        return new self();
     }
 
     /**
@@ -65,17 +71,16 @@ class Sequence implements SequenceInterface, IteratorAggregate
      *
      * @return array<string, SequenceItemInterface>
      */
-    public function all(): array
+    public function getAll(): array
     {
         return $this->items;
     }
 
     /**
      * @inheritDoc
-     * @return ArrayIterator<string, SequenceItemInterface>
      */
-    public function getIterator(): Traversable
+    public function getSequence(): SequenceInterface
     {
-        return new ArrayIterator($this->items);
+        return $this;
     }
 }

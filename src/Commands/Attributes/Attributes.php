@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Cross\Commands\Attributes;
 
 use Cross\Commands\Attributes\Attribute\AttributeInterface;
+use Cross\Commands\Attributes\Attribute\AttributeFactory;
 
 class Attributes implements AttributesInterface
 {
-    use AttributesFactory;
+    use AttributeFactory;
 
     /**
      * Attributes.

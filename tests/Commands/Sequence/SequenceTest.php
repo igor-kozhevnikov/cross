@@ -5,15 +5,25 @@ declare(strict_types=1);
 namespace Tests\Commands\Sequence;
 
 use Cross\Commands\Sequence\Sequence;
+use Cross\Commands\Sequence\SequenceInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Templates\Commands\Sequence\SequenceItemTemplate;
+use Templates\Commands\Sequence\Item\SequenceItemTemplate;
 
 #[CoversClass(Sequence::class)]
 final class SequenceTest extends TestCase
 {
+    #[Test]
+    #[TestDox('Making a sequence')]
+    public function make(): void
+    {
+        $sequence = Sequence::make();
+
+        $this->assertInstanceOf(SequenceInterface::class, $sequence);
+    }
+
     #[Test]
     #[TestDox('Initializing items')]
     public function initialize(): void
@@ -28,7 +38,7 @@ final class SequenceTest extends TestCase
 
         $sequence = new Sequence($items);
 
-        $this->assertSame($items, $sequence->all());
+        $this->assertSame($items, $sequence->getAll());
     }
 
     #[Test]
@@ -46,7 +56,7 @@ final class SequenceTest extends TestCase
         $sequence = new Sequence();
         $sequence->set($items);
 
-        $this->assertSame($items, $sequence->all());
+        $this->assertSame($items, $sequence->getAll());
     }
 
     #[Test]
@@ -62,12 +72,11 @@ final class SequenceTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Iteration items')]
-    public function iterator(): void
+    #[TestDox('Getting a sequence')]
+    public function sequence(): void
     {
-        $sequence = new Sequence();
+        $sequence = Sequence::make();
 
-        $this->assertIsIterable($sequence);
-        $this->assertIsIterable($sequence->getIterator());
+        $this->assertSame($sequence, $sequence->getSequence());
     }
 }

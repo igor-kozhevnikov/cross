@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace Cross\Commands\Sequence;
 
-use Traversable;
+use Cross\Commands\Sequence\Item\SequenceItemInterface;
 
-/**
- * @extends Traversable<SequenceItemInterface>
- */
-interface SequenceInterface extends Traversable
+interface SequenceInterface
 {
     /**
      * Adds an item.
      */
     public function add(SequenceItemInterface $item): void;
+
+    /**
+     * Returns all items.
+     *
+     * @return array<string, SequenceItemInterface>
+     */
+    public function getAll(): array;
 }

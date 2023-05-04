@@ -6,7 +6,7 @@ namespace Cross\Commands;
 
 use Cross\Commands\Attributes\Attributes;
 use Cross\Commands\Attributes\AttributesInterface;
-use Cross\Commands\Attributes\HasAttributes;
+use Cross\Commands\Attributes\AttributesKeeper;
 use Cross\Commands\Messages\Messages;
 use Cross\Commands\Messages\MessagesInterface;
 use Cross\Commands\Statuses\Exist;
@@ -41,7 +41,7 @@ abstract class BaseCommand extends InitialCommand
     /**
      * Attributes.
      */
-    protected null|AttributesInterface|HasAttributes $attributes = null;
+    protected null|AttributesInterface|AttributesKeeper $attributes = null;
 
     /**
      * Messages.
@@ -115,7 +115,7 @@ abstract class BaseCommand extends InitialCommand
     {
         $attributes = $this->attributes();
 
-        if ($attributes instanceof HasAttributes) {
+        if ($attributes instanceof AttributesKeeper) {
             $attributes = $attributes->getAttributes();
         }
 
@@ -135,7 +135,7 @@ abstract class BaseCommand extends InitialCommand
     /**
      * Defines attributes.
      */
-    protected function attributes(): AttributesInterface|HasAttributes
+    protected function attributes(): AttributesInterface|AttributesKeeper
     {
         return $this->attributes ?? new Attributes();
     }

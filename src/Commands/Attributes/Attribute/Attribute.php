@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Cross\Commands\Attributes\Attribute;
 
 use Closure;
-use Cross\Commands\Attributes\AttributesFactory;
 use Cross\Commands\Attributes\AttributesInterface;
-use Cross\Commands\Attributes\HasAttributes;
+use Cross\Commands\Attributes\AttributesKeeper;
 use Cross\Fluent\Fluent;
 use Symfony\Component\Console\Completion\CompletionInput;
 use Symfony\Component\Console\Completion\CompletionSuggestions;
@@ -21,9 +20,9 @@ use Symfony\Component\Console\Completion\Suggestion;
  * @method self suggestions(array|Closure $suggestions)
  * @method self attributes(AttributesInterface $attributes)
  */
-abstract class Attribute implements AttributeInterface, HasAttributes
+abstract class Attribute implements AttributeInterface, AttributesKeeper
 {
-    use AttributesFactory;
+    use AttributeFactory;
     use Fluent;
 
     /**

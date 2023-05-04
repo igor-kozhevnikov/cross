@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Templates\Commands;
 
 use Cross\Commands\Sequence\SequenceInterface;
+use Cross\Commands\Sequence\SequenceKeeper;
 use Cross\Commands\SequenceCommand;
 use Cross\Commands\Statuses\Exist;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -24,7 +25,7 @@ class SequenceCommandTemplate extends SequenceCommand
     /**
      * Sequence.
      */
-    public SequenceInterface $sequence;
+    public SequenceInterface|SequenceKeeper $sequence;
 
     /**
      * Constructor.
@@ -48,7 +49,7 @@ class SequenceCommandTemplate extends SequenceCommand
     /**
      * @inheritDoc
      */
-    protected function sequence(): SequenceInterface
+    protected function sequence(): SequenceInterface|SequenceKeeper
     {
         return $this->sequence;
     }

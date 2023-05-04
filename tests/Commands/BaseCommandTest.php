@@ -72,8 +72,8 @@ final class BaseCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Defining attributes as the HasAttributes')]
-    public function attributesAsHasAttributes(): void
+    #[TestDox('Defining attributes as the AttributesKeeper')]
+    public function attributesAsAttributesKeeper(): void
     {
         $name = 'file';
 

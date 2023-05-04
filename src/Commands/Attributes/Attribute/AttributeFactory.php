@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Cross\Commands\Attributes;
+namespace Cross\Commands\Attributes\Attribute;
 
 use Cross\Commands\Attributes\Attribute\Argument\Argument;
 use Cross\Commands\Attributes\Attribute\Option\Option;
+use Cross\Commands\Attributes\AttributesInterface;
 
-trait AttributesFactory
+trait AttributeFactory
 {
     /**
      * Return a stack of attributes.

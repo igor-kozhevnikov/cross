@@ -2,10 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Cross\Commands\Sequence;
+namespace Cross\Commands\Sequence\Item;
 
-class SequenceItem implements SequenceItemInterface
+use Cross\Commands\Sequence\SequenceInterface;
+use Cross\Commands\Sequence\SequenceKeeper;
+use Cross\Fluent\Fluent;
+
+/**
+ * @method self name(string $name)
+ * @method self sequence(SequenceInterface $sequence)
+ */
+class SequenceItem implements SequenceItemInterface, SequenceKeeper
 {
+    use Fluent;
+    use SequenceItemFactory;
+
     /**
      * Sequence.
      *
@@ -19,11 +30,6 @@ class SequenceItem implements SequenceItemInterface
     protected string $name;
 
     /**
-     * If true this item will be added to the sequence.
-     */
-    protected bool $append = true;
-
-    /**
      * Constructor.
      */
     public function __construct(string $name)
@@ -32,9 +38,15 @@ class SequenceItem implements SequenceItemInterface
     }
 
     /**
+     * Makes and returns an instance.
+     */
+    public static function make(string $name): self
+    {
+        return new self($name);
+    }
+
+    /**
      * Defines the sequence.
-     *
-     * @param SequenceInterface<SequenceItemInterface> $sequence
      */
     public function setSequence(SequenceInterface $sequence): void
     {
@@ -43,8 +55,6 @@ class SequenceItem implements SequenceItemInterface
 
     /**
      * Returns the sequence.
-     *
-     * @return SequenceInterface<SequenceItemInterface>
      */
     public function getSequence(): SequenceInterface
     {
@@ -65,34 +75,5 @@ class SequenceItem implements SequenceItemInterface
     public function getName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * Defines an append flag.
-     */
-    public function setAppend(bool $append): void
-    {
-        $this->append = $append;
-    }
-
-    /**
-     * Returns an append flag.
-     */
-    public function isAppend(): bool
-    {
-        return $this->append;
-    }
-
-    /**
-     * @inheritDoc
-     * @return SequenceInterface<SequenceItemInterface>
-     */
-    public function end(): SequenceInterface
-    {
-        if ($this->isAppend()) {
-            $this->getSequence()->add($this);
-        }
-
-        return $this->getSequence();
     }
 }

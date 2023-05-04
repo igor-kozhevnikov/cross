@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Tests\Commands\Attributes;
+namespace Commands\Attributes\Attribute;
 
 use Cross\Commands\Attributes\Attribute\Argument\ArgumentInterface;
+use Cross\Commands\Attributes\Attribute\AttributeFactory;
 use Cross\Commands\Attributes\Attribute\Option\OptionInterface;
-use Cross\Commands\Attributes\AttributesFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Templates\Commands\Attributes\AttributesFactoryTemplate;
+use Templates\Commands\Attributes\Attribute\AttributeFactoryTemplate;
 
-#[CoversClass(AttributesFactory::class)]
-final class AttributesFactoryTest extends TestCase
+#[CoversClass(AttributeFactory::class)]
+final class AttributeFactoryTest extends TestCase
 {
     #[Test]
     #[TestDox('Creating an argument')]
     public function argument(): void
     {
-        $factory = new AttributesFactoryTemplate();
+        $factory = new AttributeFactoryTemplate();
         $argument = $factory->argument('name');
 
         $this->assertInstanceOf(ArgumentInterface::class, $argument);
@@ -31,7 +31,7 @@ final class AttributesFactoryTest extends TestCase
     #[TestDox('Creating an option')]
     public function option(): void
     {
-        $factory = new AttributesFactoryTemplate();
+        $factory = new AttributeFactoryTemplate();
         $option = $factory->option('--fast');
 
         $this->assertInstanceOf(OptionInterface::class, $option);
