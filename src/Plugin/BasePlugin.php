@@ -54,6 +54,6 @@ abstract class BasePlugin implements PluginInterface
             return $this->commands;
         }
 
-        return $this->config['commands'] ?? [];
+        return $this->getConfig()['commands'] ?? [];
     }
 }
