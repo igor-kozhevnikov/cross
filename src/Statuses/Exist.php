@@ -13,20 +13,28 @@ enum Exist: int
     /**
      * Returns true if the code is success.
      */
-    public static function isSuccess(Exist|int $status): bool
+    public function isSuccess(): bool
     {
-        if ($status instanceof Exist) {
-            return $status === Exist::Success;
-        }
-
-        return $status === Exist::Success->value;
+        return Exist::Success == $this;
     }
 
     /**
-     * Returns true if the code is success.
+     * Returns true if a status is success.
      */
-    public static function isNotSuccess(Exist|int $status): bool
+    public static function isEqualSuccess(Exist|int $value): bool
     {
-        return ! Exist::isSuccess($status);
+        if ($value instanceof Exist) {
+            return $value === Exist::Success;
+        }
+
+        return $value === Exist::Success->value;
+    }
+
+    /**
+     * Returns true if a status isn't success.
+     */
+    public static function isNotEqualSuccess(Exist|int $value): bool
+    {
+        return ! Exist::isEqualSuccess($value);
     }
 }

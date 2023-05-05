@@ -175,7 +175,7 @@ final class BaseCommandTest extends TestCase
         $command = new BaseCommandTemplate();
         $command->prepare = Prepare::Stop;
 
-        $this->assertSame(Prepare::Stop->exist(), $command->execute());
+        $this->assertSame(Prepare::Stop->toExist()->value, $command->execute());
     }
 
     #[Test]
@@ -185,6 +185,6 @@ final class BaseCommandTest extends TestCase
         $command = new  BaseCommandTemplate();
         $command->prepare = Prepare::Skip;
 
-        $this->assertSame(Prepare::Skip->exist(), $command->execute());
+        $this->assertSame(Prepare::Skip->toExist()->value, $command->execute());
     }
 }

@@ -109,6 +109,14 @@ abstract class BaseCommand extends InitialCommand
     }
 
     /**
+     * Defines messages.
+     */
+    protected function messages(): MessagesInterface
+    {
+        return $this->messages ?? $this->messages = new Messages();
+    }
+
+    /**
      * Configure attributes.
      */
     protected function setAttributes(): void
@@ -125,19 +133,11 @@ abstract class BaseCommand extends InitialCommand
     }
 
     /**
-     * Defines messages.
-     */
-    protected function messages(): MessagesInterface
-    {
-        return $this->messages ?? new Messages();
-    }
-
-    /**
      * Defines attributes.
      */
     protected function attributes(): AttributesInterface|AttributesKeeper
     {
-        return $this->attributes ?? new Attributes();
+        return $this->attributes ?? $this->attributes = new Attributes();
     }
 
     /**
@@ -195,15 +195,13 @@ abstract class BaseCommand extends InitialCommand
     {
         $prepare = $this->prepare();
 
-        if ($prepare->isNotContinue()) {
-            return $prepare->exist();
+        if ($prepare->isContinue()) {
+            $this->before();
+            $exist = $this->handle();
+            $this->after($exist);
+        } else {
+            $exist = $prepare->toExist();
         }
-
-        $this->before();
-
-        $exist = $this->handle();
-
-        $this->after($exist);
 
         $this->showMessages();
 

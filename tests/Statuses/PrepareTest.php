@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Statuses;
 
+use Cross\Statuses\Exist;
 use Cross\Statuses\Prepare;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -17,9 +18,9 @@ final class PrepareTest extends TestCase
     #[TestDox('Correct exist code values')]
     public function exist(): void
     {
-        $this->assertSame(0, Prepare::Continue->exist());
-        $this->assertSame(1, Prepare::Stop->exist());
-        $this->assertSame(0, Prepare::Skip->exist());
+        $this->assertSame(Exist::Success, Prepare::Continue->toExist());
+        $this->assertSame(Exist::Failure, Prepare::Stop->toExist());
+        $this->assertSame(Exist::Success, Prepare::Skip->toExist());
     }
 
     #[Test]

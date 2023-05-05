@@ -28,13 +28,29 @@ class Package
     }
 
     /**
+     * Returns the base config path.
+     */
+    final public function getBaseConfigPath(): string
+    {
+        return __DIR__ . '/../../config/cross.php';
+    }
+
+    /**
+     * Returns the alternative config path.
+     */
+    public function getAlternativeConfigPath(): string
+    {
+        return getcwd() . '/cross.php';
+    }
+
+    /**
      * Fetches the base config.
      *
      * @return array<string, mixed>
      */
     protected function fetchBaseConfig(): array
     {
-        return require __DIR__ . '/../../config/config.php';
+        return require $this->getBaseConfigPath();
     }
 
     /**
@@ -47,7 +63,7 @@ class Package
     protected function fetchAlternativeConfig(?string $alternative = null): array
     {
         if (is_null($alternative)) {
-            $alternative = getcwd() . '/cross.php';
+            $alternative = $this->getAlternativeConfigPath();
         }
 
         if (! is_file($alternative)) {

@@ -37,7 +37,7 @@ abstract class SequenceCommand extends BaseCommand
             $code = $command->run($input, $this->output());
             $exist = Exist::from($code);
 
-            if (Exist::isNotSuccess($exist)) {
+            if (Exist::isNotEqualSuccess($exist)) {
                 return $exist;
             }
         }

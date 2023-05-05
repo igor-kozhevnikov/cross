@@ -23,18 +23,27 @@ final class ExistTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Determinate a success value')]
+    #[TestDox('Checking a value is success')]
     public function success(): void
     {
-        $this->assertTrue(Exist::isSuccess(0));
-        $this->assertTrue(Exist::isSuccess(Exist::Success));
+        $exit = Exist::Success;
+
+        $this->assertTrue($exit->isSuccess());
     }
 
     #[Test]
-    #[TestDox('Determinate a not success value')]
-    public function notSuccess(): void
+    #[TestDox('Checking a value is equal success')]
+    public function equalSuccess(): void
     {
-        $this->assertTrue(Exist::isNotSuccess(1));
-        $this->assertTrue(Exist::isNotSuccess(Exist::Invalid));
+        $this->assertTrue(Exist::isEqualSuccess(0));
+        $this->assertTrue(Exist::isEqualSuccess(Exist::Success));
+    }
+
+    #[Test]
+    #[TestDox('Checking a value is not equal success')]
+    public function notEqualSuccess(): void
+    {
+        $this->assertTrue(Exist::isNotEqualSuccess(1));
+        $this->assertTrue(Exist::isNotEqualSuccess(Exist::Invalid));
     }
 }

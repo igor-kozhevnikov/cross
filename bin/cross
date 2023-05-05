@@ -4,6 +4,7 @@
 require __DIR__ . '/../src/Composer/Composer.php';
 require __DIR__ . '/../src/Package/Package.php';
 
+use Cross\Cross\Commands\CopyConfig;
 use Cross\Cross\Cross;
 use Cross\Composer\Composer;
 use Cross\Package\Package;
@@ -26,6 +27,7 @@ $application = new Application($composer->getDescription(), $composer->getVersio
 
 // Cross
 $cross = new Cross($application);
+$cross->command(CopyConfig::class);
 $cross->plugins($package->getPlugins());
 $cross->commands($package->getCommands());
 $cross->run();

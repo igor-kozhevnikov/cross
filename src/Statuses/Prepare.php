@@ -11,21 +11,29 @@ enum Prepare
     case Skip;
 
     /**
+     * Returns true if the code is continued.
+     */
+    public function isContinue(): bool
+    {
+        return self::Continue == $this;
+    }
+
+    /**
      * Returns true if the code isn't continue.
      */
     public function isNotContinue(): bool
     {
-        return $this !== self::Continue;
+        return ! $this->isContinue();
     }
 
     /**
-     * Returns an exists code.
+     * Converts this to exist status.
      */
-    public function exist(): int
+    public function toExist(): Exist
     {
         return match ($this) {
-            self::Continue, self::Skip => Exist::Success->value,
-            self::Stop => Exist::Failure->value,
+            self::Continue, self::Skip => Exist::Success,
+            self::Stop => Exist::Failure,
         };
     }
 }

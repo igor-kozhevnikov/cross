@@ -4,8 +4,16 @@ declare(strict_types=1);
 
 namespace Cross\Messages;
 
+use Cross\Fluent\Fluent;
+
+/**
+ * @method self success(?string $message)
+ * @method self error(?string $message)
+ */
 class Messages implements MessagesInterface
 {
+    use Fluent;
+
     /**
      * Success message.
      */
