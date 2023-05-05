@@ -54,6 +54,13 @@ return [
 ./vendor/bin/cross cross:config
 ```
 
+## Examples
+
+You can see commands based on this package in the following repositories:
+
+- [Cross for Docker](https://github.com/igor-kozhevnikov/cross-docker)
+- [Cross for Git](https://github.com/igor-kozhevnikov/cross-git)
+
 ## License
 
 The Cross is open-sourced software licensed under the [MIT license](https://opensource.org/license/mit/).
