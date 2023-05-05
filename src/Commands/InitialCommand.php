@@ -174,9 +174,9 @@ abstract class InitialCommand extends Command
     /**
      * Asks a question.
      */
-    protected function ask(string $question, string $default = null, callable $validator = null): void
+    protected function ask(string $question, string $default = null, callable $validator = null): mixed
     {
-        $this->output()->ask($question, $default, $validator);
+        return $this->output()->ask($question, $default, $validator);
     }
 
     /**
