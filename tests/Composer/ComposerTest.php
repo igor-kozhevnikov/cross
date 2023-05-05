@@ -36,7 +36,6 @@ final class ComposerTest extends TestCase
 
         $this->assertIsArray($config);
         $this->assertIsString($config['description']);
-        $this->assertIsString($config['version']);
         $this->assertNull($config['config']['vendor-dir']);
     }
 
@@ -80,16 +79,6 @@ final class ComposerTest extends TestCase
         $config = $composer->getConfig();
 
         $this->assertSame($config['description'], $composer->getDescription());
-    }
-
-    #[Test]
-    #[TestDox('Getting a version from composer config')]
-    public function version(): void
-    {
-        $composer = new Composer(self::$path);
-        $config = $composer->getConfig();
-
-        $this->assertSame($config['version'], $composer->getVersion());
     }
 
     #[Test]

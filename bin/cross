@@ -23,7 +23,7 @@ $package = new Package();
 $composer = new Composer(__DIR__ . '/../composer.json');
 
 // Application
-$application = new Application($composer->getDescription(), $composer->getVersion());
+$application = new Application($composer->getDescription(), '1.0');
 
 // Cross
 $cross = new Cross($application);

@@ -1,7 +1,6 @@
 {
     "name": "igor-kozhevnikov/cross",
     "description": "Library for creating console commands",
-    "version": "1.0.1",
     "keywords": ["cross", "console", "command"],
     "homepage": "https://github.com/igor-kozhevnikov/cross",
     "license": "MIT",

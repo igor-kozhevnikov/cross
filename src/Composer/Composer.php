@@ -71,14 +71,6 @@ class Composer
     }
 
     /**
-     * Returns a version.
-     */
-    public function getVersion(): string
-    {
-        return $this->config['version'];
-    }
-
-    /**
      * Returns a vendor directory.
      */
     public function getVendorDirectory(): string
