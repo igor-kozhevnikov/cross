@@ -46,6 +46,8 @@ trait Fluent
     /**
      * Calls a method.
      *
+     * @param array<array-key, mixed>  $arguments
+     *
      * @throws MissingMethodException
      * @throws NonPublicMethodException
      * @throws ProtectedMethodException

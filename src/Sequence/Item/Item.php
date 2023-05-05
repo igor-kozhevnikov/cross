@@ -25,8 +25,6 @@ class Item implements ItemInterface, SequenceKeeper
 
     /**
      * Sequence.
-     *
-     * @var SequenceInterface<ItemInterface>
      */
     protected SequenceInterface $sequence;
 
@@ -42,6 +40,8 @@ class Item implements ItemInterface, SequenceKeeper
 
     /**
      * Input.
+     *
+     * @var array<string, int|string>
      */
     protected array $input = [];
 

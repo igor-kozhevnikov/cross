@@ -43,6 +43,8 @@ class Cross
 
     /**
      * Sets a plugin.
+     *
+     * @param array<string, mixed> $config
      */
     public function plugin(string|PluginInterface $plugin, array $config = []): void
     {
@@ -79,6 +81,8 @@ class Cross
 
     /**
      * Adds a command.
+     *
+     * @param array<string, mixed> $config
      */
     public function command(string|Command $command, array $config = []): void
     {
