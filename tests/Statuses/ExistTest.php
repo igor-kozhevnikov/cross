@@ -29,6 +29,7 @@ final class ExistTest extends TestCase
         $exit = Exist::Success;
 
         $this->assertTrue($exit->isSuccess());
+        $this->assertFalse($exit->isNotSuccess());
     }
 
     #[Test]

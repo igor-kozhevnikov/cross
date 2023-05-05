@@ -19,6 +19,14 @@ enum Exist: int
     }
 
     /**
+     * Returns true if the code is not success.
+     */
+    public function isNotSuccess(): bool
+    {
+        return ! $this->isSuccess();
+    }
+
+    /**
      * Returns true if a status is success.
      */
     public static function isEqualSuccess(Exist|int $value): bool
