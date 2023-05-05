@@ -4,39 +4,75 @@ declare(strict_types=1);
 
 namespace Tests\Commands;
 
-use Cross\Commands\Sequence\Item\SequenceItem;
-use Cross\Commands\Sequence\Sequence;
 use Cross\Commands\SequenceCommand;
-use Cross\Commands\Statuses\Exist;
+use Cross\Sequence\Item\Item;
+use Cross\Sequence\Sequence;
+use Cross\Statuses\Exist;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\Console\Application;
-use Templates\Commands\BaseCommandTemplate;
-use Templates\Commands\InitialCommandTemplate;
-use Templates\Commands\SequenceCommandTemplate;
 use Tests\TestCase;
 
 #[CoversClass(SequenceCommand::class)]
 final class SequenceCommandTest extends TestCase
 {
     #[Test]
-    #[TestDox('Successful handling a sequence')]
-    public function handleSuccessful(): void
+    #[TestDox('Getting a sequence as the SequenceInterface instance')]
+    public function sequenceSequenceInterface(): void
     {
-        $firstCommand = new InitialCommandTemplate();
-        $secondCommand = new InitialCommandTemplate();
+        $command = new SequenceCommandTemplate();
+        $command->sequence = new Sequence();
+        $command->initialize();
+        $command->setApplication(new Application());
 
-        $firstSequenceItem = new SequenceItem($firstCommand->getName());
-        $secondSequenceItem = new SequenceItem($secondCommand->getName());
+        $this->assertSame(Exist::Success, $command->handle());
+    }
+
+    #[Test]
+    #[TestDox('Getting a sequence as the SequenceKeeper instance')]
+    public function sequenceSequenceKeeper(): void
+    {
+        $sequence = new Sequence();
+
+        $item = new Item('run');
+        $item->setSequence($sequence);
+
+        $command = new SequenceCommandTemplate();
+        $command->sequence = $item;
+        $command->initialize();
+        $command->setApplication(new Application());
+
+        $this->assertSame(Exist::Success, $command->handle());
+    }
+
+    #[Test]
+    #[TestDox('Skipping an item when the $isUse property is negative')]
+    public function itemWontUse(): void
+    {
+        $item = new Item('run');
+        $item->setIsUse(false);
+
+        $command = new SequenceCommandTemplate();
+        $command->sequence = new Sequence([$item]);
+        $command->initialize();
+        $command->setApplication(new Application());
+
+        $this->assertSame(Exist::Success, $command->handle());
+    }
+
+    #[Test]
+    #[TestDox('Successful executing a command from the sequence')]
+    public function successfulExecuting(): void
+    {
+        $command = new InitialCommandTemplate();
+        $item = new Item($command->getName());
 
         $application = new Application();
-        $application->add($firstCommand);
-        $application->add($secondCommand);
+        $application->add($command);
 
         $sequence = new Sequence();
-        $sequence->add($firstSequenceItem);
-        $sequence->add($secondSequenceItem);
+        $sequence->add($item);
 
         $command = new SequenceCommandTemplate();
         $command->sequence = $sequence;
@@ -47,7 +83,7 @@ final class SequenceCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Unsuccessful handling a sequence')]
+    #[TestDox('Failure executing a command from the sequence')]
     public function handleUnsuccessful(): void
     {
         $command = new BaseCommandTemplate();
@@ -55,16 +91,16 @@ final class SequenceCommandTest extends TestCase
 
         $sequence = new Sequence();
 
-        $sequenceItem = new SequenceItem($command->getName());
-        $sequenceItem->setSequence($sequence);
+        $item = new Item($command->getName());
+        $item->setSequence($sequence);
 
-        $sequence->add($sequenceItem);
+        $sequence->add($item);
 
         $application = new Application();
         $application->add($command);
 
         $command = new SequenceCommandTemplate();
-        $command->sequence = $sequenceItem;
+        $command->sequence = $item;
         $command->initialize();
         $command->setApplication($application);
 

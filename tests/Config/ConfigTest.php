@@ -7,14 +7,12 @@ namespace Tests\Config;
 use Cross\Config\Config;
 use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\IgnoreMethodForCodeCoverage;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Config::class)]
-#[IgnoreMethodForCodeCoverage(Config::class, '__construct')]
-#[IgnoreMethodForCodeCoverage(Config::class, '__clone')]
 final class ConfigTest extends TestCase
 {
     /**
@@ -43,62 +41,32 @@ final class ConfigTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Return a value by a simple key')]
-    public function getSimple(): void
+    #[TestDox('Getting a default value')]
+    public function default(): void
     {
-        $key = 'key';
-        $value = 'value';
+        $default = 100;
 
-        Config::set($key, $value);
+        $this->assertSame(null, Config::get('invalid key'));
+        $this->assertSame($default, Config::get('invalid key', $default));
+    }
+
+    #[Test]
+    #[TestDox('Getting a value')]
+    #[DataProviderExternal(ConfigProvider::class, 'data')]
+    public function value(mixed $data, string $key, string $value): void
+    {
+        Config::set('_', $data);
+
+        $key = $key == '_' ? $key : "_.$key";
 
         $this->assertSame($value, Config::get($key));
     }
 
     #[Test]
-    #[TestDox('Return a default value by an invalid key')]
-    public function getDefault(): void
-    {
-        $value = 'Cross';
-
-        $this->assertSame(null, Config::get('invalid key'));
-        $this->assertSame($value, Config::get('invalid key', $value));
-    }
-
-    #[Test]
-    #[TestDox('Return a value by a complex key')]
-    public function getComplex(): void
-    {
-        $prefix = '_';
-
-        $config = [
-            'a' => 'A',
-            'b' => ['a' => 'BA'],
-            'c' => ['a' => ['a' => 'CAA']],
-            'd' => ['zero', 'uno'],
-        ];
-
-        Config::set($prefix, $config);
-
-        $this->assertSame('A', Config::get("$prefix.a"));
-        $this->assertSame('BA', Config::get("$prefix.b.a"));
-        $this->assertSame('CAA', Config::get("$prefix.c.a.a"));
-        $this->assertSame('zero', Config::get("$prefix.d.0"));
-        $this->assertSame('uno', Config::get("$prefix.d.1"));
-    }
-
-    #[Test]
-    #[TestDox('Reset config')]
+    #[TestDox('Resetting config')]
     public function reset(): void
     {
-        $key = 'key';
-        $value = 'value';
-
-        $this->assertSame([], Config::all());
-
-        Config::set($key, $value);
-
-        $this->assertSame([$key => $value], Config::all());
-
+        Config::set('key', 'value');
         Config::reset();
 
         $this->assertSame([], Config::all());

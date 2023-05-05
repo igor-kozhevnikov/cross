@@ -8,14 +8,11 @@ use Cross\Composer\Composer;
 use Cross\Composer\Exceptions\InvalidComposerConfigException;
 use Cross\Composer\Exceptions\MissingComposerConfigException;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\IgnoreClassForCodeCoverage;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use Tests\TestCase;
 
 #[CoversClass(Composer::class)]
-#[IgnoreClassForCodeCoverage(InvalidComposerConfigException::class)]
-#[IgnoreClassForCodeCoverage(MissingComposerConfigException::class)]
 final class ComposerTest extends TestCase
 {
     /**
@@ -32,7 +29,7 @@ final class ComposerTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Successful fetching of composer config')]
+    #[TestDox('Successful fetching composer config')]
     public function configSuccess(): void
     {
         $config = (new Composer(self::$path))->getConfig();
@@ -44,7 +41,7 @@ final class ComposerTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Unsuccessful fetching of composer config due to the composer.json file does not exist')]
+    #[TestDox('Unsuccessful fetching composer config due to the composer.json file does not exist')]
     public function configMissing(): void
     {
         $this->expectException(MissingComposerConfigException::class);
@@ -55,7 +52,7 @@ final class ComposerTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Unsuccessful fetching of composer config due to composer.json file content is invalid')]
+    #[TestDox('Unsuccessful fetching composer config due to composer.json file content is invalid')]
     public function configInvalid(): void
     {
         $this->expectException(InvalidComposerConfigException::class);
@@ -66,7 +63,7 @@ final class ComposerTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Getting config')]
+    #[TestDox('Getting config via the getter')]
     public function config(): void
     {
         $composer = new Composer(self::$path);
@@ -76,7 +73,7 @@ final class ComposerTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Getting a description')]
+    #[TestDox('Getting a description from composer config')]
     public function description(): void
     {
         $composer = new Composer(self::$path);
@@ -86,7 +83,7 @@ final class ComposerTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Getting a version')]
+    #[TestDox('Getting a version from composer config')]
     public function version(): void
     {
         $composer = new Composer(self::$path);
@@ -96,7 +93,7 @@ final class ComposerTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Getting a vendor directory')]
+    #[TestDox('Getting a vendor directory from composer config')]
     public function vendor(): void
     {
         $composer = new Composer(self::$path);

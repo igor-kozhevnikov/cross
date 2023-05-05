@@ -5,43 +5,78 @@ declare(strict_types=1);
 namespace Tests\Commands;
 
 use Cross\Commands\ShellCommand;
-use Cross\Commands\Statuses\Exist;
+use Cross\Statuses\Exist;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\Process\Process;
-use Templates\Commands\ShellCommandTemplate;
 use Tests\TestCase;
 
 #[CoversClass(ShellCommand::class)]
 final class ShellCommandTest extends TestCase
 {
     #[Test]
-    #[TestDox('Getting simple properties')]
-    public function properties(): void
+    #[TestDox('Getting a shell command')]
+    public function command(): void
     {
         $command = 'discover';
-        $cwd = '~/milky-way-galaxy/';
-        $tty = false;
-        $timeout = 10.5;
-        $env = ['black-holes' => true];
 
         $shell = new ShellCommandTemplate();
         $shell->command = $command;
-        $shell->cwd = $cwd;
-        $shell->tty = $tty;
-        $shell->timeout = $timeout;
-        $shell->env = $env;
 
         $this->assertSame($command, $shell->command());
+    }
+
+    #[Test]
+    #[TestDox('Getting a shell CWD')]
+    public function cwd(): void
+    {
+        $cwd = '~/milky-way-galaxy/';
+
+        $shell = new ShellCommandTemplate();
+        $shell->cwd = $cwd;
+
         $this->assertSame($cwd, $shell->cwd());
+    }
+
+    #[Test]
+    #[TestDox('Getting a shell TTY')]
+    public function tty(): void
+    {
+        $tty = (bool) rand(0, 1);
+
+        $shell = new ShellCommandTemplate();
+        $shell->tty = $tty;
+
         $this->assertSame($tty, $shell->tty());
+    }
+
+    #[Test]
+    #[TestDox('Getting a command timeout')]
+    public function timeout(): void
+    {
+        $timeout = 10.5;
+
+        $shell = new ShellCommandTemplate();
+        $shell->timeout = $timeout;
+
         $this->assertSame($timeout, $shell->timeout());
+    }
+
+    #[Test]
+    #[TestDox('Getting a command ENV')]
+    public function env(): void
+    {
+        $env = ['black-holes' => true];
+
+        $shell = new ShellCommandTemplate();
+        $shell->env = $env;
+
         $this->assertSame($env, $shell->env());
     }
 
     #[Test]
-    #[TestDox('Making a process from a string')]
+    #[TestDox('Making a Process instance from a string')]
     public function processFromString(): void
     {
         $command = 'dance';
@@ -59,7 +94,7 @@ final class ShellCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Making a process from an array')]
+    #[TestDox('Making a Process instance from an array')]
     public function processFormArray(): void
     {
         $command = ['fight', 'kill'];
@@ -74,17 +109,17 @@ final class ShellCommandTest extends TestCase
         $this->assertInstanceOf(Process::class, $process);
         $this->assertSame($cwd, $process->getWorkingDirectory());
 
-        $this->assertSame(
-            join(' ', array_map(fn (string $command): string => "'$command'", $shell->command)),
-            $process->getCommandLine(),
-        );
+        $wrapper = array_map(fn (string $command): string => "'$command'", $shell->command);
+        $expect = join(' ', $wrapper);
+
+        $this->assertSame($expect, $process->getCommandLine());
     }
 
     #[Test]
-    #[TestDox('Configuring a process')]
+    #[TestDox('Configuring a Process instance via the configureProcess() method')]
     public function configure(): void
     {
-        $tty = true;
+        $tty = (bool) rand(0, 1);
         $timeout = 200.5;
         $env = ['luck' => true];
 
@@ -103,7 +138,7 @@ final class ShellCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Executing the handle() method')]
+    #[TestDox('Executing the handle() method and get default success result')]
     public function handle(): void
     {
         $shell = new ShellCommandTemplate();

@@ -12,9 +12,9 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
-use Templates\Commands\BaseCommandTemplate;
-use Templates\Commands\InitialCommandTemplate;
-use Templates\Plugins\PluginTemplate;
+use Tests\Commands\BaseCommandTemplate;
+use Tests\Commands\InitialCommandTemplate;
+use Tests\Plugin\BasePluginTemplate;
 
 #[CoversClass(Cross::class)]
 final class CrossTest extends TestCase
@@ -75,13 +75,13 @@ final class CrossTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Adding all commands from a list of plugins')]
-    public function plugins(): void
+    #[TestDox('Adding commands from a plugins list')]
+    public function commandFromPlugins(): void
     {
         $plugins = [
-            new PluginTemplate(),
-            PluginTemplate::class,
-            PluginTemplate::class => ['timeout' => 400],
+            new BasePluginTemplate(),
+            BasePluginTemplate::class,
+            BasePluginTemplate::class => ['timeout' => 400],
         ];
 
         $this->cross->plugins($plugins);
@@ -90,11 +90,11 @@ final class CrossTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Adding all commands from a plugin')]
-    public function pluginCommands(): void
+    #[TestDox('Adding commands from a plugin')]
+    public function commandFromPlugin(): void
     {
-        $this->cross->plugin(new PluginTemplate());
-        $this->cross->plugin(PluginTemplate::class);
+        $this->cross->plugin(new BasePluginTemplate());
+        $this->cross->plugin(BasePluginTemplate::class);
 
         $this->assertCount($this->counter + 2, $this->application->all());
     }
@@ -105,7 +105,7 @@ final class CrossTest extends TestCase
     {
         Config::reset();
 
-        $plugin = new PluginTemplate();
+        $plugin = new BasePluginTemplate();
 
         $this->cross->plugin($plugin);
 
@@ -113,7 +113,7 @@ final class CrossTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Adding a list of commands')]
+    #[TestDox('Adding commands')]
     public function commands(): void
     {
         $commands = [
@@ -138,7 +138,7 @@ final class CrossTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Running an application')]
+    #[TestDox('Running an application from the Cross instance')]
     public function running(): void
     {
         $this->application = $this->createMock(Application::class);

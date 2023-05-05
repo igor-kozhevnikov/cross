@@ -10,35 +10,29 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Templates\Commands\InitialCommandTemplate;
 use Tests\TestCase;
 
 #[CoversClass(InitialCommand::class)]
 final class InitialCommandTest extends TestCase
 {
     #[Test]
-    #[TestDox('Initializing an input and output')]
+    #[TestDox('Defining the $input and $output properties via the initialize() method')]
     public function initialize(): void
     {
         $input = new ArrayInput([]);
-        $output = new SymfonyStyle($input, new BufferedOutput());
+        $output = new ConsoleOutput();
 
         $command = new InitialCommandTemplate();
         $command->initialize($input, $output);
 
         $this->assertSame($input, $command->input());
         $this->assertInstanceOf(SymfonyStyle::class, $command->output());
-
-        $command->initialize($input, new ConsoleOutput());
-
-        $this->assertInstanceOf(SymfonyStyle::class, $command->output());
     }
 
     #[Test]
-    #[TestDox('Outputting error messages')]
+    #[TestDox('Displaying error messages')]
     public function errors(): void
     {
         $output = $this->getMockBuilder(SymfonyStyle::class)
@@ -54,7 +48,7 @@ final class InitialCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Outputting an error message')]
+    #[TestDox('Displaying an error message')]
     public function error(): void
     {
         $output = $this->getMockBuilder(SymfonyStyle::class)
@@ -70,7 +64,7 @@ final class InitialCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Outputting a success messages')]
+    #[TestDox('Displaying a success message')]
     public function success(): void
     {
         $output = $this->getMockBuilder(SymfonyStyle::class)
@@ -86,7 +80,7 @@ final class InitialCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Getting arguments')]
+    #[TestDox('Getting arguments via the arguments() method')]
     public function arguments(): void
     {
         $command = new InitialCommandTemplate();
@@ -97,7 +91,7 @@ final class InitialCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Getting an argument')]
+    #[TestDox('Getting an argument via the argument() method')]
     public function argument(): void
     {
         $command = new InitialCommandTemplate();
@@ -109,7 +103,7 @@ final class InitialCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Getting options')]
+    #[TestDox('Getting options via the options() method')]
     public function options(): void
     {
         $command = new InitialCommandTemplate();
@@ -120,7 +114,7 @@ final class InitialCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Getting an option')]
+    #[TestDox('Getting an option via the option() method')]
     public function option(): void
     {
         $command = new InitialCommandTemplate();
@@ -132,7 +126,7 @@ final class InitialCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Getting a value depend on a positive option')]
+    #[TestDox('Getting a value depending on whether an option exists')]
     public function whenOption(): void
     {
         $command = new InitialCommandTemplate();
@@ -144,7 +138,7 @@ final class InitialCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Getting a value depend on a negative option')]
+    #[TestDox('Getting a value depending on whether an option does not exist')]
     public function whenNotOption(): void
     {
         $command = new InitialCommandTemplate();
@@ -156,7 +150,7 @@ final class InitialCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Executing the info method')]
+    #[TestDox('Executing the info() method of the base command')]
     public function info(): void
     {
         $arguments = ['No smoking!'];
@@ -174,7 +168,7 @@ final class InitialCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Executing the comment method')]
+    #[TestDox('Executing the comment() method of the base command')]
     public function comment(): void
     {
         $arguments = ['Remember that moment!'];
@@ -192,7 +186,7 @@ final class InitialCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Executing the ask method')]
+    #[TestDox('Executing the ask() method of the base command')]
     public function ask(): void
     {
         $arguments = ['Whats up?', 'No bad', null];
@@ -210,7 +204,7 @@ final class InitialCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Executing the choice method')]
+    #[TestDox('Executing the choice() method of the base command')]
     public function choice(): void
     {
         $arguments = ['What would you like?', ['cake', 'beer'], 'beer', true];
@@ -228,7 +222,7 @@ final class InitialCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Executing the confirm method')]
+    #[TestDox('Executing the confirm() method of the base command')]
     public function confirm(): void
     {
         $arguments = ['Really?', true];

@@ -8,8 +8,7 @@ use Cross\Plugin\BasePlugin;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
-use Templates\Commands\InitialCommandTemplate;
-use Templates\Plugins\PluginTemplate;
+use Tests\Commands\InitialCommandTemplate;
 use Tests\TestCase;
 
 #[CoversClass(BasePlugin::class)]
@@ -21,7 +20,7 @@ final class BasePluginTest extends TestCase
     {
         $key = 'reader';
 
-        $plugin = new PluginTemplate();
+        $plugin = new BasePluginTemplate();
         $plugin->key = $key;
 
         $this->assertSame($key, $plugin->getKey());
@@ -33,7 +32,7 @@ final class BasePluginTest extends TestCase
     {
         $config = ['timeout' => 200];
 
-        $plugin = new PluginTemplate();
+        $plugin = new BasePluginTemplate();
         $plugin->config = $config;
 
         $this->assertSame($config, $plugin->getConfig());
@@ -45,7 +44,7 @@ final class BasePluginTest extends TestCase
     {
         $commands = [InitialCommandTemplate::class];
 
-        $plugin = new PluginTemplate();
+        $plugin = new BasePluginTemplate();
         $plugin->commands = $commands;
 
         $this->assertSame($commands, $plugin->getCommands());

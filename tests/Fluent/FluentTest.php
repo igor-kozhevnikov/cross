@@ -9,16 +9,11 @@ use Cross\Fluent\Exceptions\NonPublicMethodException;
 use Cross\Fluent\Exceptions\ProtectedMethodException;
 use Cross\Fluent\Fluent;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\IgnoreClassForCodeCoverage;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
-use Templates\Fluent\FluentTemplate;
 use Tests\TestCase;
 
 #[CoversClass(Fluent::class)]
-#[IgnoreClassForCodeCoverage(MissingMethodException::class)]
-#[IgnoreClassForCodeCoverage(NonPublicMethodException::class)]
-#[IgnoreClassForCodeCoverage(ProtectedMethodException::class)]
 final class FluentTest extends TestCase
 {
     #[Test]

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Cross\Commands;
 
-use Cross\Commands\Attributes\Attributes;
-use Cross\Commands\Attributes\AttributesInterface;
-use Cross\Commands\Attributes\AttributesKeeper;
-use Cross\Commands\Messages\Messages;
-use Cross\Commands\Messages\MessagesInterface;
-use Cross\Commands\Statuses\Exist;
-use Cross\Commands\Statuses\Prepare;
+use Cross\Attributes\Attributes;
+use Cross\Attributes\AttributesInterface;
+use Cross\Attributes\AttributesKeeper;
+use Cross\Messages\Messages;
+use Cross\Messages\MessagesInterface;
+use Cross\Statuses\Exist;
+use Cross\Statuses\Prepare;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 

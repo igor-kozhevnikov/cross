@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cross\Commands;
 
-use Cross\Commands\Statuses\Exist;
+use Cross\Statuses\Exist;
 use Symfony\Component\Process\Process;
 
 abstract class ShellCommand extends BaseCommand

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Cross\Commands;
 
-use Cross\Commands\Sequence\SequenceInterface;
-use Cross\Commands\Sequence\SequenceKeeper;
-use Cross\Commands\Statuses\Exist;
+use Cross\Sequence\SequenceInterface;
+use Cross\Sequence\SequenceKeeper;
+use Cross\Statuses\Exist;
+use Symfony\Component\Console\Input\ArrayInput;
 
 abstract class SequenceCommand extends BaseCommand
 {
@@ -27,8 +28,13 @@ abstract class SequenceCommand extends BaseCommand
         }
 
         foreach ($sequence->getAll() as $item) {
-            $command = $this->getApplication()->find($item->getName());
-            $code = $command->run($this->input(), $this->output());
+            if ($item->isNotUse()) {
+                continue;
+            }
+
+            $command = $this->getApplication()->find($item->getCommand());
+            $input = new ArrayInput($item->getInput());
+            $code = $command->run($input, $this->output());
             $exist = Exist::from($code);
 
             if (Exist::isNotSuccess($exist)) {
