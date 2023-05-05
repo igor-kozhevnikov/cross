@@ -1,6 +1,6 @@
 {
     "name": "igor-kozhevnikov/cross",
-    "description": "Set of console commands",
+    "description": "Library for creating console commands",
     "version": "1.0.0",
     "keywords": ["cross", "console", "command"],
     "homepage": "https://github.com/igor-kozhevnikov/cross",

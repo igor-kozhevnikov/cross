@@ -1,5 +1,9 @@
 # Cross
 
+[![PHP](https://img.shields.io/badge/php-8.1-green.svg?style=flat-square)](https://github.com/igor-kozhevnikov/cross)
+[![License](https://img.shields.io/github/license/igor-kozhevnikov/cross?style=flat-square)](https://github.com/igor-kozhevnikov/cross)
+[![Release](https://img.shields.io/github/v/release/igor-kozhevnikov/cross?style=flat-square)](https://github.com/igor-kozhevnikov/cross)
+
 Library for creating console commands.
 
 ## Install
@@ -49,3 +53,7 @@ return [
 ```shell
 ./vendor/bin/cross cross:config
 ```
+
+## License
+
+The Cross is open-sourced software licensed under the [MIT license](https://opensource.org/license/mit/).
