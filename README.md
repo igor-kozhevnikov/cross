@@ -33,9 +33,11 @@ For example:
 return [
     'plugins' => [
         \Cross\Docker\Plugin\Plugin::class => [ 'env_path' => 'docker/.env' ],
+        \Cross\Git\Plugin\Plugin::class,
     ],
     'command' => [
         \Cross\Docker\Commands\SSH::class => [ 'container' => 'packager_workspace' ],
+        \Cross\Git\Commands\Snapshot::class => [ 'is_use_add' => false ],
     ],
 ];
 ```
