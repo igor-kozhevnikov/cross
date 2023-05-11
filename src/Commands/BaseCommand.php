@@ -114,7 +114,7 @@ abstract class BaseCommand extends InitialCommand
      */
     protected function config(string $key, mixed $default = null): mixed
     {
-        return Config::get($this->name() . ':' . $key, $default);
+        return Config::get("{$this->name()}.$key", $default);
     }
 
     /**
