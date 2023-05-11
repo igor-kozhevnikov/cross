@@ -8,6 +8,7 @@ use Cross\Commands\Attributes\Aliases;
 use Cross\Commands\Attributes\Description;
 use Cross\Commands\Attributes\Hidden;
 use Cross\Commands\Attributes\Name;
+use Cross\Commands\Attributes\Setup;
 use Cross\Commands\BaseCommand;
 use Cross\Statuses\Exist;
 use Tests\Helpers\Accessible;
@@ -31,6 +32,20 @@ use Tests\Helpers\Accessible;
 class BaseCommandAttributesTemplate extends BaseCommand
 {
     use Accessible;
+
+    /**
+     * Timeout.
+     */
+    public int $timeout = 0;
+
+    /**
+     * Initialize the timeout.
+     */
+    #[Setup]
+    public function initTimeout(): void
+    {
+        $this->timeout = 100;
+    }
 
     /**
      * @inheritDoc

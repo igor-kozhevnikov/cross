@@ -266,6 +266,17 @@ final class BaseCommandTest extends TestCase
     }
 
     #[Test]
+    #[TestDox('Call setup methods')]
+    public function setupViaAttributes(): void
+    {
+        $command = new BaseCommandAttributesTemplate();
+        $command->timeout = 0;
+        $command->configure();
+
+        $this->assertSame(100, $command->timeout);
+    }
+
+    #[Test]
     #[TestDox('Getting a default prepare code of a command')]
     public function prepare(): void
     {

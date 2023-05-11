@@ -11,6 +11,7 @@ use Cross\Commands\Attributes\Aliases;
 use Cross\Commands\Attributes\Description;
 use Cross\Commands\Attributes\Hidden;
 use Cross\Commands\Attributes\Name;
+use Cross\Commands\Attributes\Setup;
 use Cross\Config\Config;
 use Cross\Messages\Messages;
 use Cross\Messages\MessagesInterface;
@@ -211,7 +212,19 @@ abstract class BaseCommand extends InitialCommand
      */
     protected function setup(): void
     {
-        //
+        $reflection = new ReflectionClass($this);
+
+        foreach ($reflection->getMethods() as $method) {
+            $attributes = $method->getAttributes(Setup::class);
+
+            if (empty($attributes)) {
+                continue;
+            }
+
+            $name = $method->getName();
+
+            $this->$name();
+        }
     }
 
     /**
