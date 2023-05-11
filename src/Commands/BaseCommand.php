@@ -7,11 +7,16 @@ namespace Cross\Commands;
 use Cross\Attributes\Attributes;
 use Cross\Attributes\AttributesInterface;
 use Cross\Attributes\AttributesKeeper;
+use Cross\Commands\Attributes\Aliases;
+use Cross\Commands\Attributes\Description;
+use Cross\Commands\Attributes\Hidden;
+use Cross\Commands\Attributes\Name;
 use Cross\Config\Config;
 use Cross\Messages\Messages;
 use Cross\Messages\MessagesInterface;
 use Cross\Statuses\Exist;
 use Cross\Statuses\Prepare;
+use ReflectionClass;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -67,7 +72,20 @@ abstract class BaseCommand extends InitialCommand
      */
     protected function name(): string
     {
-        return $this->name;
+        if ($this->name) {
+            return $this->name;
+        }
+
+        $attributes = (new ReflectionClass($this))->getAttributes(Name::class);
+
+        if (empty($attributes)) {
+            return $this->name;
+        }
+
+        /** @var Name $name */
+        $name = ($attributes[0])->newInstance();
+
+        return $this->name = $name->value;
     }
 
     /**
@@ -75,7 +93,20 @@ abstract class BaseCommand extends InitialCommand
      */
     protected function description(): string
     {
-        return $this->description;
+        if ($this->description) {
+            return $this->description;
+        }
+
+        $attributes = (new ReflectionClass($this))->getAttributes(Description::class);
+
+        if (empty($attributes)) {
+            return $this->description;
+        }
+
+        /** @var Description $description */
+        $description = ($attributes[0])->newInstance();
+
+        return $this->description = $description->value;
     }
 
     /**
@@ -85,7 +116,20 @@ abstract class BaseCommand extends InitialCommand
      */
     protected function aliases(): array
     {
-        return $this->aliases;
+        if ($this->aliases) {
+            return $this->aliases;
+        }
+
+        $attributes = (new ReflectionClass($this))->getAttributes(Aliases::class);
+
+        if (empty($attributes)) {
+            return $this->aliases;
+        }
+
+        /** @var Aliases $aliases */
+        $aliases = ($attributes[0])->newInstance();
+
+        return $this->aliases = $aliases->value;
     }
 
     /**
@@ -93,7 +137,20 @@ abstract class BaseCommand extends InitialCommand
      */
     protected function hidden(): bool
     {
-        return $this->hidden;
+        if ($this->hidden) {
+            return $this->hidden;
+        }
+
+        $attributes = (new ReflectionClass($this))->getAttributes(Hidden::class);
+
+        if (empty($attributes)) {
+            return $this->hidden;
+        }
+
+        /** @var Hidden $hidden */
+        $hidden = ($attributes[0])->newInstance();
+
+        return $this->hidden = $hidden->value;
     }
 
     /**

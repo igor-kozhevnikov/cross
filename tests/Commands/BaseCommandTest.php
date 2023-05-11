@@ -9,6 +9,10 @@ namespace Tests\Commands;
 use Cross\Attributes\Attribute\Argument\Argument;
 use Cross\Attributes\Attribute\Option\Option;
 use Cross\Attributes\Attributes;
+use Cross\Commands\Attributes\Aliases;
+use Cross\Commands\Attributes\Description;
+use Cross\Commands\Attributes\Hidden;
+use Cross\Commands\Attributes\Name;
 use Cross\Commands\BaseCommand;
 use Cross\Config\Config;
 use Cross\Messages\Messages;
@@ -17,6 +21,8 @@ use Cross\Statuses\Prepare;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
+use ReflectionClass;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputOption;
 use Tests\TestCase;
 
@@ -36,8 +42,8 @@ final class BaseCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Getting a command name')]
-    public function naming(): void
+    #[TestDox('Getting a command name defined via the special property')]
+    public function nameViaProperty(): void
     {
         $name = 'elephant';
 
@@ -50,8 +56,37 @@ final class BaseCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Getting a command description')]
-    public function description(): void
+    #[TestDox('Getting a command name defined via the special attribute')]
+    public function nameViaAttribute(): void
+    {
+        $command = new BaseCommandAttributesTemplate();
+        $command->name = '';
+        $command->configure();
+
+        $reflection = new ReflectionClass($command);
+        $attribute = $reflection->getAttributes(Name::class)[0];
+
+        /** @var Name $name */
+        $name = $attribute->newInstance();
+
+        $this->assertSame($name->value, $command->name);
+        $this->assertSame($name->value, $command->name());
+        $this->assertSame($name->value, $command->getName());
+    }
+
+    #[Test]
+    #[TestDox('Getting a command name defined via the special attribute')]
+    public function nameInvalid(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $command = new class extends BaseCommand { protected function handle(): Exist { return Exist::Success; }};
+        $command->configure();
+    }
+
+    #[Test]
+    #[TestDox('Getting a command description via the special property')]
+    public function descriptionViaProperty(): void
     {
         $description = 'A big animal';
 
@@ -64,8 +99,27 @@ final class BaseCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Getting command aliases')]
-    public function aliases(): void
+    #[TestDox('Getting a command description defined via the special attribute')]
+    public function descriptionViaAttribute(): void
+    {
+        $command = new BaseCommandAttributesTemplate();
+        $command->description = '';
+        $command->configure();
+
+        $reflection = new ReflectionClass($command);
+        $attribute = $reflection->getAttributes(Description::class)[0];
+
+        /** @var Description $description */
+        $description = $attribute->newInstance();
+
+        $this->assertSame($description->value, $command->description);
+        $this->assertSame($description->value, $command->description());
+        $this->assertSame($description->value, $command->getDescription());
+    }
+
+    #[Test]
+    #[TestDox('Getting command aliases via the special property')]
+    public function aliasesViaProperty(): void
     {
         $aliases = ['mammoth'];
 
@@ -78,17 +132,53 @@ final class BaseCommandTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Getting a command hidden flag')]
-    public function hidden(): void
+    #[TestDox('Getting a command aliases defined via the special attribute')]
+    public function aliasesViaAttribute(): void
     {
-        $hidden = (bool) rand(0, 1);
-
-        $command = new BaseCommandTemplate();
-        $command->hidden = $hidden;
+        $command = new BaseCommandAttributesTemplate();
+        $command->aliases = [];
         $command->configure();
 
-        $this->assertSame($hidden, $command->isHidden());
-        $this->assertSame($hidden, $command->hidden());
+        $reflection = new ReflectionClass($command);
+        $attribute = $reflection->getAttributes(Aliases::class)[0];
+
+        /** @var Aliases $aliases */
+        $aliases = $attribute->newInstance();
+
+        $this->assertSame($aliases->value, $command->aliases);
+        $this->assertSame($aliases->value, $command->aliases());
+        $this->assertSame($aliases->value, $command->getAliases());
+    }
+
+    #[Test]
+    #[TestDox('Getting a command hidden flag via the special property')]
+    public function hiddenViaProperty(): void
+    {
+        $command = new BaseCommandTemplate();
+        $command->hidden = false;
+        $command->configure();
+
+        $this->assertSame(false, $command->isHidden());
+        $this->assertSame(false, $command->hidden());
+    }
+
+    #[Test]
+    #[TestDox('Getting a command hidden flag via the special attribute')]
+    public function hiddenViaAttribute(): void
+    {
+        $command = new BaseCommandAttributesTemplate();
+        $command->hidden = false;
+        $command->configure();
+
+        $reflection = new ReflectionClass($command);
+        $attribute = $reflection->getAttributes(Hidden::class)[0];
+
+        /** @var Hidden $hidden */
+        $hidden = $attribute->newInstance();
+
+        $this->assertSame($hidden->value, $command->hidden);
+        $this->assertSame($hidden->value, $command->hidden());
+        $this->assertSame($hidden->value, $command->isHidden());
     }
 
     #[Test]
