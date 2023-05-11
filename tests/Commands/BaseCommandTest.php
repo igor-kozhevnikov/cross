@@ -10,6 +10,7 @@ use Cross\Attributes\Attribute\Argument\Argument;
 use Cross\Attributes\Attribute\Option\Option;
 use Cross\Attributes\Attributes;
 use Cross\Commands\BaseCommand;
+use Cross\Config\Config;
 use Cross\Messages\Messages;
 use Cross\Statuses\Exist;
 use Cross\Statuses\Prepare;
@@ -91,6 +92,22 @@ final class BaseCommandTest extends TestCase
     }
 
     #[Test]
+    #[TestDox('Getting config')]
+    public function config(): void
+    {
+        $commandName = 'read';
+        $configName = 'timeout';
+        $configValue = 400;
+
+        Config::set($commandName, [$configName => $configValue]);
+
+        $command = new BaseCommandTemplate();
+        $command->name = $commandName;
+
+        $this->assertSame($configValue, $command->config($configName));
+    }
+
+    #[Test]
     #[TestDox('Defining command attributes as a AttributesInterface instance')]
     public function attributesAttributesInterface(): void
     {
@@ -157,7 +174,6 @@ final class BaseCommandTest extends TestCase
 
         $this->assertSame($messages, $command->messages());
     }
-
 
     #[Test]
     #[TestDox('Getting a default prepare code of a command')]

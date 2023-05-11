@@ -7,6 +7,7 @@ namespace Cross\Commands;
 use Cross\Attributes\Attributes;
 use Cross\Attributes\AttributesInterface;
 use Cross\Attributes\AttributesKeeper;
+use Cross\Config\Config;
 use Cross\Messages\Messages;
 use Cross\Messages\MessagesInterface;
 use Cross\Statuses\Exist;
@@ -106,6 +107,14 @@ abstract class BaseCommand extends InitialCommand
         $this->setHidden($this->hidden());
         $this->setAttributes();
         $this->setup();
+    }
+
+    /**
+     * Returns a config value.
+     */
+    protected function config(string $key, mixed $default = null): mixed
+    {
+        return Config::get($this->name() . ':' . $key, $default);
     }
 
     /**

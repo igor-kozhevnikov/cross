@@ -26,6 +26,7 @@ use Tests\Helpers\Accessible;
  * @property null|AttributesInterface|AttributesKeeper $attributes
  *
  * @method void configure()
+ * @method mixed config(string $key, mixed $default = null)
  * @method string name()
  * @method string description()
  * @method array aliases()

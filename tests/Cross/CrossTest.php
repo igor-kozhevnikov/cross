@@ -60,7 +60,7 @@ final class CrossTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->application = new Application(self::$composer->getDescription(), self::$composer->getVersion());
+        $this->application = new Application(self::$composer->getDescription());
         $this->cross = new Cross($this->application);
         $this->counter = count($this->application->all());
     }
@@ -71,7 +71,6 @@ final class CrossTest extends TestCase
     {
         $this->assertInstanceOf(Application::class, $this->application);
         $this->assertSame(self::$composer->getDescription(), $this->application->getName());
-        $this->assertSame(self::$composer->getVersion(), $this->application->getVersion());
     }
 
     #[Test]
