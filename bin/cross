@@ -1,33 +1,23 @@
 #!/usr/bin/env php
 <?php
 
-require __DIR__ . '/../src/Composer/Composer.php';
-require __DIR__ . '/../src/Package/Package.php';
+declare(strict_types=1);
+
+require __DIR__ . '/../autoload.php';
 
 use Cross\Cross\Commands\CopyConfig;
 use Cross\Cross\Cross;
-use Cross\Composer\Composer;
 use Cross\Package\Package;
 use Symfony\Component\Console\Application;
 
-// Application composer
-$composer = new Composer(getcwd() . '/composer.json');
-
-// Autoload
-require getcwd() . '/' . $composer->getVendorDirectory() . '/autoload.php';
-
-// Package
 $package = new Package();
+$application = new Application('Library for creating console commands', '1.2.0');
 
-// Package composer
-$composer = new Composer(__DIR__ . '/../composer.json');
-
-// Application
-$application = new Application($composer->getDescription(), '1.0');
-
-// Cross
 $cross = new Cross($application);
 $cross->command(CopyConfig::class);
 $cross->plugins($package->getPlugins());
 $cross->commands($package->getCommands());
-$cross->run();
+
+$status = $cross->run();
+
+exit($status);

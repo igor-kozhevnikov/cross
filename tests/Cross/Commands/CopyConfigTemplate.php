@@ -14,6 +14,7 @@ use Tests\Helpers\Accessible;
 
 /**
  * @property string $destination
+ * @property bool $tty
  */
 class CopyConfigTemplate extends CopyConfig
 {

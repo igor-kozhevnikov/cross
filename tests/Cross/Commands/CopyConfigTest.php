@@ -57,6 +57,7 @@ final class CopyConfigTest extends TestCase
     #[TestDox('Failure copying config due to destination is not valid')]
     public function copyFailure(): void
     {
+        $this->command->tty = false;
         $this->command->destination = '';
 
         $exist = $this->command->run();

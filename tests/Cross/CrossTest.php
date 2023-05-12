@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Cross;
 
-use Cross\Composer\Composer;
 use Cross\Config\Config;
 use Cross\Cross\Cross;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -19,11 +18,6 @@ use Tests\Plugin\BasePluginTemplate;
 #[CoversClass(Cross::class)]
 final class CrossTest extends TestCase
 {
-    /**
-     * Composer config.
-     */
-    private static ?Composer $composer;
-
     /**
      * Cross.
      */
@@ -42,25 +36,9 @@ final class CrossTest extends TestCase
     /**
      * @inheritDoc
      */
-    public static function setUpBeforeClass(): void
-    {
-        self::$composer = new Composer(__DIR__ . '/../../composer.json');
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public static function tearDownAfterClass(): void
-    {
-        self::$composer = null;
-    }
-
-    /**
-     * @inheritDoc
-     */
     protected function setUp(): void
     {
-        $this->application = new Application(self::$composer->getDescription());
+        $this->application = new Application();
         $this->cross = new Cross($this->application);
         $this->counter = count($this->application->all());
     }
@@ -70,7 +48,8 @@ final class CrossTest extends TestCase
     public function application(): void
     {
         $this->assertInstanceOf(Application::class, $this->application);
-        $this->assertSame(self::$composer->getDescription(), $this->application->getName());
+        $this->assertIsString($this->application->getName());
+        $this->assertIsString($this->application->getVersion());
     }
 
     #[Test]
