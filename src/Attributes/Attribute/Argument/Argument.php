@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Cross\Attributes\Attribute\Argument;
 
 use Cross\Attributes\Attribute\Attribute;
-use Fluent\Attributes\FluentSetter;
+use Fluent\Attributes\FluentSetterExtension;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -14,6 +14,9 @@ use Symfony\Component\Console\Input\InputArgument;
  * @method self required()
  * @method self array()
  */
+#[FluentSetterExtension('setMode', 'optional', InputArgument::OPTIONAL)]
+#[FluentSetterExtension('setMode', 'required', InputArgument::REQUIRED)]
+#[FluentSetterExtension('setMode', 'array', InputArgument::IS_ARRAY)]
 class Argument extends Attribute implements ArgumentInterface
 {
     /**
@@ -22,18 +25,6 @@ class Argument extends Attribute implements ArgumentInterface
     public static function make(string $name): self
     {
         return new self($name);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    #[FluentSetter('mode')]
-    #[FluentSetter('optional', InputArgument::OPTIONAL)]
-    #[FluentSetter('required', InputArgument::REQUIRED)]
-    #[FluentSetter('array', InputArgument::IS_ARRAY)]
-    public function setMode(int|string|null $mode): void
-    {
-        parent::setMode($mode);
     }
 
     /**

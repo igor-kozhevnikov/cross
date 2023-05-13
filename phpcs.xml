@@ -4,7 +4,6 @@
     <file>bin</file>
     <file>config</file>
     <file>src</file>
-    <file>tests</file>
 
     <!-- Exception folder patterns -->
     <exclude-pattern>*/vendor/*</exclude-pattern>

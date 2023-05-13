@@ -1,7 +1,5 @@
 <?php
 
-// phpcs:ignoreFile
-
 declare(strict_types=1);
 
 namespace Tests\Commands;
@@ -27,6 +25,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Tests\TestCase;
 
 #[CoversClass(BaseCommand::class)]
+#[CoversClass(Name::class)]
+#[CoversClass(Description::class)]
+#[CoversClass(Aliases::class)]
+#[CoversClass(Hidden::class)]
 final class BaseCommandTest extends TestCase
 {
     #[Test]

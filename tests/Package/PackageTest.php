@@ -12,6 +12,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Tests\TestCase;
 
 #[CoversClass(Package::class)]
+#[CoversClass(InvalidAlternativeConfigException::class)]
 final class PackageTest extends TestCase
 {
     #[Test]
