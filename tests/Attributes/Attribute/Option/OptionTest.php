@@ -50,12 +50,21 @@ final class OptionTest extends TestCase
 
     #[Test]
     #[TestDox('Defining the $mode property as NONE via the fluent setter')]
+    public function mode(): void
+    {
+        $option = new OptionTemplate();
+        $option->mode(InputOption::VALUE_NONE);
+
+        $this->assertSame($option->getMode(), InputOption::VALUE_NONE);
+    }
+
+    #[Test]
+    #[TestDox('Defining the $mode property as NONE via the fluent setter')]
     public function modeNone(): void
     {
         $option = new OptionTemplate();
         $option->none();
 
-        $this->assertIsCallable($option->getFluentAlias('none'));
         $this->assertSame($option->getMode(), InputOption::VALUE_NONE);
     }
 
@@ -66,7 +75,6 @@ final class OptionTest extends TestCase
         $option = new OptionTemplate();
         $option->optional();
 
-        $this->assertIsCallable($option->getFluentAlias('optional'));
         $this->assertSame($option->getMode(), InputOption::VALUE_OPTIONAL);
     }
 
@@ -77,7 +85,6 @@ final class OptionTest extends TestCase
         $option = new OptionTemplate();
         $option->required();
 
-        $this->assertIsCallable($option->getFluentAlias('required'));
         $this->assertSame($option->getMode(), InputOption::VALUE_REQUIRED);
     }
 
@@ -88,7 +95,6 @@ final class OptionTest extends TestCase
         $option = new OptionTemplate();
         $option->array();
 
-        $this->assertIsCallable($option->getFluentAlias('array'));
         $this->assertSame($option->getMode(), InputOption::VALUE_IS_ARRAY);
     }
 
@@ -99,7 +105,6 @@ final class OptionTest extends TestCase
         $option = new OptionTemplate();
         $option->negatable();
 
-        $this->assertIsCallable($option->getFluentAlias('negatable'));
         $this->assertSame($option->getMode(), InputOption::VALUE_NEGATABLE);
     }
 

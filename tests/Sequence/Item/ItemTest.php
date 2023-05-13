@@ -72,18 +72,6 @@ final class ItemTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Defining the $sequence property via the fluent setter')]
-    public function sequenceViaFluentSetter(): void
-    {
-        $sequence = new Sequence();
-
-        $item = new ItemTemplate();
-        $item->sequence($sequence);
-
-        $this->assertSame($sequence, $item->getSequence());
-    }
-
-    #[Test]
     #[TestDox('Defining the positive $isUse property')]
     public function isUseTrue(): void
     {
@@ -104,13 +92,32 @@ final class ItemTest extends TestCase
     }
 
     #[Test]
+    #[TestDox('Defining the positive $isNotUse property')]
+    public function isNotUseTrue(): void
+    {
+        $item = new ItemTemplate();
+        $item->setIsNotUse(true);
+
+        $this->assertSame(true, $item->isNotUse());
+    }
+
+    #[Test]
+    #[TestDox('Defining the negative $isNotUse property')]
+    public function isNotUseFalse(): void
+    {
+        $item = new ItemTemplate();
+        $item->setIsNotUse(false);
+
+        $this->assertSame(false, $item->isNotUse());
+    }
+
+    #[Test]
     #[TestDox('Defining the $isUse property via the when() method')]
     public function isUseViaWhen(): void
     {
         $item = new ItemTemplate();
         $item->when(true);
 
-        $this->assertIsCallable($item->getFluentAlias('when'));
         $this->assertSame(false, $item->isNotUse());
     }
 
@@ -121,7 +128,6 @@ final class ItemTest extends TestCase
         $item = new ItemTemplate();
         $item->whenNot(false);
 
-        $this->assertIsCallable($item->getFluentAlias('when'));
         $this->assertSame(false, $item->isNotUse());
     }
 
@@ -146,7 +152,6 @@ final class ItemTest extends TestCase
         $item = new ItemTemplate();
         $item->with($attributes);
 
-        $this->assertIsCallable($item->getFluentAlias('with'));
         $this->assertSame($attributes, $item->getInput());
     }
 }

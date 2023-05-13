@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Cross\Attributes\Attribute\Argument;
 
-use Closure;
 use Cross\Attributes\Attribute\Attribute;
+use Fluent\Attributes\FluentSetter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -27,14 +27,13 @@ class Argument extends Attribute implements ArgumentInterface
     /**
      * @inheritDoc
      */
-    protected function getFluentAlias(string $name): ?Closure
+    #[FluentSetter('mode')]
+    #[FluentSetter('optional', InputArgument::OPTIONAL)]
+    #[FluentSetter('required', InputArgument::REQUIRED)]
+    #[FluentSetter('array', InputArgument::IS_ARRAY)]
+    public function setMode(int|string|null $mode): void
     {
-        return match ($name) {
-            'optional' => fn () => $this->setMode(InputArgument::OPTIONAL),
-            'required' => fn () => $this->setMode(InputArgument::REQUIRED),
-            'array' => fn () => $this->setMode(InputArgument::IS_ARRAY),
-            default => null,
-        };
+        parent::setMode($mode);
     }
 
     /**

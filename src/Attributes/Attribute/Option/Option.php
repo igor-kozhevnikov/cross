@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Cross\Attributes\Attribute\Option;
 
-use Closure;
 use Cross\Attributes\Attribute\Attribute;
+use Fluent\Attributes\FluentSetter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -35,6 +35,7 @@ class Option extends Attribute implements OptionInterface
     /**
      * Defines the shortcut.
      */
+    #[FluentSetter('shortcut')]
     public function setShortcut(?string $shortcut): void
     {
         $this->shortcut = $shortcut;
@@ -51,16 +52,15 @@ class Option extends Attribute implements OptionInterface
     /**
      * @inheritDoc
      */
-    protected function getFluentAlias(string $name): ?Closure
+    #[FluentSetter('mode')]
+    #[FluentSetter('none', InputOption::VALUE_NONE)]
+    #[FluentSetter('optional', InputOption::VALUE_OPTIONAL)]
+    #[FluentSetter('required', InputOption::VALUE_REQUIRED)]
+    #[FluentSetter('array', InputOption::VALUE_IS_ARRAY)]
+    #[FluentSetter('negatable', InputOption::VALUE_NEGATABLE)]
+    public function setMode(int|string|null $mode): void
     {
-        return match ($name) {
-            'none' => fn() => $this->setMode(InputOption::VALUE_NONE),
-            'optional' => fn() => $this->setMode(InputOption::VALUE_OPTIONAL),
-            'required' => fn() => $this->setMode(InputOption::VALUE_REQUIRED),
-            'array' => fn() => $this->setMode(InputOption::VALUE_IS_ARRAY),
-            'negatable' => fn() => $this->setMode(InputOption::VALUE_NEGATABLE),
-            default => null,
-        };
+        parent::setMode($mode);
     }
 
     /**

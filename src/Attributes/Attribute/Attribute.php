@@ -7,7 +7,8 @@ namespace Cross\Attributes\Attribute;
 use Closure;
 use Cross\Attributes\AttributesInterface;
 use Cross\Attributes\AttributesKeeper;
-use Cross\Fluent\Fluent;
+use Fluent\Attributes\FluentSetter;
+use Fluent\Fluent;
 use Symfony\Component\Console\Completion\CompletionInput;
 use Symfony\Component\Console\Completion\CompletionSuggestions;
 use Symfony\Component\Console\Completion\Suggestion;
@@ -18,7 +19,6 @@ use Symfony\Component\Console\Completion\Suggestion;
  * @method self mode(null|int|string $mode)
  * @method self default(null|string|bool|int|float|array $default)
  * @method self suggestions(array|Closure $suggestions)
- * @method self attributes(AttributesInterface $attributes)
  */
 abstract class Attribute implements AttributeInterface, AttributesKeeper
 {
@@ -70,6 +70,7 @@ abstract class Attribute implements AttributeInterface, AttributesKeeper
     /**
      * Defines the name.
      */
+    #[FluentSetter('name')]
     public function setName(string $name): void
     {
         $this->name = $name;
@@ -86,6 +87,7 @@ abstract class Attribute implements AttributeInterface, AttributesKeeper
     /**
      * Defines the description.
      */
+    #[FluentSetter('description')]
     public function setDescription(string $description): void
     {
         $this->description = $description;
@@ -102,6 +104,7 @@ abstract class Attribute implements AttributeInterface, AttributesKeeper
     /**
      * Defines the mode.
      */
+    #[FluentSetter('mode')]
     public function setMode(null|int|string $mode): void
     {
         $this->mode = $mode;
@@ -120,6 +123,7 @@ abstract class Attribute implements AttributeInterface, AttributesKeeper
      *
      * @param null|string|bool|int|float|array<array-key, mixed> $default
      */
+    #[FluentSetter('default')]
     public function setDefault(null|string|bool|int|float|array $default): void
     {
         $this->default = $default;
@@ -140,6 +144,7 @@ abstract class Attribute implements AttributeInterface, AttributesKeeper
      *
      * @param array<string|Suggestion>|Closure $suggestions
      */
+    #[FluentSetter('suggestions')]
     public function setSuggestions(array|Closure $suggestions): void
     {
         $this->suggestions = $suggestions;

@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Cross\Sequence\Item;
 
-use Closure;
-use Cross\Fluent\Fluent;
 use Cross\Sequence\SequenceInterface;
 use Cross\Sequence\SequenceKeeper;
+use Fluent\Attributes\FluentSetter;
+use Fluent\Fluent;
 
 /**
  * @method self command(string $command)
- * @method self sequence(SequenceInterface $sequence)
  * @method self input(array $input)
  * @method self with(array $attributes)
  * @method self isUse(bool $isUse)
@@ -62,19 +61,6 @@ class Item implements ItemInterface, SequenceKeeper
     }
 
     /**
-     * @inheritDoc
-     */
-    protected function getFluentAlias(string $name): ?Closure
-    {
-        return match ($name) {
-            'with' => $this->setInput(...),
-            'when' => fn (bool $isUse) => $this->setIsUse($isUse),
-            'whenNot' => fn (bool $isNotUse) => $this->setIsUse(! $isNotUse),
-            default => null,
-        };
-    }
-
-    /**
      * Defines the sequence.
      */
     public function setSequence(SequenceInterface $sequence): void
@@ -93,6 +79,7 @@ class Item implements ItemInterface, SequenceKeeper
     /**
      * Defines a command.
      */
+    #[FluentSetter('command')]
     public function setCommand(string $command): void
     {
         $this->command = $command;
@@ -109,9 +96,20 @@ class Item implements ItemInterface, SequenceKeeper
     /**
      * Defines whether a command will be used.
      */
+    #[FluentSetter('isUse')]
+    #[FluentSetter('when')]
     public function setIsUse(bool $isUse): void
     {
         $this->isUse = $isUse;
+    }
+
+    /**
+     * Defines whether a command will not be used.
+     */
+    #[FluentSetter('whenNot')]
+    public function setIsNotUse(bool $isNotUse): void
+    {
+        $this->setIsUse(! $isNotUse);
     }
 
     /**
@@ -127,6 +125,8 @@ class Item implements ItemInterface, SequenceKeeper
      *
      * @param array<string, int|string> $input
      */
+    #[FluentSetter('input')]
+    #[FluentSetter('with')]
     public function setInput(array $input): void
     {
         $this->input = $input;

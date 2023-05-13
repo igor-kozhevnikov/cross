@@ -26,12 +26,21 @@ final class ArgumentTest extends TestCase
 
     #[Test]
     #[TestDox('Defining the $mode property as REQUIRED via the fluent setter')]
+    public function mode(): void
+    {
+        $argument = new ArgumentTemplate();
+        $argument->mode(InputArgument::REQUIRED);
+
+        $this->assertSame($argument->getMode(), InputArgument::REQUIRED);
+    }
+
+    #[Test]
+    #[TestDox('Defining the $mode property as REQUIRED via the fluent setter')]
     public function modeRequired(): void
     {
         $argument = new ArgumentTemplate();
         $argument->required();
 
-        $this->assertIsCallable($argument->getFluentAlias('required'));
         $this->assertSame($argument->getMode(), InputArgument::REQUIRED);
     }
 
@@ -42,7 +51,6 @@ final class ArgumentTest extends TestCase
         $argument = new ArgumentTemplate();
         $argument->optional();
 
-        $this->assertIsCallable($argument->getFluentAlias('optional'));
         $this->assertSame($argument->getMode(), InputArgument::OPTIONAL);
     }
 
@@ -53,7 +61,6 @@ final class ArgumentTest extends TestCase
         $argument = new ArgumentTemplate();
         $argument->array();
 
-        $this->assertIsCallable($argument->getFluentAlias('array'));
         $this->assertSame($argument->getMode(), InputArgument::IS_ARRAY);
     }
 

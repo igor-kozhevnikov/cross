@@ -145,14 +145,4 @@ final class AttributeTest extends TestCase
 
         $this->assertInstanceOf(AttributesInterface::class, $attribute->getAttributes());
     }
-
-    #[Test]
-    #[TestDox('Defining the $attributes property via the fluent setter')]
-    public function attributesViaFluentSetter(): void
-    {
-        $attribute = new AttributeTemplate();
-        $attribute->attributes(new Attributes());
-
-        $this->assertInstanceOf(AttributesInterface::class, $attribute->getAttributes());
-    }
 }

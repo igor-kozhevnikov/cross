@@ -16,12 +16,4 @@ class ItemTemplate extends Item
     {
         parent::__construct($this->command = $command ?: (string) rand());
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function getFluentAlias(string $name): ?Closure
-    {
-        return parent::getFluentAlias($name);
-    }
 }

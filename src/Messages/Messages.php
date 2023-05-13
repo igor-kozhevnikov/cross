@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Cross\Messages;
 
-use Cross\Fluent\Fluent;
+use Fluent\Attributes\FluentSetter;
+use Fluent\Fluent;
 
 /**
  * @method self success(?string $message)
@@ -27,6 +28,7 @@ class Messages implements MessagesInterface
     /**
      * Define a success message.
      */
+    #[FluentSetter('success')]
     public function setSuccess(?string $message): void
     {
         $this->success = $message;
@@ -51,6 +53,7 @@ class Messages implements MessagesInterface
     /**
      * Defines an error message.
      */
+    #[FluentSetter('error')]
     public function setError(?string $message): void
     {
         $this->error = $message;
