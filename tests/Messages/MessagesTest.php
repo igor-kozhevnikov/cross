@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Messages;
 
 use Cross\Messages\Messages;
+use Cross\Statuses\Prepare;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -37,5 +38,12 @@ final class MessagesTest extends TestCase
 
         $this->assertTrue($messages->hasError());
         $this->assertSame($error, $messages->getError());
+    }
+
+    #[Test]
+    #[TestDox('Returning the stop case of Prepare')]
+    public function stop(): void
+    {
+        $this->assertSame(Prepare::Stop, (new Messages())->stop());
     }
 }

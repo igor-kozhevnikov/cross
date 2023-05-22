@@ -21,7 +21,7 @@ class Package
     /**
      * Returns the base config path.
      */
-    final public function getBaseConfigPath(Extension|string $extension): string
+    public function getBaseConfigPath(Extension|string $extension): string
     {
         if (is_string($extension)) {
             $extension = Extension::from($extension);
