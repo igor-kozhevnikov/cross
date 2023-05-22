@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Cross\Commands;
 
-use Cross\Cross\Commands\CopyConfig;
+use Cross\Cross\Commands\Config;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(CopyConfig::class)]
+#[CoversClass(Config::class)]
 final class CopyConfigTest extends TestCase
 {
     /**
@@ -26,7 +26,7 @@ final class CopyConfigTest extends TestCase
     /**
      * Command.
      */
-    private CopyConfigTemplate $command;
+    private ConfigTemplate $command;
 
     /**
      * @inheritDoc
@@ -38,7 +38,7 @@ final class CopyConfigTest extends TestCase
 
         unlink($this->destination);
 
-        $this->command = new CopyConfigTemplate();
+        $this->command = new ConfigTemplate();
         $this->command->destination = $this->destination;
     }
 

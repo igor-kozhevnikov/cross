@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 require __DIR__ . '/../autoload.php';
 
-use Cross\Cross\Commands\CopyConfig;
+use Cross\Cross\Commands\Config;
 use Cross\Cross\Cross;
 use Cross\Package\Package;
 use Symfony\Component\Console\Application;
@@ -14,7 +14,7 @@ $package = new Package();
 $application = new Application('Library for creating console commands', '1.2.0');
 
 $cross = new Cross($application);
-$cross->command(CopyConfig::class);
+$cross->command(Config::class);
 $cross->plugins($package->getPlugins());
 $cross->commands($package->getCommands());
 

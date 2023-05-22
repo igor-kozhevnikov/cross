@@ -17,7 +17,7 @@ composer required igor-kozhevnikov/cross
 Run the follow command to create config.
 
 ```shell
-./vendor/bin/cross cross:config
+./vendor/bin/cross config
 ```
 
 A `cross.php` config file locates in the root directory.
