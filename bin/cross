@@ -11,6 +11,8 @@ use Cross\Package\Package;
 use Symfony\Component\Console\Application;
 
 $package = new Package();
+$package->configure();
+
 $application = new Application('Library for creating console commands', '1.2.0');
 
 $cross = new Cross($application);

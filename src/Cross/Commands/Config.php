@@ -12,9 +12,11 @@ use Cross\Commands\Attributes\Name;
 use Cross\Commands\Attributes\Setup;
 use Cross\Commands\ShellCommand;
 use Cross\Messages\Messages;
+use Cross\Package\Config\Extension;
 use Cross\Package\Package;
 use Cross\Statuses\Exist;
 use Cross\Statuses\Prepare;
+use ValueError;
 
 /**
  * @method Messages messages()
@@ -48,7 +50,10 @@ class Config extends ShellCommand
     protected function attributes(): AttributesInterface|AttributesKeeper
     {
         return Attributes::make()
-            ->argument('ext')->optional()->default('php')->description('Extension of config file');
+            ->argument('extension')
+                ->optional()
+                ->default(Extension::PHP->value)
+                ->description('Extension of config file');
     }
 
     /**
@@ -56,15 +61,21 @@ class Config extends ShellCommand
      */
     protected function prepare(): Prepare
     {
-        $exist = file_exists($this->package->getAlternativeConfigPath());
+        $extension = $this->argument('extension');
 
-        if (! $exist) {
-            return Prepare::Continue;
+        try {
+            $path = $this->package->getAlternativeConfigPath($extension);
+        } catch (ValueError) {
+            return $this->messages()->error("Invalid extension '$extension'")->stop();
         }
 
-        $this->messages()->error('Config already exists');
+        $exist = file_exists($path);
 
-        return Prepare::Stop;
+        if ($exist) {
+            return $this->messages()->error('Config already exists')->stop();
+        }
+
+        return Prepare::Continue;
     }
 
     /**
@@ -73,8 +84,9 @@ class Config extends ShellCommand
      */
     protected function command(): string|array
     {
-        $source = $this->package->getBaseConfigPath();
-        $destination = $this->package->getAlternativeConfigPath();
+        $extension = $this->argument('extension');
+        $source = $this->package->getBaseConfigPath($extension);
+        $destination = $this->package->getAlternativeConfigPath($extension);
 
         return "cp $source $destination";
     }

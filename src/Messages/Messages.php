@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cross\Messages;
 
+use Cross\Statuses\Prepare;
 use Fluent\Attributes\FluentSetter;
 use Fluent\Fluent;
 
@@ -73,5 +74,13 @@ class Messages implements MessagesInterface
     public function getError(): ?string
     {
         return $this->error;
+    }
+
+    /**
+     * Returns the stop case.
+     */
+    public function stop(): Prepare
+    {
+        return Prepare::Stop;
     }
 }

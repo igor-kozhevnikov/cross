@@ -9,7 +9,7 @@ use Tests\Helpers\Accessible;
 
 /**
  * @method array fetchBaseConfig()
- * @method array fetchAlternativeConfig(?string $alternative = null)
+ * @method array fetchAlternativeConfig(?string $path = null)
  */
 class PackageTemplate extends Package
 {

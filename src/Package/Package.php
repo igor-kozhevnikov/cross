@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cross\Package;
 
+use Cross\Package\Config\Extension;
 use Cross\Package\Exceptions\InvalidAlternativeConfigException;
 use Cross\Plugin\PluginInterface;
 use Symfony\Component\Console\Command\Command;
@@ -18,29 +19,27 @@ class Package
     protected array $config;
 
     /**
-     * Constructor.
-     *
-     * @throws InvalidAlternativeConfigException
-     */
-    public function __construct(?string $alternative = null)
-    {
-        $this->config = $this->mergeConfig($alternative);
-    }
-
-    /**
      * Returns the base config path.
      */
-    final public function getBaseConfigPath(): string
+    final public function getBaseConfigPath(Extension|string $extension): string
     {
-        return __DIR__ . '/../../config/cross.php';
+        if (is_string($extension)) {
+            $extension = Extension::from($extension);
+        }
+
+        return __DIR__ . "/../../config/cross.$extension->value";
     }
 
     /**
      * Returns the alternative config path.
      */
-    public function getAlternativeConfigPath(): string
+    public function getAlternativeConfigPath(Extension|string $extension): string
     {
-        return getcwd() . '/cross.php';
+        if (is_string($extension)) {
+            $extension = Extension::from($extension);
+        }
+
+        return getcwd() . "/cross.$extension->value";
     }
 
     /**
@@ -50,7 +49,7 @@ class Package
      */
     protected function fetchBaseConfig(): array
     {
-        return require $this->getBaseConfigPath();
+        return require $this->getBaseConfigPath(Extension::PHP);
     }
 
     /**
@@ -60,17 +59,20 @@ class Package
      *
      * @throws InvalidAlternativeConfigException
      */
-    protected function fetchAlternativeConfig(?string $alternative = null): array
+    protected function fetchAlternativeConfig(): array
     {
-        if (is_null($alternative)) {
-            $alternative = $this->getAlternativeConfigPath();
-        }
+        $extension = $this->getAvailableAlternativeConfigExtension();
 
-        if (! is_file($alternative)) {
+        if (is_null($extension)) {
             return [];
         }
 
-        $config = require $alternative;
+        $path = $this->getAlternativeConfigPath($extension);
+
+        $config = match ($extension) {
+            Extension::PHP => require $path,
+            Extension::JSON => json_decode(file_get_contents($path), true),
+        };
 
         if (! is_array($config)) {
             throw new InvalidAlternativeConfigException();
@@ -80,22 +82,34 @@ class Package
     }
 
     /**
+     * Fetches an alternative config.
+     */
+    protected function getAvailableAlternativeConfigExtension(): ?Extension
+    {
+        $extensions = Extension::cases();
+
+        foreach ($extensions as $extension) {
+            if (is_file($this->getAlternativeConfigPath($extension))) {
+                return $extension;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Merges configs.
      *
      * @return array<string, mixed>
      *
      * @throws InvalidAlternativeConfigException
      */
-    protected function mergeConfig(?string $alternative = null): array
+    public function configure(): void
     {
         $base = $this->fetchBaseConfig();
-        $alternative = $this->fetchAlternativeConfig($alternative);
+        $alternative = $this->fetchAlternativeConfig();
 
-        if (empty($alternative)) {
-            return $base;
-        }
-
-        return array_merge($base, $alternative);
+        $this->config = array_merge($base, $alternative);
     }
 
     /**
