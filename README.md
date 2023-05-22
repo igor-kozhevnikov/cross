@@ -16,11 +16,13 @@ composer required igor-kozhevnikov/cross
 
 Run the follow command to create config.
 
+Available extensions: `php` `json`.
+
 ```shell
-./vendor/bin/cross config
+./vendor/bin/cross config [<extension>]
 ```
 
-A `cross.php` config file locates in the root directory.
+A `cross.php` or `cross.json` config file locates in the root directory.
 
 The `plugins` and `commands` array contains definitions and configurations of 
 plugins and commands.
@@ -42,6 +44,19 @@ return [
 ];
 ```
 
+```json
+{
+    "plugins": {
+        "\\Cross\\Docker\\Plugin\\Plugin": { "env_path": "docker/.env" },
+        "\\Cross\\Git\\Plugin\\Plugin": {}
+    },
+    "commands": {
+        "\\Cross\\Docker\\Commands\\SSH": { "container": "packager_workspace" },
+        "\\Cross\\Git\\Commands\\Snapshot": { "is_use_add": false }
+    }
+}
+```
+
 ## Commands
 
 ### Display all command
@@ -53,8 +68,12 @@ return [
 ### Make config
 
 ```shell
-./vendor/bin/cross cross:config
+./vendor/bin/cross config [<extension>]
 ```
+
+Arguments:
+
+- `extension` Extension of config file. Available values: `php` `json`.
 
 ## Examples
 

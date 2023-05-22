@@ -82,7 +82,7 @@ class Package
     }
 
     /**
-     * Fetches an alternative config.
+     * Fetches an alternative config paths and returns an existing file extension.
      */
     protected function getAvailableAlternativeConfigExtension(): ?Extension
     {
