@@ -82,6 +82,24 @@ You can see commands based on this package in the following repositories:
 - [Cross for Docker](https://github.com/igor-kozhevnikov/cross-docker)
 - [Cross for Git](https://github.com/igor-kozhevnikov/cross-git)
 
+## Alias
+
+Add the following code to `~/.zshrc` file to create the `x` alias.
+
+```zsh
+function chpwd() {
+  if [[ -f ./vendor/bin/cross ]]; then
+    eval "alias x='./vendor/bin/cross'"
+  elif [[ -f ~/.composer/vendor/bin/cross ]]; then
+    eval "alias x='~/.composer/vendor/bin/cross'"
+  else
+    eval "alias x='echo The Cross package is not installed'"
+  fi
+}
+```
+
+And use `x command` instead of `./vendor/bin/cross command`.
+
 ## License
 
 The Cross is open-sourced software licensed under the [MIT license](https://opensource.org/license/mit/).
