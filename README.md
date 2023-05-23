@@ -87,8 +87,8 @@ You can see commands based on this package in the following repositories:
 Add the following code to `~/.zshrc` file to create the `x` alias.
 
 ```sh
-CROSS_LOCAL="./vendor/bin/cross"
-CROSS_GLOBAL="~/.composer/vendor/bin/cross"
+CROSS_LOCAL=./vendor/bin/cross
+CROSS_GLOBAL=~/.composer/vendor/bin/cross
 
 cross() {
   if [[ -f $CROSS_LOCAL ]]; then
