@@ -86,16 +86,21 @@ You can see commands based on this package in the following repositories:
 
 Add the following code to `~/.zshrc` file to create the `x` alias.
 
-```zsh
-function chpwd() {
-  if [[ -f ./vendor/bin/cross ]]; then
-    eval "alias x='./vendor/bin/cross'"
-  elif [[ -f ~/.composer/vendor/bin/cross ]]; then
-    eval "alias x='~/.composer/vendor/bin/cross'"
+```sh
+CROSS_LOCAL="./vendor/bin/cross"
+CROSS_GLOBAL="~/.composer/vendor/bin/cross"
+
+cross() {
+  if [[ -f $CROSS_LOCAL ]]; then
+    eval "alias x='${CROSS_LOCAL}'"
+  elif [[ -f $CROSS_GLOBAL ]]; then
+    eval "alias x='${CROSS_GLOBAL}'"
   else
     eval "alias x='echo The Cross package is not installed'"
   fi
 }
+
+add-zsh-hook chpwd cross
 ```
 
 And use `x command` instead of `./vendor/bin/cross command`.
