@@ -74,6 +74,14 @@ final class Config
     }
 
     /**
+     * Checks if a value exists.
+     */
+    public static function has(string $key): bool
+    {
+        return isset(self::getInstance()->config[$key]);
+    }
+
+    /**
      * Returns a value by a key.
      */
     public static function get(string $key, mixed $default = null): mixed

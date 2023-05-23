@@ -59,6 +59,7 @@ final class ConfigTest extends TestCase
 
         $key = $key == '_' ? $key : "_.$key";
 
+        $this->assertTrue(Config::has($key));
         $this->assertSame($value, Config::get($key));
     }
 
