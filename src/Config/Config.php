@@ -78,7 +78,7 @@ final class Config
      */
     public static function has(string $key): bool
     {
-        return isset(self::getInstance()->config[$key]);
+        return (bool) self::get($key);
     }
 
     /**
