@@ -101,6 +101,7 @@ cross() {
 }
 
 add-zsh-hook chpwd cross
+eval cross
 ```
 
 And use `x command` instead of `./vendor/bin/cross command`.
