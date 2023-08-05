@@ -284,6 +284,6 @@ abstract class BaseCommand extends InitialCommand
 
         $this->showMessages();
 
-        return $exist->value;
+        return $exist->getCode();
     }
 }

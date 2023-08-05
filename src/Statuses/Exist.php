@@ -4,18 +4,42 @@ declare(strict_types=1);
 
 namespace Cross\Statuses;
 
-enum Exist: int
+enum Exist
 {
-    case Success = 0;
-    case Failure = 1;
-    case Invalid = 2;
+    case Success;
+    case Failure;
+    case Invalid;
+
+    /**
+     * Make case by a code.
+     */
+    public static function makeByCode(int $code): self
+    {
+        return match ($code) {
+            0 => self::Success,
+            1 => self::Failure,
+            default => self::Invalid,
+        };
+    }
+
+    /**
+     * Returns a code.
+     */
+    public function getCode(): int
+    {
+        return match ($this) {
+            self::Success => 0,
+            self::Failure => 1,
+            self::Invalid => 2,
+        };
+    }
 
     /**
      * Returns true if the code is success.
      */
     public function isSuccess(): bool
     {
-        return Exist::Success == $this;
+        return self::Success === $this;
     }
 
     /**
@@ -31,11 +55,11 @@ enum Exist: int
      */
     public static function isEqualSuccess(Exist|int $value): bool
     {
-        if ($value instanceof Exist) {
-            return $value === Exist::Success;
+        if ($value instanceof self) {
+            return $value === self::Success;
         }
 
-        return $value === Exist::Success->value;
+        return $value === self::Success->getCode();
     }
 
     /**
@@ -43,6 +67,6 @@ enum Exist: int
      */
     public static function isNotEqualSuccess(Exist|int $value): bool
     {
-        return ! Exist::isEqualSuccess($value);
+        return ! self::isEqualSuccess($value);
     }
 }

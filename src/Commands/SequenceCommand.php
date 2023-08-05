@@ -35,7 +35,7 @@ abstract class SequenceCommand extends BaseCommand
             $command = $this->getApplication()->find($item->getCommand());
             $input = new ArrayInput($item->getInput());
             $code = $command->run($input, $this->output());
-            $exist = Exist::from($code);
+            $exist = Exist::makeByCode($code);
 
             if (Exist::isNotEqualSuccess($exist)) {
                 return $exist;

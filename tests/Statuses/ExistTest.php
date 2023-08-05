@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Statuses;
 
 use Cross\Statuses\Exist;
+use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -17,9 +18,9 @@ final class ExistTest extends TestCase
     #[TestDox('Correct values')]
     public function values(): void
     {
-        $this->assertSame(0, Exist::Success->value);
-        $this->assertSame(1, Exist::Failure->value);
-        $this->assertSame(2, Exist::Invalid->value);
+        $this->assertSame(0, Exist::Success->getCode());
+        $this->assertSame(1, Exist::Failure->getCode());
+        $this->assertSame(2, Exist::Invalid->getCode());
     }
 
     #[Test]

@@ -21,6 +21,11 @@ class ConfigTemplate extends Config
     use Accessible;
 
     /**
+     * TTY.
+     */
+    public bool $tty = true;
+
+    /**
      * Name.
      */
     protected string $name = 'config';

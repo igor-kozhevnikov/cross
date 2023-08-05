@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Exception\ExceptionInterface;
 use Tests\Package\PackageTemplate;
 
 #[CoversClass(Config::class)]

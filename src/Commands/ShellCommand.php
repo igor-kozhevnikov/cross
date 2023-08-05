@@ -118,6 +118,6 @@ abstract class ShellCommand extends BaseCommand
 
         $code = $process->run();
 
-        return Exist::from($code);
+        return Exist::makeByCode($code);
     }
 }
