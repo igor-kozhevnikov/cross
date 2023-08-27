@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cross\Config;
 
-use Exception;
+use RuntimeException;
 
 final class Config
 {
@@ -40,11 +40,12 @@ final class Config
      * Unserialize.
      *
      * @param array<string, mixed> $data
-     * @throws Exception
+     *
+     * @throws RuntimeException
      */
     public function __unserialize(array $data): void
     {
-        throw new Exception('Cannot unserialize (unserialize)');
+        throw new RuntimeException('Cannot unserialize (unserialize)');
     }
 
     /**

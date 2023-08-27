@@ -7,6 +7,7 @@ namespace Cross\Cross;
 use Cross\Config\Config;
 use Cross\Plugin\PluginInterface;
 use Exception;
+use RuntimeException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 
@@ -90,9 +91,8 @@ class Cross
             $command = new $command();
         }
 
-        $old = Config::get($command->getName(), []);
-
-        Config::set($command->getName(), array_merge($old, $config));
+        $this->defineConfig($command, $config);
+        $this->defineAliases($command, $config);
 
         $this->application->add($command);
     }
@@ -104,5 +104,43 @@ class Cross
     public function run(): int
     {
         return $this->application->run();
+    }
+
+    /**
+     * Returns a config.
+     *
+     * @param array<string, mixed> $config
+     */
+    private function defineConfig(Command $command, array $config): void
+    {
+        $general = Config::get($command->getName(), []);
+        $config = array_merge($general, $config);
+
+        Config::set($command->getName(), $config);
+    }
+
+    /**
+     * Returns aliases.
+     *
+     * @param array<string, mixed> $config
+     */
+    private function defineAliases(Command $command, array $config): void
+    {
+        $key = 'aliases';
+
+        if (! isset($config[$key])) {
+            return;
+        }
+
+        if (! $config[$key]) {
+            $command->setAliases([]);
+            return;
+        }
+
+        if (! is_array($config[$key])) {
+            throw new RuntimeException('Is expected an array of aliases');
+        }
+
+        $command->setAliases($config[$key]);
     }
 }
