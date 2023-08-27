@@ -7,6 +7,7 @@ namespace Cross\Package;
 use Cross\Package\Config\Extension;
 use Cross\Package\Exceptions\InvalidAlternativeConfigException;
 use Cross\Plugin\PluginInterface;
+use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 
 class Package
@@ -112,14 +113,35 @@ class Package
         $this->config = array_merge($base, $alternative);
     }
 
+    public function autoload(): void
+    {
+        $autoload = $this->getConfig('autoload', []);
+
+        if (! $autoload) {
+            return;
+        }
+
+        if (! is_array($autoload)) {
+            throw new RuntimeException('Is expected an array');
+        }
+
+        foreach ($autoload as $file) {
+            require $file;
+        }
+    }
+
     /**
      * Returns config.
      *
      * @return array<string, mixed>
      */
-    public function getConfig(): array
+    public function getConfig(?string $key = null, mixed $default = null): mixed
     {
-        return $this->config;
+        if (! $key) {
+            return $this->config ?? [];
+        }
+
+        return $this->config[$key] ?? $default;
     }
 
     /**
@@ -129,7 +151,7 @@ class Package
      */
     public function getPlugins(): array
     {
-        return $this->getConfig()['plugins'] ?? [];
+        return $this->getConfig('plugins', []);
     }
 
     /**
@@ -139,6 +161,6 @@ class Package
      */
     public function getCommands(): array
     {
-        return $this->getConfig()['commands'] ?? [];
+        return $this->getConfig('commands', []);
     }
 }

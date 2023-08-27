@@ -116,6 +116,20 @@ final class CrossTest extends TestCase
     }
 
     #[Test]
+    #[TestDox('Adding a command config')]
+    public function commandConfig(): void
+    {
+        $this->markTestIncomplete();
+    }
+
+    #[Test]
+    #[TestDox('Adding command aliases')]
+    public function commandAliases(): void
+    {
+        $this->markTestIncomplete();
+    }
+
+    #[Test]
     #[TestDox('Running an application from the Cross instance')]
     public function running(): void
     {

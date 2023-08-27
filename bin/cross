@@ -12,8 +12,9 @@ use Symfony\Component\Console\Application;
 
 $package = new Package();
 $package->configure();
+$package->autoload();
 
-$application = new Application('Library for creating console commands', '1.2.0');
+$application = new Application('Library for creating console commands', '1.3.0');
 
 $cross = new Cross($application);
 $cross->command(Config::class);

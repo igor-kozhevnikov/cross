@@ -138,12 +138,19 @@ final class PackageTest extends TestCase
     #[TestDox('Getting the initial configuration')]
     public function config(): void
     {
-        $config = ['plugins' => [], 'commands' => []];
+        $config = ['autoload' => [], 'plugins' => [], 'commands' => []];
 
         $package = new Package();
         $package->configure();
 
         $this->assertSame($config, $package->getConfig());
+    }
+
+    #[Test]
+    #[TestDox('Autoload another classes')]
+    public function autoload(): void
+    {
+        $this->markTestIncomplete();
     }
 
     #[Test]
