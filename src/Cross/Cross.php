@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Cross\Cross;
 
 use Cross\Config\Config;
+use Cross\Cross\Exceptions\InvalidAliasesException;
+use Cross\Cross\Exceptions\InvalidAliasException;
 use Cross\Plugin\PluginInterface;
 use Exception;
-use RuntimeException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 
@@ -30,6 +31,9 @@ class Cross
      * Sets plugins.
      *
      * @param array<int, class-string|PluginInterface>|array<class-string, array<string, mixed>> $plugins
+     *
+     * @throws InvalidAliasesException
+     * @throws InvalidAliasException
      */
     public function plugins(array $plugins): void
     {
@@ -46,6 +50,9 @@ class Cross
      * Sets a plugin.
      *
      * @param array<string, mixed> $config
+     *
+     * @throws InvalidAliasesException
+     * @throws InvalidAliasException
      */
     public function plugin(string|PluginInterface $plugin, array $config = []): void
     {
@@ -68,6 +75,9 @@ class Cross
      * Sets commands.
      *
      * @param array<int, class-string|Command>|array<class-string, array<string, mixed>> $commands
+     *
+     * @throws InvalidAliasesException
+     * @throws InvalidAliasException
      */
     public function commands(array $commands): void
     {
@@ -84,6 +94,9 @@ class Cross
      * Adds a command.
      *
      * @param array<string, mixed> $config
+     *
+     * @throws InvalidAliasesException
+     * @throws InvalidAliasException
      */
     public function command(string|Command $command, array $config = []): void
     {
@@ -123,6 +136,9 @@ class Cross
      * Returns aliases.
      *
      * @param array<string, mixed> $config
+     *
+     * @throws InvalidAliasesException
+     * @throws InvalidAliasException
      */
     private function defineAliases(Command $command, array $config): void
     {
@@ -132,15 +148,26 @@ class Cross
             return;
         }
 
-        if (! $config[$key]) {
-            $command->setAliases([]);
-            return;
+        $aliases = $config[$key];
+
+        if (! $aliases) {
+            $aliases = [];
         }
 
-        if (! is_array($config[$key])) {
-            throw new RuntimeException('Is expected an array of aliases');
+        if (is_string($aliases)) {
+            $aliases = (array) $aliases;
         }
 
-        $command->setAliases($config[$key]);
+        if (! is_array($aliases)) {
+            throw new InvalidAliasesException();
+        }
+
+        foreach ($aliases as $alias) {
+            if (! is_string($alias) || empty(trim($alias))) {
+                throw new InvalidAliasException();
+            }
+        }
+
+        $command->setAliases($aliases);
     }
 }

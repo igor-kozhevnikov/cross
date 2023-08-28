@@ -7,7 +7,7 @@ namespace Cross\Package;
 use Cross\Package\Config\Extension;
 use Cross\Package\Exceptions\InvalidAlternativeConfigException;
 use Cross\Plugin\PluginInterface;
-use RuntimeException;
+use JsonException;
 use Symfony\Component\Console\Command\Command;
 
 class Package
@@ -59,6 +59,7 @@ class Package
      * @return array<string, mixed>
      *
      * @throws InvalidAlternativeConfigException
+     * @throws JsonException
      */
     protected function fetchAlternativeConfig(): array
     {
@@ -72,7 +73,7 @@ class Package
 
         $config = match ($extension) {
             Extension::PHP => require $path,
-            Extension::JSON => json_decode(file_get_contents($path), true),
+            Extension::JSON => json_decode(file_get_contents($path), true, 512, JSON_THROW_ON_ERROR),
         };
 
         if (! is_array($config)) {
@@ -101,9 +102,8 @@ class Package
     /**
      * Merges configs.
      *
-     * @return array<string, mixed>
-     *
      * @throws InvalidAlternativeConfigException
+     * @throws JsonException
      */
     public function configure(): void
     {
@@ -113,6 +113,11 @@ class Package
         $this->config = array_merge($base, $alternative);
     }
 
+    /**
+     * Autoload classes.
+     *
+     * @throws InvalidAlternativeConfigException
+     */
     public function autoload(): void
     {
         /** @var string[]|string $autoload */
@@ -127,7 +132,7 @@ class Package
         }
 
         if (! is_array($autoload)) {
-            throw new RuntimeException('Is expected an array');
+            throw new InvalidAlternativeConfigException();
         }
 
         foreach ($autoload as $file) {
