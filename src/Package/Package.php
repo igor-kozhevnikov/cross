@@ -115,10 +115,15 @@ class Package
 
     public function autoload(): void
     {
+        /** @var string[]|string $autoload */
         $autoload = $this->getConfig('autoload', []);
 
         if (! $autoload) {
             return;
+        }
+
+        if (is_string($autoload)) {
+            $autoload = (array) $autoload;
         }
 
         if (! is_array($autoload)) {
