@@ -55,7 +55,7 @@ class Sequence implements SequenceInterface
      */
     public function add(ItemInterface $item): void
     {
-        $this->items[$item->getCommand()] = $item;
+        $this->items[] = $item;
     }
 
     /**
@@ -63,7 +63,13 @@ class Sequence implements SequenceInterface
      */
     public function get(string $command): ?ItemInterface
     {
-        return $this->items[$command] ?? null;
+        foreach ($this->items as $item) {
+            if ($item->getCommand() === $command) {
+                return $item;
+            }
+        }
+
+        return null;
     }
 
     /**
