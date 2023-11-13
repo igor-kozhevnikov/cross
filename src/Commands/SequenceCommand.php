@@ -7,6 +7,7 @@ namespace Cross\Commands;
 use Cross\Sequence\SequenceInterface;
 use Cross\Sequence\SequenceKeeper;
 use Cross\Statuses\Exist;
+use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 
 abstract class SequenceCommand extends BaseCommand
@@ -18,6 +19,8 @@ abstract class SequenceCommand extends BaseCommand
 
     /**
      * @inheritDoc
+     *
+     * @throws ExceptionInterface
      */
     protected function handle(): Exist
     {
@@ -32,7 +35,7 @@ abstract class SequenceCommand extends BaseCommand
                 continue;
             }
 
-            $command = $this->getApplication()->find($item->getCommand());
+            $command = $this->getApplication()?->find($item->getCommand());
             $input = new ArrayInput($item->getInput());
             $code = $command->run($input, $this->output());
             $exist = Exist::makeByCode($code);

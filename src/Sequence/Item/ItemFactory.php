@@ -16,10 +16,10 @@ trait ItemFactory
     /**
      * Makes an item.
      */
-    public function item(string $command): Item
+    public function item(string $command, mixed ...$arguments): Item
     {
         if (class_exists($command) && method_exists($command, 'getName')) {
-            $command = (new $command())->getName();
+            $command = (new $command(...$arguments))->getName();
         }
 
         $item = new Item($command);
