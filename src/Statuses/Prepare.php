@@ -15,7 +15,7 @@ enum Prepare
      */
     public function isContinue(): bool
     {
-        return self::Continue == $this;
+        return self::Continue === $this;
     }
 
     /**
