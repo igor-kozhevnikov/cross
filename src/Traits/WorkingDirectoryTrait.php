@@ -9,7 +9,7 @@ trait WorkingDirectoryTrait
     /**
      * Working directory.
      */
-    protected ?string $workingDirectory = null;
+    private ?string $workingDirectory = null;
 
     /**
      * Defines a working directory.
@@ -22,8 +22,8 @@ trait WorkingDirectoryTrait
     /**
      * Returns a working directory.
      */
-    public function getWorkingDirectory(): ?string
+    public function getWorkingDirectory(?string $path = null): ?string
     {
-        return $this->workingDirectory;
+        return $path ? "$this->workingDirectory/$path" : $this->workingDirectory;
     }
 }
