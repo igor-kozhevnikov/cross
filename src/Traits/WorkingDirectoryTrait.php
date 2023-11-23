@@ -26,4 +26,20 @@ trait WorkingDirectoryTrait
     {
         return $path ? "$this->workingDirectory/$path" : $this->workingDirectory;
     }
+
+    /**
+     * Returns true if a working directory is defined.
+     */
+    public function hasWorkingDirectory(): bool
+    {
+        return (bool) $this->getWorkingDirectory();
+    }
+
+    /**
+     * Returns true if a working directory is undefined.
+     */
+    public function missingWorkingDirectory(): bool
+    {
+        return ! $this->hasWorkingDirectory();
+    }
 }
