@@ -170,9 +170,11 @@ abstract class BaseCommand extends InitialCommand
     /**
      * Returns a config value.
      */
-    protected function config(string $key, mixed $default = null): mixed
+    protected function config(string $key, mixed $default = null, ?string $scope = null): mixed
     {
-        return Config::get("{$this->name()}.$key", $default);
+        $scope ??= $this->name();
+
+        return Config::get("$scope.$key", $default);
     }
 
     /**
