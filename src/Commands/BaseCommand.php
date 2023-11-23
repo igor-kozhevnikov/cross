@@ -17,12 +17,15 @@ use Cross\Messages\Messages;
 use Cross\Messages\MessagesInterface;
 use Cross\Statuses\Exist;
 use Cross\Statuses\Prepare;
+use Cross\Traits\WorkingDirectoryTrait;
 use ReflectionClass;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class BaseCommand extends InitialCommand
 {
+    use WorkingDirectoryTrait;
+
     /**
      * Name.
      */

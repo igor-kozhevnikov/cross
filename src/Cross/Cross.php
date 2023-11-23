@@ -4,16 +4,20 @@ declare(strict_types=1);
 
 namespace Cross\Cross;
 
+use Cross\Commands\BaseCommand;
 use Cross\Config\Config;
 use Cross\Cross\Exceptions\InvalidAliasesException;
 use Cross\Cross\Exceptions\InvalidAliasException;
 use Cross\Plugin\PluginInterface;
+use Cross\Traits\WorkingDirectoryTrait;
 use Exception;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 
 class Cross
 {
+    use WorkingDirectoryTrait;
+
     /**
      * Application.
      */
@@ -102,6 +106,10 @@ class Cross
     {
         if (is_string($command)) {
             $command = new $command();
+        }
+
+        if ($command instanceof BaseCommand) {
+            $command->setWorkingDirectory($this->getWorkingDirectory());
         }
 
         $this->defineConfig($command, $config);

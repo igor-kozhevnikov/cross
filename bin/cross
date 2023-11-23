@@ -14,9 +14,10 @@ $package = new Package();
 $package->configure();
 $package->autoload();
 
-$application = new Application('Library for creating console commands', '1.7.0');
+$application = new Application('Library for creating console commands', '1.8.0');
 
 $cross = new Cross($application);
+$cross->setWorkingDirectory($package->getConfig('working_directory'));
 $cross->command(Config::class);
 $cross->plugins($package->getPlugins());
 $cross->commands($package->getCommands());
