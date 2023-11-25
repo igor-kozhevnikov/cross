@@ -66,8 +66,9 @@ abstract class BaseCommand extends InitialCommand
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(?string $workingDirectory = null)
     {
+        $this->setWorkingDirectory($workingDirectory);
         parent::__construct($this->name());
     }
 

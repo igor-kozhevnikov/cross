@@ -105,10 +105,8 @@ class Cross
     public function command(string|Command $command, array $config = []): void
     {
         if (is_string($command)) {
-            $command = new $command();
-        }
-
-        if ($command instanceof BaseCommand) {
+            $command = new $command($this->getWorkingDirectory());
+        } elseif ($command instanceof BaseCommand) {
             $command->setWorkingDirectory($this->getWorkingDirectory());
         }
 
