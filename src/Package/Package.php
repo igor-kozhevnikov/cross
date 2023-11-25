@@ -40,7 +40,15 @@ class Package
             $extension = Extension::from($extension);
         }
 
-        return getcwd() . "/cross.$extension->value";
+        return $this->getWorkingDirectory("cross.$extension->value");
+    }
+
+    /**
+     * Returns the current working directory.
+     */
+    public function getWorkingDirectory(?string $path = null): string
+    {
+        return $path ? getcwd() . "/$path" : getcwd();
     }
 
     /**

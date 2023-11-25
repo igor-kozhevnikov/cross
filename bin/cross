@@ -15,7 +15,7 @@ $package->configure();
 $package->autoload();
 
 $cross = new Cross(new Application());
-$cross->setWorkingDirectory($package->getConfig('working_directory'));
+$cross->setWorkingDirectory($package->getWorkingDirectory());
 $cross->command(Config::class);
 $cross->plugins($package->getPlugins());
 $cross->commands($package->getCommands());
