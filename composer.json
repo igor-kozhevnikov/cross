@@ -12,8 +12,8 @@
     ],
     "require": {
         "php": "^8.1",
-        "symfony/console": "^v6.2",
-        "symfony/process": "^v6.2",
+        "symfony/console": "^7.0",
+        "symfony/process": "^7.0",
         "igor-kozhevnikov/fluent": "^1.1"
     },
     "require-dev": {
