@@ -29,7 +29,13 @@ abstract class ProxyCommand extends BaseCommand
      */
     protected function handle(): Exist
     {
-        $command = $this->getApplication()?->find($this->proxy());
+        $command = $this->proxy();
+
+        if (class_exists($command) && method_exists($command, 'getName')) {
+            $command = (new $command())->getName();
+        }
+
+        $command = $this->getApplication()?->find($command);
         $input = new ArrayInput($this->parameters());
         $code = $command->run($input, $this->output());
 
